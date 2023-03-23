@@ -1,0 +1,20 @@
+{
+  "name": "yoangelo_website",
+  "version": "0.0.0",
+  "description": "website four pairs to interact",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AngeloC3/Yoangelo_Website.git"
+  },
+  "author": "Angelo Cataldo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AngeloC3/Yoangelo_Website/issues"
+  },
+  "homepage": "https://github.com/AngeloC3/Yoangelo_Website#readme"
+}
