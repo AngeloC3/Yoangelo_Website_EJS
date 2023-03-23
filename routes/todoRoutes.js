@@ -1,7 +1,8 @@
 const router = require('express').Router();
 
-router.get("/watchlist", (req, res) => {
+router.get(`/todo/:todolist`, (req, res) => {
     res.render("blank");
 })
 
 module.exports = router;
+
