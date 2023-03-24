@@ -3,6 +3,7 @@ const User = require('../models/User')
 const Notification = require('../models/Notification')
 const bcrypt = require("bcrypt");
 
+// middleware
 router.use(async (req,res,next) => {
     if (req.session.username) {
         res.locals.loggedIn = true;
@@ -15,14 +16,16 @@ router.use(async (req,res,next) => {
         res.locals.username = null;
         res.locals.user = null;
     }
-    next()
+    next();
   });
+
+// self auth
 
 router.get('/login', (req, res) => {
     if (req.query.incorrect_login == 'true'){
         res.locals.incorrect_login = true
       }
-    res.render("login-signup", {form_type: "login"});
+    res.render("forms/formTemplate", {form: "loginForm"});
 })
 
 router.post('/login', async (req, res) => {
@@ -49,7 +52,7 @@ router.get('/signup', (req, res) => {
     if (req.query.unavailable_email == 'true'){
         res.locals.unavailable_email = true
       }
-    res.render("login-signup", {form_type: "signup"});
+    res.render("forms/formTemplate", {form: "signupForm"});
 })
 
 router.post('/signup', async (req, res) => {
@@ -73,6 +76,13 @@ router.post('/signup', async (req, res) => {
         req.session.user = user
         res.redirect('/')
     }
+})
+
+
+// partner auth
+
+router.get('/set_partner', (req, res) => {
+    
 })
 
 module.exports = router;
