@@ -4,18 +4,38 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
 const NotificationSchema = Schema( {
-  userId: {
+  recipientId: {
     type: ObjectId,
     ref: 'User',
     required: true
   },
-  message: {
+  senderId: {
+    type: ObjectId,
+    ref: 'User',
+  },
+  notifType: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
   },
   created_at: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    required: true
+  },
+  related: {
+    relatedSchema: {
+      type: String,
+      validate: function() {
+        return (this.relatedSchema && this.relatedId) || (!this.relatedSchema && !this.relatedId);
+      }
+    },
+    relatedId: {
+      type: ObjectId,
+      validate: function() {
+        return (this.relatedSchema && this.relatedId) || (!this.relatedSchema && !this.relatedId);
+      }
+    }
   }
 } );
 

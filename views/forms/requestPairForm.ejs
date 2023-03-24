@@ -1,0 +1,27 @@
+<% if (typeof success !== 'undefined' && success === true) {%>
+
+    <div class="alert alert-success" role="alert" style="vertical-align: middle;">
+        <h2>Your pair request was successfully sent!</h2>
+    </div>
+
+<% } else { %>
+    <form action="/request_pair" method="POST">
+
+        <% if (typeof invalid_pair !== 'undefined' && invalid_pair === true) {%>
+        <div class="alert alert-danger" role="alert">
+            Invalid email. Please try again.
+        </div>
+        <% } %> 
+
+        <h2 class="fw-bold mb-2 text-uppercase">Request Pair</h2>
+        <p class="text-white-50 mb-5">Please enter someone's account email to request to pair, and a notification will be sent to them!</p>
+
+        <div class="form-outline form-white mb-4">
+        <input type="email" name="email" class="form-control form-control-lg" required/>
+        <label class="form-label" for="email">Email</label>
+        </div>
+
+
+        <button class="btn btn-outline-light btn-lg px-5" type="submit">Request</button>
+    </form>
+<% } %> 

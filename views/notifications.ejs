@@ -1,0 +1,31 @@
+<link href="/css/notifications.css" rel="stylesheet" type="text/css">
+
+<% avatar_route = 'images/avatar.png'; %>
+
+<div class="container bg-dark">
+    <h3 class="m-b-50 heading-line text-light">Notifications <i class="fa fa-bell"></i></h3>
+
+    <div class="notification-ui_dd-content">
+
+        <div class="notification-list bg-secondary" style="overflow: hidden;">
+            <div class="notification-list_content">
+                <div class="notification-list_img">
+                    <img src=<%= avatar_route %> alt="user">
+                </div>
+                <div class="notification-list_detail text-light">
+                    <b class="text-dark">John Doe</b>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Unde, dolorem.</p>
+                    <p><small>10 mins ago</small></p>
+                </div>
+            </div>
+            <div class="notification-list_right">
+                <a href="#" class="btn btn-info w-100 m-1 glow-on-hover">View</a>
+                <a href="#" class="btn btn-danger w-100 m-1 glow-on-hover">Dismiss</a>
+            </div>
+        </div>
+
+    </div>
+
+    <p style="visibility: hidden;">.</p>  <%# I have no idea how to get this to work without this fucker, so :shrug: %>
+
+</div>

@@ -31,14 +31,18 @@ mongoose.connect(mongodb_URI, {
     useUnifiedTopology: true 
 }).then(() => console.log("Connected to MongoDB")).catch(error => console.log(error));
 
-// routes imports
+// fully accessible routes and middleware
+app.use(require("./public/js/middlewares").set_locals)
 app.use(require("./routes/auth"));
+app.get("/", (req, res,) => {
+  res.render('blank');
+});
+
+// log in only routes
+app.use(require("./public/js/middlewares").req_login);
+app.use(require("./routes/partnerRoutes"));
 app.use(require('./routes/todoRoutes'));
 
-// routes
-app.get("/", (req, res,) => {
-    res.render('blank');
-});
 
 // errors
 const errorController = require('./controllers/errorController');

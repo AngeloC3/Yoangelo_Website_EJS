@@ -1,4 +1,12 @@
-<link href="/css/nav.css" rel="stylesheet" type="text/css">
+<style>
+    .dropdown-item:hover {
+        background-color:  blue;
+    }
+
+    .nav-link {
+        font-size: 20px;
+    }
+</style>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
 <div class="container-fluid">
@@ -17,7 +25,7 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link mx-2 dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Todos
+                    Goals
                 </a>
                 <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
                     <li><a class="dropdown-item text-light" href="/todos/watchlist">Watchlist</a></li>
@@ -47,7 +55,7 @@
                     <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item text-light">Settings</a></li>
                         <% if (!hasPartner) {%>
-                            <li><a class="dropdown-item text-light" href="/set_partner">Set Partner</a></li>
+                            <li><a class="dropdown-item text-light" href="/request_pair">Request Pair</a></li>
                         <% } %> 
                     </ul>
                 </li>
