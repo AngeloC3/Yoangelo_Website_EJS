@@ -3,24 +3,25 @@ const mongoose = require( 'mongoose' );
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
-var userSchema = Schema( {
+const userSchema = Schema( {
   username: {
     type: String,
     required: true,
   },
-  passphrase: {
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
     type: String,
     required: true
   },
-  partnerID: {
+  partnerId: {
     type: ObjectId,
     ref: 'User',
-    required: true
+    default: null
   },
-  partnerCode: {
-    type: String,
-    required: true
-  } // NEEDS TO BE ADDED IN AUTH? same was ay passphrase?
 } );
 
 module.exports = mongoose.model( 'User', userSchema );

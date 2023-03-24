@@ -1,0 +1,57 @@
+<form action="/signup" method="POST">
+    
+    <% if (typeof unavailable_email !== 'undefined' && unavailable_email === true) {%>
+        <div class="alert alert-danger" role="alert">
+            The email address you entered is unavailable. Please try a different email address.
+        </div>
+    <% } %>
+
+    <h2 class="fw-bold mb-2 text-uppercase">Signup</h2>
+    <p class="text-white-50 mb-5">Please enter desired username, email, and password</p>
+
+    <div class="form-outline form-white mb-4">
+        <input type="text" name="username" class="form-control form-control-lg" required/>
+        <label class="form-label" for="username">Display Name</label>
+    </div>
+
+    <div class="form-outline form-white mb-4">
+        <input type="email" name="email" id="email" class="form-control form-control-lg" required/>
+        <label class="form-label" for="email">Email</label>
+    </div>
+
+    <div class="form-outline form-white mb-4">
+        <input type="email" name="confirm_email" id="confirm_email" class="form-control form-control-lg" required/>
+        <label class="form-label" for="confirm_email">Confirm Email</label>
+    </div>
+
+    <div class="form-outline form-white mb-4">
+        <input type="password" name="password" id="password" class="form-control form-control-lg" required/>
+        <label class="form-label" for="password">Password</label>
+    </div>
+
+    <div class="form-outline form-white mb-4">
+        <input type="password" name="confirm_password" id="confirm_password" class="form-control form-control-lg"  required/>
+        <label class="form-label" for="confirm_password">Confirm Password</label>
+    </div>
+
+    <button class="btn btn-outline-light btn-lg px-5" type="submit" onclick="return checkMatches()">Signup</button>
+</form>
+
+
+<script>
+    function checkMatches() {
+        const email = document.getElementById("email").value;
+        const confirm_email = document.getElementById("confirm_email").value;
+        if (email != confirm_email) {
+            alert("Emails do not match");
+            return false;
+        }
+        const password = document.getElementById("password").value;
+        const confirm_password = document.getElementById("confirm_password").value;
+        if (password != confirm_password) {
+            alert("Passwords do not match");
+            return false;
+        }
+        return true;
+    }
+</script>

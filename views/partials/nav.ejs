@@ -1,13 +1,67 @@
 <link href="/css/nav.css" rel="stylesheet" type="text/css">
 
-<nav>
-    <div class="logo-container">
-        <img src="images/favicon.ico" alt="Logo">
-    </div>
-    <div className='nav-list'>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/test">Test</a></li>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+<div class="container-fluid">
+    <a class="navbar-brand" href="/">
+        <img src="/images/logo.png" alt="Logo" width="60" height="48" class="d-inline-block align-text-center">
+        Yoangelo Website
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link mx-2" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link mx-2 dropdown-toggle" href="/todos" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Todos
+                </a>
+                <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item text-light" href="/todos/watchlist">Watchlist</a></li>
+                    <li><a class="dropdown-item text-light" href="/todos/bucketlist">Bucketlist</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto d-lg-inline-flex d-block">
+            <% if (!loggedIn) {%>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="/login">Login</a>
+                </li>
+            <% } else { %>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="/notifications" id="notificationBell">
+                        <i class="fas fa-bell"></i>
+                        <% if (typeof notifNum !== 'undefined' && notifNum > 0 ) {%>
+                        <span class="badge bg-danger" id="notificationBadge"><%= notifNum %></span>
+                        <% } %> 
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2">Test</a>
+                </li>
+            <% } %>
         </ul>
     </div>
+</div>
 </nav>
+  
+<script>
+    // Get the current URL
+    const currentUrl = window.location.href;
+  
+    // Find the link that matches the current URL
+    const links = document.querySelectorAll('.navbar-nav a');
+    for (let i = 0; i < links.length; i++) {
+        if (links[i].href === currentUrl) {
+            links[i].classList.add('active');
+            if (links[i].closest('.dropdown-menu')) {
+            const dropdownToggle = links[i].closest('.dropdown-menu').previousElementSibling;
+            dropdownToggle.classList.add('active');
+            }
+        }   
+    }
+</script>
