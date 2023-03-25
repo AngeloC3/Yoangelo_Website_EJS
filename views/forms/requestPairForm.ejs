@@ -1,7 +1,7 @@
-<% if (typeof success !== 'undefined' && success === true) {%>
+<% if (typeof pair_username !== 'undefined') {%>
 
     <div class="alert alert-success" role="alert" style="vertical-align: middle;">
-        <h2>Your pair request was successfully sent!</h2>
+        <h2>Your pair request was successfully sent to <%= pair_username %>!</h2>
     </div>
 
 <% } else { %>

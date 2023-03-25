@@ -35,19 +35,19 @@ mongoose.connect(mongodb_URI, {
 app.use(require("./public/js/middlewares").set_locals)
 app.use(require("./routes/auth"));
 app.get("/", (req, res,) => {
-  res.render('blank');
+  res.render("blank");
 });
 
 // log in only routes
 app.use(require("./public/js/middlewares").req_login);
 app.use(require("./routes/partnerRoutes"));
-app.use(require('./routes/todoRoutes'));
+app.use("/todos", require('./routes/todoRoutes'));
 
 
 // errors
 const errorController = require('./controllers/errorController');
 app.use(errorController.respondInternalError);
-app.use(errorController.resoindRouteNotFound);
+app.use(errorController.respondRouteNotFound);
 
 app.listen(port, () => {
     const url = `http://localhost:${port}`;

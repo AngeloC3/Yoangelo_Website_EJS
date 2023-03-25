@@ -18,7 +18,7 @@ const NotificationSchema = Schema( {
     required: true,
     trim: true,
   },
-  created_at: {
+  createdAt: {
     type: Date,
     default: Date.now,
     required: true
@@ -38,5 +38,19 @@ const NotificationSchema = Schema( {
     }
   }
 } );
+
+NotificationSchema.methods.getTypeInfo = function() {
+  const infoObj = {
+    deleteRoute: "/idkyet/" + this._id,
+  }
+  switch (this.notifType) {
+    case 'pair request':
+      infoObj.message = 'You have a new pair request';
+      infoObj.viewRoute = "/notifications/respond_pair_request";
+    default:
+      infoObj.message = 'You have a new notification';
+  }
+  return infoObj;
+};
 
 module.exports = mongoose.model( 'Notification', NotificationSchema );
