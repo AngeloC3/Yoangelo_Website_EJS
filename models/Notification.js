@@ -44,7 +44,7 @@ NotificationSchema.methods.getTypeInfo = function() {
     deleteRoute: "/idkyet/" + this._id,
   }
   switch (this.notifType) {
-    case 'pair request':
+    case 'pair-request':
       infoObj.message = 'You have a new pair request';
       infoObj.viewRoute = "/notifications/respond_pair_request";
     default:

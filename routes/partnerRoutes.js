@@ -21,11 +21,11 @@ router.post('/request_pair', async (req, res) => {
     if (!pair) {
         res.redirect('/request_pair' + '/?invalid_pair=' + true);
     } else {
-        await Notification.deleteOne({senderId: req.session.user._id, notifType: "pair request"}).then(() => {
+        await Notification.deleteOne({senderId: req.session.user._id, notifType: "pair-request"}).then(() => {
             Notification.create({
                 recipientId: pair._id,
                 senderId: req.session.user._id,
-                notifType: "pair request"
+                notifType: "pair-request"
             });
             res.redirect("/request_pair" + '/?pair_username=' + pair.username);
         })
@@ -56,14 +56,29 @@ router.get("/notifications", async (req, res) => {
 });
 
 router.get('/notifications/respond_pair_request', async (req, res) => {
-    const pair_request = await Notification.findOne({recipientId: req.session.user._id, notifType: "pair request"})
+    const pair_request = await Notification.findOne({recipientId: req.session.user._id, notifType: "pair-request"})
     res.render("forms/formTemplate", {form: "respondPairRequestForm"});
 });
 
-router.post('/notifications/respond_pair_request', (req, res) => {
+router.post('/notifications/respond_pair_request', async (req, res) => {
+    return; // TODO DELETE LOL
     const choice = req.body.yesno
     if (choice === "accept"){
-        console.log("YAY")
+        // find the one that you are recipient
+        notif_ids_to_delete = []
+        const userId = req.session.user._id;
+        const pair_request = await Notification.findOne({recipientId: userId, notifType: "pair-request"})
+        const partnerId = pair_request.senderId
+        const pair = await User.findByIdAndUpdate(partnerId, { partnerId: userId });
+        req.session.user = await User.findByIdAndUpdate(userId, { partnerId: partnerId });
+        // delete all pair requests involving you or the partner
+        await Notification.deleteMany({ 
+            $and: [
+              { type: 'pair-request' },
+              { $or: [ { _id: partnerId }, { _id: userId } ] }
+            ]
+          })
+          console.log("YAY")
     } else {
         console.log("NAY")
     }
