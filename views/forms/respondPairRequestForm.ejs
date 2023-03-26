@@ -1,11 +1,39 @@
-<form action="/notifications/respond_pair_request" method="POST">
+<% if (typeof pair_request === 'undefined') { %>
 
-    
+    <h2 class="fw-bold mb-2 text-uppercase">Pair Request Not Found</h2>
 
-    <h1 class="fw-bold mb-2 text-uppercase">User</h1>
-    <p class="text-white-50 mb-5">wants to pair with you</p>
+<% } else { %>
 
-    <button type="submit" name="yesno" value="accept" class="btn btn-success me-2 btn-lg px-4">Accept</button>
-    <button type="submit" name="yesno" value="reject" class="btn btn-danger btn-lg px-4">Reject</button>
+<form action="" method="POST" id="pair-request-form">
+
+    <h2 class="fw-bold mb-2 text-uppercase text-und">Pair Request</h2>
+    <h3 class="fw-bold mb-2"><%= pair_username %></h3>
+    <p class="mb-5"><%= pair_email %></p>
+
+    <button type="button" class="btn btn-success me-2 btn-lg px-4" onclick="confirmPairRequest('accept')">Accept</button>
+    <button type="button" class="btn btn-danger btn-lg px-4" onclick="confirmPairRequest('reject')">Reject</button>
     
 </form>
+
+<script>
+  
+window.addEventListener('DOMContentLoaded', function() {
+    var currentLink = window.location.href;
+    var form = document.getElementById('pair-request-form');
+    form.setAttribute('action', currentLink);
+  });
+
+function confirmPairRequest(action) {
+  if (confirm('Are you sure you want to ' + action + ' this pair request?')) {
+    const pair_form = document.getElementById('pair-request-form');
+    const input = document.createElement('input');
+    input.setAttribute('type', 'hidden');
+    input.setAttribute('name', 'yesno');
+    input.setAttribute('value', action);
+    pair_form.appendChild(input);
+    pair_form.submit();
+  }
+}
+</script>
+
+<% } %>

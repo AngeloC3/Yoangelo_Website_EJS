@@ -55,7 +55,7 @@
                     <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item text-light">Settings</a></li>
                         <% if (!hasPartner) {%>
-                            <li><a class="dropdown-item text-light" href="/request_pair">Request Pair</a></li>
+                            <li><a class="dropdown-item text-light" href="/pair/request_pair">Request Pair</a></li>
                         <% } %> 
                     </ul>
                 </li>
@@ -79,5 +79,10 @@
             dropdownToggle.classList.add('active');
             }
         }   
+    }
+
+    const notifNum = '<%= notifNum %>';
+    if (notifNum < 1){
+        document.getElementById("notificationBell").classList.add("disabled");
     }
 </script>
