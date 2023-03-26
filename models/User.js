@@ -3,7 +3,7 @@ const mongoose = require( 'mongoose' );
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
-const userSchema = Schema( {
+const UserSchema = Schema( {
   username: {
     type: String,
     required: true,
@@ -27,4 +27,8 @@ const userSchema = Schema( {
   },
 } );
 
-module.exports = mongoose.model( 'User', userSchema );
+UserSchema.methods.hasPartner = function() {
+  return this.partnerId !== null;
+}
+
+module.exports = mongoose.model( 'User', UserSchema );

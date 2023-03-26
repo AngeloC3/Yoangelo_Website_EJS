@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Notification = require('../models/Notification');
 const User = require('../models/User');
 const { checkParamId } = require("../public/js/middlewares");
+const { findUserByIdAndUpdateReq } = require("../public/js/utils");
 
 // partner auth
 
@@ -14,7 +15,7 @@ router.get('/request_pair', (req, res) => {
 });
 
 router.post('/request_pair', async (req, res) => {
-    const user = await User.findById(req.session.userId);
+    const user = await findUserByIdAndUpdateReq(req.session.userId, req)
     const pair_email = req.body.email;
     let pair = false;
     if (pair_email !== user.email){
@@ -56,7 +57,7 @@ router.get('/respond_pair_request/:notifId', checkParamId('notifId'), async (req
 });
 
 router.post('/respond_pair_request/:notifId', checkParamId('notifId'), async (req, res) => {
-    const user = await User.findById(req.session.userId);
+    const user = await findUserByIdAndUpdateReq(req.session.userId, req)
     const choice = req.body.yesno
     if (choice === "accept"){
         // find the one that you are recipient
@@ -77,6 +78,7 @@ router.post('/respond_pair_request/:notifId', checkParamId('notifId'), async (re
         // connect pairs
         const pair = await User.findByIdAndUpdate(partnerId, { partnerId: userId });
         await User.findByIdAndUpdate(userId, { partnerId: partnerId });
+        req.session.hasPartner = true;
         // send notification saying that it was successfull
         await sendSuccessfulPairAlert(userId, pair.username);
         await sendSuccessfulPairAlert(partnerId, user.username)

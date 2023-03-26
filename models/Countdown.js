@@ -3,7 +3,7 @@ const mongoose = require( 'mongoose' );
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
-var countdownSchema = Schema( {
+const countdownSchema = Schema( {
   userId: {
     type: ObjectId,
     ref: "User"

@@ -43,6 +43,7 @@ const NotificationSchema = Schema( {
   related: {
     relatedSchema: {
       type: String,
+      trim: true,
       validate: function() {
         return (this.relatedSchema && this.relatedId) || (!this.relatedSchema && !this.relatedId);
       }
@@ -56,7 +57,7 @@ const NotificationSchema = Schema( {
   }
 } );
 
-NotificationSchema.methods.getTypeInfo = function() {
+NotificationSchema.methods.getTypeInfo = () => {
   const infoObj = {
     deleteRoute: "/notifications/delete/" + this._id,
   }
