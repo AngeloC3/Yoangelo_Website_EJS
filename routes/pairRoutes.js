@@ -32,7 +32,7 @@ router.post('/request_pair', async (req, res) => {
                 notifType: "pair-request",
             }
         });
-        res.redirect("/pair/request_pair" + '/?pair_username=' + pair.username);
+    res.redirect("/pair/request_pair" + '/?pair_username=' + pair.username);
     })       
 });
 

@@ -1,11 +1,9 @@
 const Notification = require('../../models/Notification')
 const User = require('../../models/User')
-const isValidMongooseId = require('mongoose').Types.ObjectId.isValid;
 const ObjectId = require('mongoose').Types.ObjectId;
+const isValidMongooseId = ObjectId.isValid;
 
 devMode = true;
-
-// TODO: somehow track whether or not the user has a partner without querying the database every route
 
 // sets local that are needed constantly
 const set_locals = async (req,res,next) => {
@@ -15,6 +13,7 @@ const set_locals = async (req,res,next) => {
     }
     if (req.session.userId) {
         res.locals.loggedIn = true;
+        req.session.userId = new ObjectId(req.session.userId); // session saves as a string this converts back
         // get # of notifs and unread notifs --> error if there are none
         try{
             const notifs = await Notification.aggregate(getReadVsUnreadPipeline(req.session.userId));
