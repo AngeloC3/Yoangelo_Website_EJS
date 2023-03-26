@@ -14,19 +14,20 @@ router.get('/request_pair', (req, res) => {
 });
 
 router.post('/request_pair', async (req, res) => {
+    const user = await User.findById(req.session.userId);
     const pair_email = req.body.email;
     let pair = false;
-    if (pair_email !== req.session.user.email){
+    if (pair_email !== user.email){
         pair = await User.findOne({ email: pair_email })
     }
     if (!pair) {
         res.redirect('/pair/request_pair' + '/?invalid_pair=' + true);
         return;
     }
-    await Notification.deleteOne({senderId: req.session.user._id, 'notifDetails.notifType': "pair-request"}).then(() => {
+    await Notification.deleteOne({senderId: user._id, 'notifDetails.notifType': "pair-request"}).then(() => {
         Notification.create({
             recipientId: pair._id,
-            senderId: req.session.user._id,
+            senderId: user._id,
             notifDetails: {
                 notifType: "pair-request",
             }
@@ -38,10 +39,15 @@ router.post('/request_pair', async (req, res) => {
 // partner related views
 
 router.get('/respond_pair_request/:notifId', checkParamId('notifId'), async (req, res) => {
-    const pair_request = await Notification.findById(req.params.notifId);
+    // returns the non-updated pair request
+    const pair_request = await Notification.findByIdAndUpdate(req.params.notifId, {viewed: true}, { new: false}); 
     if (!pair_request){
         res.render("forms/formTemplate", {form: "respondPairRequestForm"});
         return;
+    }
+    // if the pair request wasn't viewed prior to this, decrement the amount of unread notifs
+    if (pair_request.viewed === false){
+        res.locals.notifNums.notifUnreadTotal -= 1;
     }
     pair = await User.findById(pair_request.senderId);
     pair_username = pair.username;
@@ -50,10 +56,11 @@ router.get('/respond_pair_request/:notifId', checkParamId('notifId'), async (req
 });
 
 router.post('/respond_pair_request/:notifId', checkParamId('notifId'), async (req, res) => {
+    const user = await User.findById(req.session.userId);
     const choice = req.body.yesno
     if (choice === "accept"){
         // find the one that you are recipient
-        const userId = req.session.user._id;
+        const userId = user._id;
         const pair_request = await Notification.findById(req.params.notifId);
         const partnerId = pair_request.senderId
         // delete all pair requests involving you or the partner
@@ -64,15 +71,15 @@ router.post('/respond_pair_request/:notifId', checkParamId('notifId'), async (re
             ]
           });
         // if you have a current partner -- make their current partner null, and yours will change
-        if (req.session.user.partnerId){
-            const ex = await User.findByIdAndUpdate(req.session.user.partnerId, { partnerId: null});
+        if (user.partnerId){
+            const ex = await User.findByIdAndUpdate(user.partnerId, { partnerId: null});
         }
         // connect pairs
         const pair = await User.findByIdAndUpdate(partnerId, { partnerId: userId });
-        req.session.user = await User.findByIdAndUpdate(userId, { partnerId: partnerId });
+        await User.findByIdAndUpdate(userId, { partnerId: partnerId });
         // send notification saying that it was successfull
         await sendSuccessfulPairAlert(userId, pair.username);
-        await sendSuccessfulPairAlert(partnerId, req.session.user.username)
+        await sendSuccessfulPairAlert(partnerId, user.username)
     } else {
         await Notification.findByIdAndDelete(req.params.notifId);
     }

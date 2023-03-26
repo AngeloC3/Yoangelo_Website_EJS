@@ -43,8 +43,8 @@
                 <li class="nav-item">
                     <a class="nav-link mx-2" href="/notifications" id="notificationBell">
                         <i class="fas fa-bell"></i>
-                        <% if (notifNum > 0 ) {%>
-                        <span class="badge bg-danger" id="notificationBadge"><%= notifNum %></span>
+                        <% if (notifNums.notifUnreadTotal > 0 ) {%>
+                        <span class="badge bg-danger" id="notificationBadge"><%= notifNums.notifUnreadTotal %></span>
                         <% } %> 
                     </a>
                 </li>
@@ -81,8 +81,8 @@
         }   
     }
 
-    const notifNum = '<%= notifNum %>';
-    if (notifNum < 1){
+    const notifNums = '<%= notifNums %>';
+    if (typeof notifNums.notifNumTotal !== 'undefined' && notifNums.notifNumTotal < 1){
         document.getElementById("notificationBell").classList.add("disabled");
     }
 </script>

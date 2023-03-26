@@ -36,7 +36,14 @@
     margin-bottom: 7px;
     -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-    border-left: 2px solid pink;
+}
+
+.notification-list_unread {
+    border-left: .6rem solid pink;
+}
+
+.notification-list_read {
+    border-left: .6rem solid transparent;
 }
 
 .notification-list .notification-list_content {
@@ -63,11 +70,3 @@
     border-radius: 5px;
     margin-left: 20px;
 }
-
-.glow-on-hover {
-    transition: box-shadow 0.3s ease-in-out;
-}
-
-.glow-on-hover:hover {
-    box-shadow: 0 0 10px pink;
-}   

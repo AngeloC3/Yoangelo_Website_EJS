@@ -30,6 +30,11 @@ const NotificationSchema = Schema( {
       trim: true,
     },
   },
+  viewed: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
   createdAt: {
     type: Date,
     default: Date.now,

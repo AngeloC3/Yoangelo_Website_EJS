@@ -6,9 +6,8 @@ const { checkParamId } = require("../public/js/middlewares");
 const system_name = "Yoangelo Website"
 
 router.get("/", async (req, res) => {
-    const user = req.session.user;
     const notifs = []
-    await Notification.find({recipientId: user._id}).then(async (notifications) => {
+    await Notification.find({recipientId: req.session.userId}).then(async (notifications) => {
         for (const notif of notifications) {
             let senderName = system_name;
             if (notif.senderId){
@@ -21,7 +20,8 @@ router.get("/", async (req, res) => {
                 message: message,
                 viewRoute: viewRoute,
                 createdAt: notif.createdAt.toLocaleString(),
-                deleteIdRoute: deleteRoute
+                deleteIdRoute: deleteRoute,
+                viewed: notif.viewed
             }
             notifs.push(notifObj);
         }

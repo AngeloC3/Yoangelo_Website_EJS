@@ -28,12 +28,10 @@ router.post('/login', async (req, res) => {
         isMatch = await bcrypt.compare(password, user.password);
     }
     if (isMatch) {
-        req.session.username = user.username;
-        req.session.user = user;
+        req.session.userId = user._id;
         res.redirect('/');
       } else {
-        req.session.username = null;
-        req.session.user = null;
+        req.session.userId = null;
         res.redirect('login' + '/?incorrect_login=' + true)
       }
 });
@@ -58,8 +56,7 @@ router.post('/signup', async (req, res) => {
             email: email,
             password: hashedPassword,
         });
-        req.session.username = user.username;
-        req.session.user = user;
+        req.session.userId = user._id;
         res.redirect('/');
     }
 });

@@ -1,25 +1,37 @@
 const Notification = require('../../models/Notification')
 const User = require('../../models/User')
 const isValidMongooseId = require('mongoose').Types.ObjectId.isValid;
+const ObjectId = require('mongoose').Types.ObjectId;
 
 devMode = true;
 
+// TODO: somehow track whether or not the user has a partner without querying the database every route
+
 // sets local that are needed constantly
 const set_locals = async (req,res,next) => {
-    if (devMode && !req.username) {
-        req.session.user = await User.findOne({email: "user1@fake.com"})
-        req.session.username = req.session.user.username;
+    if (devMode && !req.session.userId) {
+        const user = await User.findOne({email: "user1@fake.com"});
+        req.session.userId = user._id;
     }
-    if (req.session.username) {
+    if (req.session.userId) {
         res.locals.loggedIn = true;
-        res.locals.username = req.session.username;
-        res.locals.user = req.session.user;
-        res.locals.hasPartner = req.session.user.partnerId !== null;
-        res.locals.notifNum = await Notification.countDocuments({recipientId: req.session.user._id})
+        // get # of notifs and unread notifs --> error if there are none
+        try{
+            const notifs = await Notification.aggregate(getReadVsUnreadPipeline(req.session.userId));
+            const {notifTotal, notifUnreadTotal} = notifs[0];
+            res.locals.notifNums = {
+                notifTotal: notifTotal,
+                notifUnreadTotal: notifUnreadTotal
+            }
+        } catch (error) {
+            res.locals.notifNums = {
+                notifTotal: 0,
+                notifUnreadTotal: 0
+            }
+        }
     } else {
         res.locals.loggedIn = false;
-        res.locals.username = null;
-        res.locals.user = null;
+        res.locals.notifNums = {}
     }
     next();
 };
@@ -49,4 +61,28 @@ module.exports = {
     set_locals,
     req_login,
     checkParamId,
+}
+
+// helpers
+
+const getReadVsUnreadPipeline = (userId) => {
+    return [
+        {
+          $match: { recipientId: userId },
+        },
+        {
+          $group:
+            {
+              _id: null,
+              notifTotal: {
+                $sum: 1
+              },
+              notifUnreadTotal: {
+                $sum: {
+                  $cond: [ {$eq: ["$viewed", false] }, 1, 0]
+                },
+              },
+            },
+        },
+      ]
 }
