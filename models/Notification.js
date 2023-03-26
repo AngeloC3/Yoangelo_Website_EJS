@@ -57,7 +57,7 @@ const NotificationSchema = Schema( {
   }
 } );
 
-NotificationSchema.methods.getTypeInfo = () => {
+NotificationSchema.methods.getTypeInfo = function() {
   const infoObj = {
     deleteRoute: "/notifications/delete/" + this._id,
   }

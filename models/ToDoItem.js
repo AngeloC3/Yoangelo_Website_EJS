@@ -53,7 +53,7 @@ const TodoItemSchema = Schema( {
   },
 } );
 
-TodoItemSchema.methods.getAvgRating = () => {
+TodoItemSchema.methods.getAvgRating = function() {
   // TODO: round this?
   let num = undefined;
   if (this.partnerRate){
