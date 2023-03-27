@@ -1,0 +1,90 @@
+<style>
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-top: 50px;
+      margin-bottom: 40px;
+      color: #333;
+      font-size: 48px;
+      font-weight: bold;
+      text-shadow: 1px 1px #ddd;
+    }
+    
+    /* Card style */
+    .card {
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+      border-radius: 5px;
+      border: none;
+    }
+    
+    .card:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .card-header {
+      background-color: #fff;
+      color: #333;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .card-body {
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+    
+    .card-body p {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    
+    .card-body p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .card-body .btn {
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 20px;
+      font-size: 18px;
+      color: #fff;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    
+    .card-body .btn:hover {
+      background-color: #0069d9;
+      color: #fff;
+      text-decoration: none;
+    }
+</style>
+<div class="container">
+    <h1>Todo List</h1>
+    <% locals.item_list.forEach(function(todo) { %>
+      <div class="card">
+        <div class="card-header">
+          <%= todo.title %>
+        </div>
+        <div class="card-body">
+          <p>Type: <%= todo.todoType %></p>
+          <p>Description: <%= todo.description %></p>
+          <p>Created by: <%= todo.creatorInfo.creatorName %></p>
+          <p>Creator rating: <%= todo.creatorRate %></p>
+          <% if(todo.partnerRate) { %>
+            <p>Partner rating: <%= todo.partnerRate %></p>
+          <% } %>
+          <p>Completed: <%= todo.completed ? 'Yes' : 'No' %></p>
+          <p>Created at: <%= todo.createdAt %></p>
+          <a href="#" class="btn">Edit</a>
+        </div>
+      </div>
+    <% }); %>
+  </div>

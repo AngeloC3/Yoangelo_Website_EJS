@@ -29,7 +29,7 @@ router.post('/login', async (req, res) => {
     }
     if (isMatch) {
         req.session.userId = user._id;
-        req.session.hasPartner = user.hasPartner();
+        req.session.hasPartner = user.partnerId !== null;
         res.redirect('/');
       } else {
         req.session.userId = null;
@@ -58,7 +58,7 @@ router.post('/signup', async (req, res) => {
             password: hashedPassword,
         });
         req.session.userId = user._id;
-        req.session.userId = user.hasPartner();
+        req.session.hasPartner = user.partnerId !== null;
         res.redirect('/');
     }
 });

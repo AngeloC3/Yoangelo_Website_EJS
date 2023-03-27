@@ -8,16 +8,21 @@ const minRate = [0, "The Rating must be at least 0"]
 const maxRate = [10, "The Rating must be at most 10"]
 
 const TodoItemSchema = Schema( {
-  userInfo: {
-    userId: {
+  creatorInfo: {
+    creatorId: {
       type: ObjectId,
       ref: 'User',
       required: true,
     },
-    username: {
+    creatorName: {
       type: String,
       required: true,
     }
+  },
+  todoType: {
+    type: String,
+    required: true,
+    enum: ["watch_list", "bucket_list", "reading_list"]
   },
   title: {
     type: String,
@@ -26,13 +31,14 @@ const TodoItemSchema = Schema( {
   },
   description: {
     type: String,
-    required: true,
-    trim: true
+    trim: true,
+    default: function() {
+      return this.todoType + " item";
+    }
   },
-  userRate: {
+  creatorRate: {
     type: Number,
     required: true,
-    default: 0,
     min: minRate,
     max: maxRate,
   },
@@ -57,9 +63,9 @@ TodoItemSchema.methods.getAvgRating = function() {
   // TODO: round this?
   let num = undefined;
   if (this.partnerRate){
-    num = (this.userRate + this.partnerRate) / 2;
+    num = (this.creatorRate + this.partnerRate) / 2;
   } else {
-    num = this.userRate;
+    num = this.creatorRate;
   }
   return parseFloat(num.toFixed(2)).toString();
 }

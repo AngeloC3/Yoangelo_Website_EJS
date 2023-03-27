@@ -27,8 +27,4 @@ const UserSchema = Schema( {
   },
 } );
 
-UserSchema.methods.hasPartner = function() {
-  return this.partnerId !== null;
-}
-
 module.exports = mongoose.model( 'User', UserSchema );
