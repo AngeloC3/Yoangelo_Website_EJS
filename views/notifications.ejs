@@ -11,11 +11,7 @@
 
             <% for (let notif of notifs) { %>
             
-                <% if (notif.viewed) { %>
-                    <div class="notification-list bg-secondary notification-list_read" style="overflow: hidden;">
-                <% } else { %>
-                    <div class="notification-list bg-secondary notification-list_unread" style="overflow: hidden;">
-                <% } %>
+                <div class="notification-list bg-secondary <%= notif.viewed ? 'notification-list_read' : 'notification-list_unread' %>" style="overflow: hidden;">
                 <div class="notification-list_content">
                     <div class="notification-list_img">
                         <img src=<%= avatar_route %> alt="user">

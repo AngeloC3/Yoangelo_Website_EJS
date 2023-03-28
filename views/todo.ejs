@@ -1,38 +1,64 @@
 <style>
-    body{min-height: 100vh}.text-gray{color: #aaa}img{height: 170px;width: 140px}
+    .todo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .todo-header {
+      text-align: center;
+    }
+    
+    .todo-header * {
+      font-size: 5em;
+      font-weight: bold;
+      color: pink;
+    }
+    .todo-details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }    
 </style>
 
-<div class="container py-5">
-    <div class="row text-center text-white mb-5">
-        <div class="col-lg-7 mx-auto">
-            <h1 class="display-4">Product List</h1>
+    <div class="container py-5 bg-dark">
+        <div class="row text-center text-white mb-5">
+            <div class="col-lg-7 mx-auto">
+                <h1 class="display-4">Todo List</h1>
+            </div>
         </div>
-    </div>
     <div class="row">
-        <div class="col-lg-8 mx-auto">
+        <div class="col-lg-10 mx-auto"> <!-- Make number bigger to make the box wider -->
             <!-- List group-->
             <ul class="list-group shadow">
+
+                <% for (let todo of todos) { %>
+
                 <!-- list group item-->
-                <li class="list-group-item">
-                    <!-- Custom content-->
-                    <div class="media align-items-lg-center flex-column flex-lg-row p-3">
-                        <div class="media-body order-2 order-lg-1">
-                            <h5 class="mt-0 font-weight-bold mb-2">Apple iPhone XR (Red, 128 GB)</h5>
-                            <p class="font-italic text-muted mb-0 small">128 GB ROM | 15.49 cm (6.1 inch) Display 12MP Rear Camera | 7MP Front Camera A12 Bionic Chip Processor</p>
-                            <div class="d-flex align-items-center justify-content-between mt-1">
-                                <h6 class="font-weight-bold my-2">₹64,999</h6>
-                                <ul class="list-inline small">
-                                    <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fa fa-star-o text-gray"></i></li>
-                                </ul>
+                <li class="list-group-item bg-secondary text-white mb-3">
+                    <div class="d-flex justify-content-around align-items-center">
+                        <div>
+                            <img src="https://dummyimage.com/200x200/000000/fff">
+                        </div>
+                        <div>
+                            <h1><%= todo.title %></h1>
+                            <p><%= todo.description %></p>
+                        </div>
+                        <div class="todo-container">
+                            <div class="todo-header">
+                                <h1><%= todo.getAvgRating() %></h1>
                             </div>
-                        </div><img src="https://i.imgur.com/KFojDGa.jpg" alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
-                    </div> <!-- End -->
-                </li> <!-- End -->
-            </ul> <!-- End -->
+                            <div class="todo-details">
+                                <figcaption>Created by <%= todo.creatorInfo.creatorName %></figcaption>
+                                <figcaption><%= todo.createdAt.toLocaleString() %></figcaption>
+                            </div>
+                        </div>                                                                               
+                    </div>
+                </li>
+
+                <% } %>
+                
+            </ul> 
         </div>
     </div>
 </div>

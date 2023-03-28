@@ -29,6 +29,7 @@ router.get("/", async (req, res) => {
     res.render("notifications", {notifs: notifs});
 });
 
+// TODO: change to delete request
 router.get("/delete/:notifId", checkParamId("notifId"), async (req, res) => {
     await Notification.findByIdAndRemove(req.params.notifId);
     res.redirect("/notifications");
