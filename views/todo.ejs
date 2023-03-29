@@ -10,7 +10,7 @@
     }
     
     .todo-header * {
-      font-size: 5em;
+      font-size: 6em;
       font-weight: bold;
       color: pink;
     }
@@ -18,13 +18,13 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-    }    
+    }
 </style>
 
     <div class="container py-5 bg-dark">
         <div class="row text-center text-white mb-5">
             <div class="col-lg-7 mx-auto">
-                <h1 class="display-4">Todo List</h1>
+                <h1 class="display-4"><%= page_title %></h1>
             </div>
         </div>
     <div class="row">
@@ -35,27 +35,30 @@
                 <% for (let todo of todos) { %>
 
                 <!-- list group item-->
-                <li class="list-group-item bg-secondary text-white mb-3">
-                    <div class="d-flex justify-content-around align-items-center">
-                        <div>
-                            <img src="https://dummyimage.com/200x200/000000/fff">
-                        </div>
-                        <div>
-                            <h1><%= todo.title %></h1>
-                            <p><%= todo.description %></p>
-                        </div>
-                        <div class="todo-container">
-                            <div class="todo-header">
-                                <h1><%= todo.getAvgRating() %></h1>
+                    <li class="list-group-item bg-secondary text-white mb-3 rounded bordered">
+                        <div class="d-flex justify-content-around align-items-center">
+                            <div>
+                                <img src="https://dummyimage.com/200x200/000000/fff">
                             </div>
-                            <div class="todo-details">
-                                <figcaption>Created by <%= todo.creatorInfo.creatorName %></figcaption>
-                                <figcaption><%= todo.createdAt.toLocaleString() %></figcaption>
+                            <div>
+                                <h1><%= todo.title %></h1>
+                                <p><%= todo.description %></p>
                             </div>
-                        </div>                                                                               
-                    </div>
-                </li>
-
+                            <div class="todo-container">
+                                <div class="todo-header">
+                                    <h1><%= todo.getAvgRating() %></h1>
+                                </div>
+                                <div class="todo-details">
+                                    <figcaption>Created by <%= todo.creatorInfo.creatorName %></figcaption>
+                                    <figcaption><%= todo.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-') %></figcaption>
+                                </div>
+                            </div>                                                                               
+                        </div>
+                        <a class="details-button glow-on-hover btn btn-secondary">
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                    </li>
+                    
                 <% } %>
                 
             </ul> 

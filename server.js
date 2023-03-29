@@ -42,7 +42,7 @@ app.get("/", (req, res,) => {
 app.use(require("./public/js/middlewares").req_login);
 app.use("/pair", require("./routes/pairRoutes"));
 app.use("/notifications", require("./routes/notificationRoutes"));
-app.use("/todos", require('./routes/todoRoutes'));
+app.use("/todos/:todoType", require('./routes/todoRoutes'));
 
 // errors
 const errorController = require('./controllers/errorController');

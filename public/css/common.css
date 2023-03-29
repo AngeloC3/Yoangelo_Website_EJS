@@ -9,3 +9,17 @@ body {
 .glow-on-hover:hover {
     box-shadow: 0 0 10px pink;
 }   
+
+.details-button {
+    margin-top: .1rem;
+    margin-right: .2rem;
+    position:absolute;
+    top:0;
+    right:0;
+    font-size: 1.5em;
+}
+
+.bordered {
+    border: 2px solid #f00; 
+    border-top: 2px solid #f00
+}
