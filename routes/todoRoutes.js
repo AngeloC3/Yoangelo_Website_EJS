@@ -11,11 +11,27 @@ router.get('/', async (req, res) => {
     const user = await User.findById(req.session.userId);
     const userId = user._id;
     const partnerId = user.partnerId;
-    res.locals.todos = await TodoItem.find({'creatorInfo.creatorId': {$in: [userId, partnerId]}, todoType: req.params.todoType });
+    if (req.query.sortByRating == "true") {
+        const todos = await TodoItem.find({'creatorInfo.creatorId': {$in: [userId, partnerId]}, todoType: req.params.todoType})
+        res.locals.todos = todos.sort((a, b) => {
+            if (a.completed && !b.completed){
+                return 1;
+            }
+            if (b.completed && !a.completed){
+                return -1;
+            }
+            return b.getAvgRating() - a.getAvgRating();
+        });
+    } else {
+        res.locals.todos = await TodoItem.find({
+            'creatorInfo.creatorId': {$in: [userId, partnerId]}, 
+            todoType: req.params.todoType 
+          }).sort({completed: 1});
+    }
     res.locals.page_title = todoTypeToTitle(req.params.todoType);
     res.locals.todoType = req.params.todoType;
     res.render("todo");
-})
+});
 
 router.put('/change_completed/:todoId', checkParamId("todoId"), async (req, res) => {
     try {
@@ -28,7 +44,7 @@ router.put('/change_completed/:todoId', checkParamId("todoId"), async (req, res)
       } catch (err) {
         res.status(500).send("Todo item failed to change completion");
       }
-})
+});
 
 router.delete('/delete/:todoId', checkParamId("todoId"), async (req, res) => {
     try{
@@ -39,7 +55,7 @@ router.delete('/delete/:todoId', checkParamId("todoId"), async (req, res) => {
     } catch (err) {
         res.status(500).send("Todo item failed to delete");
     }
-})
+});
 
 module.exports = router;
 
@@ -50,4 +66,4 @@ const todoTypeToTitle = (type) => {
     const words = type.split("_");
     const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
     return capitalizedWords.join(" ");
-  }
+  };
