@@ -22,7 +22,6 @@ const TodoItemSchema = Schema( {
   todoType: {
     type: String,
     required: true,
-    enum: ["watch_list", "bucket_list", "reading_list"]
   },
   title: {
     type: String,
@@ -59,7 +58,7 @@ const TodoItemSchema = Schema( {
 TodoItemSchema.methods.getAvgRating = function() {
   // TODO: round this?
   let num = undefined;
-  if (this.partnerRate){
+  if (this.partnerRate !== undefined){
     num = (this.creatorRate + this.partnerRate) / 2;
   } else {
     num = this.creatorRate;
@@ -68,13 +67,33 @@ TodoItemSchema.methods.getAvgRating = function() {
 };
 
 TodoItemSchema.methods.didRate = function(id) {
-  if (this.creatorInfo.creatorId === id) {
+  if (id.equals(this.creatorInfo.creatorId)) {
     return true;
   }
-  if (!this.partnerRate){
+  if (this.partnerRate === undefined){
     return false;
   }
   return true;
 };
+
+TodoItemSchema.methods.getBothRateString = function(id) {
+  const getRateString = (rate) => {
+    if (rate === null){
+      return "X"
+    }
+    return parseFloat(rate.toFixed(1)).toString()
+  };
+
+  let num1 = null;
+  let num2 = null;
+  if (id.equals(this.creatorInfo.creatorId)) {
+    num1 = this.creatorRate;
+    if (this.partnerRate !== undefined) num2 = this.partnerRate;
+  } else {
+    num2 = this.creatorRate;
+    if (this.partnerRate !== undefined) num1 = this.partnerRate;
+  }
+  return getRateString(num1) + " - " + getRateString(num2);
+}
 
 module.exports = mongoose.model( 'TodoItem', TodoItemSchema );

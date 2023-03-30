@@ -1,15 +1,25 @@
 <form action='<%= postAction %>' method="POST">
 
-    <h2 class="fw-bold mb-2 text-uppercase">Add item to <%= page_title %></h2>
-    <p class="text-white-50 mb-5">Please fill out the form to add a new item!</p>
+    <% if (!rateOnly) { %>
+        <% if (buttonText === 'Add') { %>
+            <h2 class="fw-bold mb-2 text-uppercase">Add item to <%= page_title %></h2>
+            <p class="text-white-50 mb-5">Please fill out the form to add a new item!</p>
+        <% } else { %>
+            <h2 class="fw-bold mb-2 text-uppercase">Modify item from <%= page_title %></h2>
+            <p class="text-white-50 mb-5">Please fill out the form to modify this item!</p>
+        <% } %>
+    <% } else { %>
+        <h2 class="fw-bold mb-2 text-uppercase">Rate item from <%= page_title %></h2>
+        <p class="text-white-50 mb-5">Please select your rating of the new item!</p>
+    <% } %>
 
     <div class="form-outline form-white mb-4">
-        <input type="text" name="title" class="form-control form-control-lg" value="<%= titleVal %>" required/>
+        <input type="text" name="title" class="form-control form-control-lg" value="<%= titleVal %>" <% if (rateOnly) { %> disabled <% } %> required/>
         <label class="form-label" for="title">Title</label>
     </div>
 
     <div class="form-outline form-white mb-4">
-        <textarea name="description" class="form-control form-control-lg" rows="5" value="<%= descVal %>"></textarea>
+        <textarea id="descTextArea" name="description" class="form-control form-control-lg" rows="5" <% if (rateOnly) { %> disabled <% } %>></textarea>
         <label class="form-label" for="description">Description</label>
         <small class="form-text text-muted">*Optional</small>
     </div>
@@ -28,4 +38,6 @@
     function updateValue(val) {
         document.getElementById('rating-value').textContent = val;
     }
+    document.getElementById('rating-value').textContent = '<%= ratingVal %>';
+    document.getElementById('descTextArea').textContent = '<%= descVal %>';
 </script>

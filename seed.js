@@ -77,6 +77,11 @@ const seedTodos = async () => {
   const createTodo = async (creator, i) => {
     const randType = todoTypes[Math.floor(Math.random() * todoTypes.length)];
     const randInt = Math.floor(Math.random() * 10) + 1;
+    const randomSpaces = Math.floor(Math.random() * 0) + 1; // change inner val to higher for longer descrptions
+    let description = randType;
+    for (let i = 0; i < randomSpaces; i++) {
+      description += " " + randType;
+    }
 
     return await TodoItem.create({
       creatorInfo: {
@@ -85,6 +90,7 @@ const seedTodos = async () => {
       },
       todoType: randType,
       title: randType + " " + i,
+      description: description,
       creatorRate: randInt
     })
   }

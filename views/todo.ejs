@@ -28,6 +28,10 @@
         text-decoration: line-through;
         text-decoration-color: #add8e6;
     }
+    .unrated {
+        /* After completed so this background color supercedes completed's */
+        background-color: #6f0000 !important;
+    }
 </style>
 
 <div class="container py-5 bg-dark">
@@ -55,9 +59,13 @@
                 <% for (let todo of todos) { %>
 
                 <!-- list group item-->
-                    <li class="list-group-item bg-secondary text-white mb-3 rounded bordered <%= todo.completed ? 'completed' : '' %>">
+                    <li class="list-group-item bg-secondary text-white mb-3 rounded bordered 
+                            <%= todo.completed ? 'completed' : '' %>
+                            <%= !todo.didRate(userId) ? 'unrated' : '' %>
+                            ">
                         <div class="d-flex justify-content-around align-items-center">
                             <div>
+                                <%# TODO: edit ejs so picture remains constant spot %>
                                 <img src="https://dummyimage.com/200x200/000000/fff">
                             </div>
                             <div>
@@ -66,9 +74,10 @@
                             </div>
                             <div class="todo-container">
                                 <div class="todo-header">
-                                    <h1><%= todo.creatorRate %></h1>
+                                    <h1><%= todo.getAvgRating() %></h1>
                                 </div>
                                 <div class="todo-details">
+                                    <figcaption><%= todo.getBothRateString(userId) %></figcaption>
                                     <figcaption>Created by <%= todo.creatorInfo.creatorName %></figcaption>
                                     <figcaption><%= todo.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-') %></figcaption>
                                 </div>
@@ -78,9 +87,9 @@
                             <button class="btn <%= todo.completed ? 'btn-secondary' : 'btn-success' %>  btn-lg glow-on-hover complete-todo" data-id="<%= todo._id %>">
                                 <i class="fas fa-check"></i>
                             </button>
-                            <button class="btn btn-warning btn-lg text-white glow-on-hover">
-                                <i class="fas fa-edit">Unfinished</i>
-                            </button>
+                            <a href="<%= todoType %>/modify/<%= todo._id %>" class="btn btn-warning btn-lg text-white glow-on-hover">
+                                <i class="fas fa-edit"></i>
+                            </a>
                             <button class="btn btn-danger btn-lg glow-on-hover delete-todo" data-id="<%= todo._id %>">
                                 <i class="fas fa-trash"></i>
                             </button>

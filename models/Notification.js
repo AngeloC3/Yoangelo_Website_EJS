@@ -19,15 +19,14 @@ const NotificationSchema = Schema( {
       type: String,
       required: true,
       trim: true,
-      enum: ["system", "pair-request",]
+      enum: ["system", "pair-request", "new-todo-item"]
     },
     notifMessage: {
       type: String,
       trim: true,
       required: function() {
-        return this.notifDetails.notifType === 'system';
+        return this.notifDetails.notifType === 'system' || this.notifDetails.notifType === 'new-todo-item';
       },
-      trim: true,
     },
   },
   viewed: {
@@ -69,9 +68,14 @@ NotificationSchema.methods.getTypeInfo = function() {
       infoObj.message = 'You have a new pair request';
       infoObj.viewRoute = "/pair/respond_pair_request/" + this._id;
       break;
+    case 'new-todo-item':
+      infoObj.message = this.notifDetails.notifMessage;
+      infoObj.viewRoute = "idkyet" // TODO FIX THIS
+      break;
     default:
       infoObj.message = 'You have a new notification';
   }
+  console.log(infoObj)
   return infoObj;
 };
 
