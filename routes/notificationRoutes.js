@@ -29,10 +29,15 @@ router.get("/", async (req, res) => {
     res.render("notifications", {notifs: notifs});
 });
 
-// TODO: change to delete request
-router.get("/delete/:notifId", checkParamId("notifId"), async (req, res) => {
-    await Notification.findByIdAndRemove(req.params.notifId);
-    res.redirect("/notifications");
+router.delete("/delete/:notifId", checkParamId("notifId"), async (req, res) => {
+    try{
+        await Notification.findByIdAndRemove(req.params.notifId)
+        .then(() =>{
+            res.status(200).send("Notification successfully deleted");
+        });
+    } catch (err) {
+        res.status(500).send("Notification failed to delete");
+    }
 })
 
 module.exports = router;

@@ -20,6 +20,6 @@ body {
 }
 
 .bordered {
-    border: 2px solid #f00; 
-    border-top: 2px solid #f00
+    border: 2px solid white !important; 
+    box-shadow: 0 0 .5rem #ff69b4;
 }

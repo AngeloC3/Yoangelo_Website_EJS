@@ -12,23 +12,25 @@
             <% for (let notif of notifs) { %>
             
                 <div class="notification-list bg-secondary <%= notif.viewed ? 'notification-list_read' : 'notification-list_unread' %>" style="overflow: hidden;">
-                <div class="notification-list_content">
-                    <div class="notification-list_img">
-                        <img src=<%= avatar_route %> alt="user">
+                    <div class="notification-list_content">
+                        <div class="notification-list_img">
+                            <img src=<%= avatar_route %> alt="user">
+                        </div>
+                        <div class="notification-list_detail text-light">
+                            <b style="color: pink"><%= notif.senderName %></b>
+                            <p><%= notif.message %></p>
+                            <p><small><%= notif.createdAt %></small></p>
+                        </div>
                     </div>
-                    <div class="notification-list_detail text-light">
-                        <b style="color: pink"><%= notif.senderName %></b>
-                        <p><%= notif.message %></p>
-                        <p><small><%= notif.createdAt %></small></p>
+                    <div class="notification-list_right">
+                        <% if (notif.viewRoute) { %>
+                            <a href="<%= notif.viewRoute %>" class="btn btn-primary w-100 m-1 glow-on-hover"><i class="fas fa-eye text-white"></i></a>
+                        <% } %>
+                        <a class="btn btn-danger w-100 m-1 glow-on-hover delete-notif" data-delete-route='<%= notif.deleteIdRoute %>' data-id="<%= notif._id %>">
+                            <i class="fas fa-trash"></i>
+                        </a>
                     </div>
                 </div>
-                <div class="notification-list_right">
-                    <% if (notif.viewRoute) { %>
-                        <a href="<%= notif.viewRoute %>" class="btn btn-info w-100 m-1 glow-on-hover">View</a>
-                    <% } %>
-                    <a href='<%= notif.deleteIdRoute %>' class="btn btn-danger w-100 m-1 glow-on-hover" onclick="return confirmDelete('<%= notif.senderName %>', '<%= notif.message %>')">Delete</a>
-                </div>
-            </div>
             <% } %>
 
         <% } else { %>
@@ -44,7 +46,31 @@
 </div>
 
 <script>
-    const confirmDelete = (name, msg) => {
-        return confirm('Are you sure you want to delete this notification:\n' + msg + "\n" + "from " + name) 
-    }
+    // Add event listener for delete button clicks
+    const deleteButtons = document.querySelectorAll('.delete-notif');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const confirmDelete = confirm('Are you sure you want to delete this Notification');
+            if (!confirmDelete) return;
+            const todoId = this.getAttribute('data-id');
+            const deleteRoute = this.getAttribute('data-delete-route');
+            // Send DELETE request to server
+            fetch(deleteRoute, { method: 'DELETE' })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                // Remove deleted notif from the screen
+                const notificationList = this.closest('.notification-list');
+                const remaining_num = notificationList.parentNode.children.length - 1;
+                if (remaining_num < 1){
+                    location.reload();
+                }
+                notificationList.remove();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
 </script>

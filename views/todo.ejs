@@ -19,23 +19,35 @@
         flex-direction: column;
         align-items: center;
     }
+    #ModifyButtons {
+        justify-content: center;
+        gap: 10px;
+    }
+    .completed {
+        background-color: #302f2b !important;
+        text-decoration: line-through;
+        text-decoration-color: #add8e6;
+    }
 </style>
 
-    <div class="container py-5 bg-dark">
-        <div class="row text-center text-white mb-5">
-            <div class="col-lg-7 mx-auto">
-                <h1 class="display-4"><%= page_title %></h1>
-            </div>
+<div class="container py-5 bg-dark">
+    <div class="row text-center text-white mb-5">
+        <div class="col-lg-7 mx-auto">
+            <h1 class="display-4" id="page-title"><%= page_title %></h1>
         </div>
+    </div>
     <div class="row">
         <div class="col-lg-10 mx-auto"> <!-- Make number bigger to make the box wider -->
+
+            <% if (todos.length !== 0) { %>
+
             <!-- List group-->
             <ul class="list-group shadow">
 
                 <% for (let todo of todos) { %>
 
                 <!-- list group item-->
-                    <li class="list-group-item bg-secondary text-white mb-3 rounded bordered">
+                    <li class="list-group-item bg-secondary text-white mb-3 rounded bordered <%= todo.completed ? 'completed' : '' %>">
                         <div class="d-flex justify-content-around align-items-center">
                             <div>
                                 <img src="https://dummyimage.com/200x200/000000/fff">
@@ -54,14 +66,116 @@
                                 </div>
                             </div>                                                                               
                         </div>
-                        <a class="details-button glow-on-hover btn btn-secondary">
+                        <div id="ModifyButtons" style="display:none;">
+                            <button class="btn <%= todo.completed ? 'btn-secondary' : 'btn-success' %>  btn-lg glow-on-hover complete-todo" data-id="<%= todo._id %>">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn btn-warning btn-lg text-white glow-on-hover">
+                                <i class="fas fa-edit">Unfinished</i>
+                            </button>
+                            <button class="btn btn-danger btn-lg glow-on-hover delete-todo" data-id="<%= todo._id %>">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <button class="details-button glow-on-hover btn btn-secondary" onclick="toggleDisplay(this)">
                             <i class="fas fa-info-circle"></i>
-                        </a>
+                        </button>
                     </li>
                     
                 <% } %>
                 
-            </ul> 
+            </ul>
+            <% } else { %>
+
+                <h2 class="fw-bold text-uppercase text-light text-center">No <%= page_title %> Items</h2>
+    
+            <% } %> 
         </div>
     </div>
 </div>
+
+<script>
+    function toggleDisplay(button) {
+        // Find the parent list item of the clicked button
+        const listItem = button.closest('li');
+
+        // Find the ModifyButtons div within the list item
+        const modifyButtons = listItem.querySelector('#ModifyButtons');
+
+        // Toggle the display style between 'none' and 'flex'
+        if (modifyButtons.style.display === 'none') {
+        modifyButtons.style.display = 'flex';
+        } else {
+        modifyButtons.style.display = 'none';
+        }
+    }
+
+    const todoType = '<%= todoType %>';
+    const pageName = '<%= page_title %>'
+    // Add event listener for delete button clicks
+    const deleteButtons = document.querySelectorAll('.delete-todo');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const confirmDelete = confirm(`Are you sure you want to delete this ${pageName} item?`);
+            if (!confirmDelete) return;
+            const todoId = this.getAttribute('data-id');
+            // Send DELETE request to server
+            fetch(`/todos/${todoType}/delete/${todoId}`, { method: 'DELETE' })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                // Remove deleted todo from the screen
+                const todoList = this.closest('.list-group-item');
+                const remaining_num = todoList.parentNode.children.length - 1;
+                if (remaining_num < 1){
+                    location.reload();
+                }
+                todoList.remove();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+
+    // Add event listener for complete button clicks
+    const completeButtons = document.querySelectorAll('.complete-todo');
+    completeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const todoId = this.getAttribute('data-id');
+            const todoListItem = this.closest('.list-group-item');
+            // Send PUT request to server
+            fetch(`/todos/${todoType}/change_completed/${todoId}`, { method: 'PUT' })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                const parentList = todoListItem.parentNode;
+                if (todoListItem.classList.contains('completed')){
+                    // Update to show non-completion
+                    this.classList.remove('btn-secondary');
+                    this.classList.add('btn-success');
+                    todoListItem.classList.remove('completed');
+                    todoListItem.style.textDecoration = "none";
+                    parentList.insertBefore(todoListItem, parentList.firstChild);
+                }
+                else {
+                    // Update to show completion
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-secondary');
+                    todoListItem.classList.add('completed');
+                    todoListItem.style.textDecoration = "line-through";
+                    todoListItem.style.textDecorationColor = "#add8e6";
+                    parentList.appendChild(todoListItem);
+                }
+                // Find and click the info button within the list item
+                todoListItem.querySelector('.details-button').click();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+
+    </script>

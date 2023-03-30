@@ -56,6 +56,13 @@ const seedPairRequests = async (u1u2_pair = false) => {
     partnerId = u2._id;
     await User.findByIdAndUpdate(partnerId, { partnerId: userId });
     await User.findByIdAndUpdate(userId, { partnerId: partnerId });
+    await Notification.create({
+      recipientId: userId,
+      notifDetails: {
+          notifType: "system",
+          notifMessage: "You have successfully paired with user2!"
+      }
+    });
     console.log("first 2 users paired");
   } else {
     await sendPairRequest(u2, u1);
