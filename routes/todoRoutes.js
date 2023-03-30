@@ -2,12 +2,11 @@ const router = require('express').Router({ mergeParams: true }); // allows /todo
 const TodoItem = require('../models/TodoItem');
 const User = require('../models/User');
 const { checkParamId } = require("../public/js/middlewares");
-const ObjectId = require('mongoose').Types.ObjectId;
-const isValidMongooseId = ObjectId.isValid;
 
 // Every route has param todoType that specifies which type of todo list it is
 
 router.get('/', async (req, res) => {
+    console.log(req.params.todoType);
     const user = await User.findById(req.session.userId);
     const userId = user._id;
     const partnerId = user.partnerId;
@@ -33,7 +32,7 @@ router.get('/', async (req, res) => {
     res.render("todo");
 });
 
-router.put('/change_completed/:todoId', checkParamId("todoId"), async (req, res) => {
+router.patch('/change_completed/:todoId', checkParamId("todoId"), async (req, res) => {
     try {
         const todo = await TodoItem.findById(req.params.todoId);
         todo.completed = !todo.completed;
@@ -55,6 +54,22 @@ router.delete('/delete/:todoId', checkParamId("todoId"), async (req, res) => {
     } catch (err) {
         res.status(500).send("Todo item failed to delete");
     }
+});
+
+router.get('/add', (req, res) => {
+    res.locals.todoType = req.params.todoType;
+    res.locals.postAction = `/todos/${req.params.todoType}/add`;
+    res.locals.page_title = todoTypeToTitle(req.params.todoType);
+    res.locals.buttonText = "Add";
+    res.locals.titleVal = undefined;
+    res.locals.descVal = undefined;
+    res.locals.ratingVal = 0;
+    res.render("forms/formTemplate", {form: "addTodoForm"});
+});
+
+router.post('/add', async (req, res) => {
+    const {title, description, rating} = req.body;
+    res.redirect("test")
 });
 
 module.exports = router;

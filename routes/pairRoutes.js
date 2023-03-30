@@ -7,11 +7,9 @@ const { findUserByIdAndUpdateReqSession } = require("../public/js/utils");
 // partner auth
 
 router.get('/request_pair', (req, res) => {
-    if (req.query.invalid_pair == 'true'){
-        res.locals.invalid_pair = true;
-      }
-    res.locals.pair_username = req.query.pair_username;
-    res.render("forms/formTemplate", {form: "requestPairForm"});
+    const error = req.flash('error');
+    const success = req.flash('success');
+    res.render("forms/formTemplate", {form: "requestPairForm", error, success});
 });
 
 router.post('/request_pair', async (req, res) => {
@@ -22,7 +20,8 @@ router.post('/request_pair', async (req, res) => {
         pair = await User.findOne({ email: pair_email })
     }
     if (!pair) {
-        res.redirect('/pair/request_pair' + '?invalid_pair=' + true);
+        req.flash('error', "The given email does not exist");
+        res.redirect('request_pair');
         return;
     }
     await Notification.deleteOne({senderId: user._id, 'notifDetails.notifType': "pair-request"}).then(() => {
@@ -33,7 +32,8 @@ router.post('/request_pair', async (req, res) => {
                 notifType: "pair-request",
             }
         });
-    res.redirect("/pair/request_pair" + '?pair_username=' + pair.username);
+    req.flash('success', `Your pair request was successfully sent to ${pair.username}!`);
+    res.redirect("request_pair");
     })       
 });
 

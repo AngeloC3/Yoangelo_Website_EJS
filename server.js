@@ -32,7 +32,8 @@ mongoose.connect(mongodb_URI, {
 }).then(() => console.log("Connected to MongoDB")).catch(error => console.log(error));
 
 // fully accessible routes and middleware
-app.use(require("./public/js/middlewares").set_locals)
+app.use(require('connect-flash')());
+app.use(require("./public/js/middlewares").set_locals);
 app.use(require("./routes/auth"));
 app.get("/", (req, res,) => {
   res.render("blank");

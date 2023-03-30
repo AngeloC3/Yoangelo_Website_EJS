@@ -32,9 +32,6 @@ const TodoItemSchema = Schema( {
   description: {
     type: String,
     trim: true,
-    default: function() {
-      return this.todoType + " item";
-    }
   },
   creatorRate: {
     type: Number,

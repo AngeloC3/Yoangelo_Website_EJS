@@ -1,0 +1,31 @@
+<form action='<%= postAction %>' method="POST">
+
+    <h2 class="fw-bold mb-2 text-uppercase">Add item to <%= page_title %></h2>
+    <p class="text-white-50 mb-5">Please fill out the form to add a new item!</p>
+
+    <div class="form-outline form-white mb-4">
+        <input type="text" name="title" class="form-control form-control-lg" value="<%= titleVal %>" required/>
+        <label class="form-label" for="title">Title</label>
+    </div>
+
+    <div class="form-outline form-white mb-4">
+        <textarea name="description" class="form-control form-control-lg" rows="5" value="<%= descVal %>"></textarea>
+        <label class="form-label" for="description">Description</label>
+        <small class="form-text text-muted">*Optional</small>
+    </div>
+
+    <div class="form-outline form-white mb-4">
+        <input type="range" name="rating" min="0" max="10" value="<%= ratingVal %>" oninput="updateValue(this.value)" required>
+        <p id="rating-value" style="font-size: 3em;"></p>
+        <label class="form-label" for="rating">Rating</label>
+    </div>
+
+
+    <button class="btn btn-outline-light btn-lg px-5" type="submit"><%= buttonText %></button>
+</form>
+
+<script>
+    function updateValue(val) {
+        document.getElementById('rating-value').textContent = val;
+    }
+</script>

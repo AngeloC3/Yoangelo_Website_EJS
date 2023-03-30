@@ -34,6 +34,9 @@
     <div class="row text-center text-white mb-5">
         <div class="col-lg-7 mx-auto">
             <h1 class="display-4" id="page-title"><%= page_title %></h1>
+            <a class="btn btn-secondary glow-on-hover" style="border-radius: 50%" href="<%= todoType %>/add">
+                <i class="fas fa-plus"></i>
+            </a>
         </div>
     </div>
     <div class="row">
@@ -111,7 +114,7 @@
     }
 
     const todoType = '<%= todoType %>';
-    const pageName = '<%= page_title %>'
+    const pageName = '<%= page_title %>';
     // Add event listener for delete button clicks
     const deleteButtons = document.querySelectorAll('.delete-todo');
     deleteButtons.forEach(button => {
@@ -146,7 +149,7 @@
             const todoId = this.getAttribute('data-id');
             const todoListItem = this.closest('.list-group-item');
             // Send PUT request to server
-            fetch(`/todos/${todoType}/change_completed/${todoId}`, { method: 'PUT' })
+            fetch(`/todos/${todoType}/change_completed/${todoId}`, { method: 'PATCH' })
             .then(response => {
                 if (!response.ok) {
                 throw new Error('Network response was not ok');

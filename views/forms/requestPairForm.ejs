@@ -1,24 +1,22 @@
-<% if (typeof pair_username !== 'undefined') {%>
+<% if (success.length > 0) {%>
 
-    <div class="alert alert-success" role="alert" style="vertical-align: middle;">
-        <h2>Your pair request was successfully sent to <%= pair_username %>!</h2>
+    <div class="alert alert-success" role="alert">
+        <h2><%= success %></h2>
     </div>
 
 <% } else { %>
     <form action="/pair/request_pair" method="POST">
 
-        <% if (typeof invalid_pair !== 'undefined' && invalid_pair === true) {%>
-        <div class="alert alert-danger" role="alert">
-            Invalid email. Please try again.
-        </div>
-        <% } %> 
+        <% if (error.length > 0) { %>
+            <div class="alert alert-danger" role="alert"><%= error %></div>
+        <% } %>
 
         <h2 class="fw-bold mb-2 text-uppercase">Request Pair</h2>
         <p class="text-white-50 mb-5">Please enter someone's account email to request to pair, and a notification will be sent to them!</p>
 
         <div class="form-outline form-white mb-4">
-        <input type="email" name="email" class="form-control form-control-lg" required/>
-        <label class="form-label" for="email">Email</label>
+            <input type="email" name="email" class="form-control form-control-lg" required/>
+            <label class="form-label" for="email">Email</label>
         </div>
 
 
