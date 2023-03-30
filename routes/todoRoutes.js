@@ -6,10 +6,10 @@ const { checkParamId } = require("../public/js/middlewares");
 // Every route has param todoType that specifies which type of todo list it is
 
 router.get('/', async (req, res) => {
-    console.log(req.params.todoType);
     const user = await User.findById(req.session.userId);
     const userId = user._id;
     const partnerId = user.partnerId;
+    // TODO: edit ejs so picture remains constant spot
     if (req.query.sortByRating == "true") {
         const todos = await TodoItem.find({'creatorInfo.creatorId': {$in: [userId, partnerId]}, todoType: req.params.todoType})
         res.locals.todos = todos.sort((a, b) => {
@@ -25,11 +25,12 @@ router.get('/', async (req, res) => {
         res.locals.todos = await TodoItem.find({
             'creatorInfo.creatorId': {$in: [userId, partnerId]}, 
             todoType: req.params.todoType 
-          }).sort({completed: 1});
+          }).sort({completed: 1, createdAt: -1});
     }
     res.locals.page_title = todoTypeToTitle(req.params.todoType);
     res.locals.todoType = req.params.todoType;
-    res.render("todo");
+    const success = req.flash('success');
+    res.render("todo", {success});
 });
 
 router.patch('/change_completed/:todoId', checkParamId("todoId"), async (req, res) => {
@@ -64,12 +65,29 @@ router.get('/add', (req, res) => {
     res.locals.titleVal = undefined;
     res.locals.descVal = undefined;
     res.locals.ratingVal = 0;
-    res.render("forms/formTemplate", {form: "addTodoForm"});
+    res.render("forms/formTemplate", {form: "add-modifyTodoForm"});
 });
 
 router.post('/add', async (req, res) => {
-    const {title, description, rating} = req.body;
-    res.redirect("test")
+    const {title, rating} = req.body;
+    const user = await User.findById(req.session.userId);
+    const username = user.username;
+    let description = req.body.description;
+    if (!description){
+        description = undefined
+    }
+    await TodoItem.create({
+        creatorInfo: {
+            creatorId: req.session.userId,
+            creatorName: username
+        },
+        todoType: req.params.todoType,
+        title: title,
+        description: description,
+        creatorRate: rating,
+    });
+    req.flash("success", `${title} successfully added to ${todoTypeToTitle(req.params.todoType)}`)
+    res.redirect(req.baseUrl)
 });
 
 module.exports = router;

@@ -37,6 +37,11 @@
             <a class="btn btn-secondary glow-on-hover" style="border-radius: 50%" href="<%= todoType %>/add">
                 <i class="fas fa-plus"></i>
             </a>
+            <% if (success.length > 0) {%>
+                <div class="alert alert-success alert-sm" role="alert" style="padding: .2rem; margin-top: .5rem;">
+                    <h2><%= success %></h2>
+                </div>
+            <% } %> 
         </div>
     </div>
     <div class="row">

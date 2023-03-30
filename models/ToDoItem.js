@@ -65,6 +65,16 @@ TodoItemSchema.methods.getAvgRating = function() {
     num = this.creatorRate;
   }
   return parseFloat(num.toFixed(2)).toString();
-}
+};
+
+TodoItemSchema.methods.didRate = function(id) {
+  if (this.creatorInfo.creatorId === id) {
+    return true;
+  }
+  if (!this.partnerRate){
+    return false;
+  }
+  return true;
+};
 
 module.exports = mongoose.model( 'TodoItem', TodoItemSchema );
