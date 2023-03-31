@@ -70,7 +70,7 @@ NotificationSchema.methods.getTypeInfo = function() {
       break;
     case 'new-todo-item':
       infoObj.message = this.notifDetails.notifMessage;
-      infoObj.viewRoute = "idkyet" // TODO FIX THIS
+      infoObj.viewRoute = `/todos/${this.related.relatedSchema}/modify/${this.related.relatedId}?rateOnly=true&viewNotifId=${this._id}`;
       break;
     default:
       infoObj.message = 'You have a new notification';

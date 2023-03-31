@@ -47,7 +47,7 @@ router.get('/respond_pair_request/:notifId', checkParamId('notifId'), async (req
         return;
     }
     // if the pair request wasn't viewed prior to this, decrement the amount of unread notifs
-    if (pair_request.viewed === false){
+    if (!pair_request.viewed){
         res.locals.notifNums.notifUnreadTotal -= 1;
     }
     pair = await User.findById(pair_request.senderId);

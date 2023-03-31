@@ -45,7 +45,7 @@
 
     .d-flex > div {
         flex-basis: calc(33.33% - 10px);
-        margin-bottom: 20px;
+        margin-bottom: 1rem;
     }
 
     #listImage {
@@ -69,6 +69,15 @@
     </div>
     <div class="row">
         <div class="col-lg-10 mx-auto"> <!-- Make number bigger to make the box wider -->
+            <div class="dropdown mb-2">
+                <button class="btn btn-secondary glow-on-hover" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Sort <i class="fas fa-sort"></i>
+                </button>
+                <ul class="dropdown-menu bg-secondary" aria-labelledby="sortButton">
+                  <li><a class="dropdown-item text-light" href="?sortByRating=true">Rating</a></li>
+                  <li><a class="dropdown-item text-light" href="<%= todoType %>">Recent</a></li>
+                </ul>
+            </div>
 
             <% if (todos.length !== 0) { %>
 
@@ -117,7 +126,7 @@
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
-                        <button class="details-button glow-on-hover btn btn-secondary" onclick="toggleDisplay(this)">
+                        <button class="top-right-button glow-on-hover btn btn-secondary" onclick="toggleDisplay(this)">
                             <i class="fas fa-info-circle"></i>
                         </button>
                     </li>
@@ -218,4 +227,4 @@
         });
     });
 
-    </script>
+</script>

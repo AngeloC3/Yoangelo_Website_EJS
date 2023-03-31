@@ -3,7 +3,6 @@ const TodoItem = require('../models/TodoItem');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const { checkParamId } = require("../public/js/middlewares");
-const e = require('connect-flash');
 
 // Every route has param todoType that specifies which type of todo list it is
 
@@ -99,7 +98,7 @@ router.post('/add', async (req, res) => {
                     notifMessage: `A new item has been added to your ${todoTypeToSplit(req.params.todoType)}!`,
                 },
                 related: {
-                    relatedSchema: "TodoItem",
+                    relatedSchema: req.params.todoType,
                     relatedId: new_todo_item._id
                 }
             });
@@ -138,6 +137,12 @@ router.get('/modify/:todoId', checkParamId("todoId"), async (req, res, next) => 
         res.locals.buttonText = "Rate";
     } else {
         res.locals.rateOnly = false;
+    }
+    if (req.query.viewNotifId){
+        const relatedNotif = await Notification.findByIdAndUpdate(req.query.viewNotifId, {viewed: true}, {new: false});
+        if (relatedNotif && !relatedNotif.viewed){
+            res.locals.notifNums.notifUnreadTotal -= 1;
+        }
     }
     res.render("forms/formTemplate", {form: "add-modifyTodoForm"});
 });

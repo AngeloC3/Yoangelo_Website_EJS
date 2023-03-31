@@ -10,7 +10,7 @@ body {
     box-shadow: 0 0 10px pink;
 }   
 
-.details-button {
+.top-right-button {
     margin-top: .1rem;
     margin-right: .2rem;
     position:absolute;

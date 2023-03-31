@@ -7,7 +7,7 @@ const system_name = "Yoangelo Website"
 
 router.get("/", async (req, res) => {
     const notifs = []
-    await Notification.find({recipientId: req.session.userId}).then(async (notifications) => {
+    await Notification.find({recipientId: req.session.userId}).sort({createdAt: -1}).then(async (notifications) => {
         for (const notif of notifications) {
             let senderName = system_name;
             if (notif.senderId){
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
                 senderName: senderName,
                 message: message,
                 viewRoute: viewRoute,
-                createdAt: notif.createdAt.toLocaleString(),
+                createdAt: notif.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-'),
                 deleteIdRoute: deleteRoute,
                 viewed: notif.viewed
             }
