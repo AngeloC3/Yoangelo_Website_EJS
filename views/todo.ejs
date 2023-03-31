@@ -23,6 +23,10 @@
         justify-content: center;
         gap: 10px;
     }
+    #rateButton {
+        color: yellow;
+        font-size: 2em;
+    }
     .completed {
         background-color: #302f2b !important;
         text-decoration: line-through;
@@ -31,6 +35,21 @@
     .unrated {
         /* After completed so this background color supercedes completed's */
         background-color: #6f0000 !important;
+    }
+    .d-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .d-flex > div {
+        flex-basis: calc(33.33% - 10px);
+        margin-bottom: 20px;
+    }
+
+    #listImage {
+        width: 35%; height: 35%; 
     }
 </style>
 
@@ -63,13 +82,17 @@
                             <%= todo.completed ? 'completed' : '' %>
                             <%= !todo.didRate(userId) ? 'unrated' : '' %>
                             ">
-                        <div class="d-flex justify-content-around align-items-center">
-                            <div>
-                                <%# TODO: edit ejs so picture remains constant spot %>
-                                <img src="https://dummyimage.com/200x200/000000/fff">
+                        <% if (!todo.didRate(userId)) { %>
+                            <div style="justify-content: center; display: flex;">
+                                <a href="<%= todoType %>/modify/<%= todo._id %>?rateOnly=true" class="btn glow-on-hover" id='rateButton'><i class="fa fa-star"></i></a>
                             </div>
+                        <% } %>
+                        <div class="d-flex">
                             <div>
-                                <h1><%= todo.title %></h1>
+                                <img id='listImage' src="/images/check.png">
+                            </div>
+                            <div style="text-align: center;">
+                                <h1 style="margin-bottom: 2rem;"><%= todo.title %></h1>
                                 <p><%= todo.description %></p>
                             </div>
                             <div class="todo-container">

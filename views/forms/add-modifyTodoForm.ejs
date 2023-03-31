@@ -14,12 +14,12 @@
     <% } %>
 
     <div class="form-outline form-white mb-4">
-        <input type="text" name="title" class="form-control form-control-lg" value="<%= titleVal %>" <% if (rateOnly) { %> disabled <% } %> required/>
+        <input type="text" name="title" class="form-control form-control-lg" value="<%= titleVal %>" <% if (rateOnly) { %> readonly <% } %> required/>
         <label class="form-label" for="title">Title</label>
     </div>
 
     <div class="form-outline form-white mb-4">
-        <textarea id="descTextArea" name="description" class="form-control form-control-lg" rows="5" <% if (rateOnly) { %> disabled <% } %>></textarea>
+        <textarea id="descTextArea" name="description" class="form-control form-control-lg" rows="5" <% if (rateOnly) { %> readonly <% } %>></textarea>
         <label class="form-label" for="description">Description</label>
         <small class="form-text text-muted">*Optional</small>
     </div>

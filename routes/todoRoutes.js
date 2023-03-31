@@ -151,10 +151,8 @@ router.post('/modify/:todoId', checkParamId("todoId"), async (req, res) => {
         error.status = 400;
         return next(error);
     }
-    toModify.title = title;
-    if (description) {
-        toModify.description = description;
-    }
+    if (title) toModify.title = title;
+    if (description) toModify.description = description;
     if (req.session.userId.equals(toModify.creatorInfo.creatorId)){
         toModify.creatorRate = rating;
     } else {

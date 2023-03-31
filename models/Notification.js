@@ -75,7 +75,6 @@ NotificationSchema.methods.getTypeInfo = function() {
     default:
       infoObj.message = 'You have a new notification';
   }
-  console.log(infoObj)
   return infoObj;
 };
 
