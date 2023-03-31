@@ -1,3 +1,32 @@
+<style>
+    #countdown {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        margin: 50px auto;
+    }
+
+    #countdown div {
+        margin: 0 10px;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #333;
+        color: #fff;
+    }
+
+    #countdown div:before {
+        content: attr(data-label);
+        display: block;
+        font-size: 0.75rem;
+        font-weight: normal;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+</style>
+
 <!-- List group-->
 <ul class="list-group shadow">
     
@@ -5,9 +34,40 @@
 
     <!-- list group item-->
         <li class="list-group-item bg-secondary text-white mb-3 rounded bordered">
-            hey
+            <div class="countdown" data-end-time="<%= countdown.endsAt.getTime() %>">            
+                <div data-label="days"></div>
+                <div data-label="hours"></div>
+                <div data-label="minutes"></div>
+                <div data-label="seconds"></div>
+            </div>
         </li>
         
     <% } %>
     
-</ul>"
+</ul>
+
+<script>
+    const countdowns = document.querySelectorAll('.countdown');
+    countdowns.forEach((countdown) => {
+        const endsAt = new Date(countdown.getAttribute("data-end-time"));
+        countdown.textContent = endsAt;
+        setInterval(() => {
+            const timeLeft = endsAt - new Date();
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+                const seconds = Math.floor((timeLeft / 1000) % 60);
+                countdown.querySelector('[data-label="days"]').textContent = `${days}d`;
+                countdown.querySelector('[data-label="hours"]').textContent = `${hours}h`;
+                countdown.querySelector('[data-label="minutes"]').textContent = `${minutes}m`;
+                countdown.querySelector('[data-label="seconds"]').textContent = `${seconds}s`;
+            } else {
+                countdown.querySelector('[data-label="days"]').textContent = '0d';
+                countdown.querySelector('[data-label="hours"]').textContent = '0h';
+                countdown.querySelector('[data-label="minutes"]').textContent = '0m';
+                countdown.querySelector('[data-label="seconds"]').textContent = '0s';
+            }
+        }, 1000);
+    });
+</script>

@@ -2,3 +2,8 @@
 - countdowns
 - wishlist
 - homepage
+- upload images to todo list items
+- upload background images to countdowns
+- upload pfps
+- non refresh delete for notifs
+- functionalize the delete todo procedure
