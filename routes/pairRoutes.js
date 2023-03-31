@@ -9,7 +9,7 @@ const { findUserByIdAndUpdateReqSession } = require("../public/js/utils");
 router.get('/request_pair', (req, res) => {
     const error = req.flash('error');
     const success = req.flash('success');
-    res.render("forms/formTemplate", {form: "requestPairForm", error, success});
+    res.render("forms/formContainer", {form: "requestPairForm", error, success});
 });
 
 router.post('/request_pair', async (req, res) => {
@@ -43,7 +43,7 @@ router.get('/respond_pair_request/:notifId', checkParamId('notifId'), async (req
     // returns the non-updated pair request
     const pair_request = await Notification.findByIdAndUpdate(req.params.notifId, {viewed: true}, { new: false}); 
     if (!pair_request){
-        res.render("forms/formTemplate", {form: "respondPairRequestForm"});
+        res.render("forms/formContainer", {form: "respondPairRequestForm"});
         return;
     }
     // if the pair request wasn't viewed prior to this, decrement the amount of unread notifs
@@ -53,7 +53,7 @@ router.get('/respond_pair_request/:notifId', checkParamId('notifId'), async (req
     pair = await User.findById(pair_request.senderId);
     pair_username = pair.username;
     pair_email = pair.email;
-    res.render("forms/formTemplate", {form: "respondPairRequestForm", pair_username: pair_username, pair_email: pair_email, pair_request: true});
+    res.render("forms/formContainer", {form: "respondPairRequestForm", pair_username: pair_username, pair_email: pair_email, pair_request: true});
 });
 
 router.post('/respond_pair_request/:notifId', checkParamId('notifId'), async (req, res) => {

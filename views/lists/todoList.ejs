@@ -53,95 +53,76 @@
     }
 </style>
 
-<div class="container py-5 bg-dark">
-    <div class="row text-center text-white mb-5">
-        <div class="col-lg-7 mx-auto">
-            <h1 class="display-4" id="page-title"><%= page_title %></h1>
-            <a class="btn btn-secondary glow-on-hover" style="border-radius: 50%" href="<%= todoType %>/add">
-                <i class="fas fa-plus"></i>
-            </a>
-            <% if (success.length > 0) {%>
-                <div class="alert alert-success alert-sm" role="alert" style="padding: .2rem; margin-top: .5rem;">
-                    <h2><%= success %></h2>
-                </div>
-            <% } %> 
-        </div>
+<% if (todos.length !== 0) { %>
+            
+    <div class="dropdown mb-2">
+        <button class="btn btn-secondary glow-on-hover" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Sort <i class="fas fa-sort"></i>
+        </button>
+        <ul class="dropdown-menu bg-secondary" aria-labelledby="sortButton">
+            <li><a class="dropdown-item text-light" href="?sortByRating=true">Rating</a></li>
+            <li><a class="dropdown-item text-light" href="<%= todoType %>">Recent</a></li>
+        </ul>
     </div>
-    <div class="row">
-        <div class="col-lg-10 mx-auto"> <!-- Make number bigger to make the box wider -->
-            <div class="dropdown mb-2">
-                <button class="btn btn-secondary glow-on-hover" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Sort <i class="fas fa-sort"></i>
-                </button>
-                <ul class="dropdown-menu bg-secondary" aria-labelledby="sortButton">
-                  <li><a class="dropdown-item text-light" href="?sortByRating=true">Rating</a></li>
-                  <li><a class="dropdown-item text-light" href="<%= todoType %>">Recent</a></li>
-                </ul>
-            </div>
 
-            <% if (todos.length !== 0) { %>
+    <!-- List group-->
+    <ul class="list-group shadow">
+        
+        <% for (let todo of todos) { %>
 
-            <!-- List group-->
-            <ul class="list-group shadow">
-
-                <% for (let todo of todos) { %>
-
-                <!-- list group item-->
-                    <li class="list-group-item bg-secondary text-white mb-3 rounded bordered 
-                            <%= todo.completed ? 'completed' : '' %>
-                            <%= !todo.didRate(userId) ? 'unrated' : '' %>
-                            ">
-                        <% if (!todo.didRate(userId)) { %>
-                            <div style="justify-content: center; display: flex;">
-                                <a href="<%= todoType %>/modify/<%= todo._id %>?rateOnly=true" class="btn glow-on-hover" id='rateButton'><i class="fa fa-star"></i></a>
-                            </div>
-                        <% } %>
-                        <div class="d-flex">
-                            <div>
-                                <img id='listImage' src="/images/check.png">
-                            </div>
-                            <div style="text-align: center;">
-                                <h1 style="margin-bottom: 2rem;"><%= todo.title %></h1>
-                                <p><%= todo.description %></p>
-                            </div>
-                            <div class="todo-container">
-                                <div class="todo-header">
-                                    <h1><%= todo.getAvgRating() %></h1>
-                                </div>
-                                <div class="todo-details">
-                                    <figcaption><%= todo.getBothRateString(userId) %></figcaption>
-                                    <figcaption>Created by <%= todo.creatorInfo.creatorName %></figcaption>
-                                    <figcaption><%= todo.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-') %></figcaption>
-                                </div>
-                            </div>                                                                               
-                        </div>
-                        <div id="ModifyButtons" style="display:none;">
-                            <button class="btn <%= todo.completed ? 'btn-secondary' : 'btn-success' %>  btn-lg glow-on-hover complete-todo" data-id="<%= todo._id %>">
-                                <i class="fas fa-check"></i>
-                            </button>
-                            <a href="<%= todoType %>/modify/<%= todo._id %>" class="btn btn-warning btn-lg text-white glow-on-hover">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button class="btn btn-danger btn-lg glow-on-hover delete-todo" data-id="<%= todo._id %>">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                        <button class="top-right-button glow-on-hover btn btn-secondary" onclick="toggleDisplay(this)">
-                            <i class="fas fa-info-circle"></i>
-                        </button>
-                    </li>
-                    
+        <!-- list group item-->
+            <li class="list-group-item bg-secondary text-white mb-3 rounded bordered 
+                    <%= todo.completed ? 'completed' : '' %>
+                    <%= !todo.didRate(userId) ? 'unrated' : '' %>
+                    ">
+                <% if (!todo.didRate(userId)) { %>
+                    <div style="justify-content: center; display: flex;">
+                        <a href="<%= todoType %>/modify/<%= todo._id %>?rateOnly=true" class="btn glow-on-hover" id='rateButton'><i class="fa fa-star"></i></a>
+                    </div>
                 <% } %>
-                
-            </ul>
-            <% } else { %>
+                <div class="d-flex">
+                    <div>
+                        <img id='listImage' src="/images/check.png">
+                    </div>
+                    <div style="text-align: center;">
+                        <h1 style="margin-bottom: 2rem;"><%= todo.title %></h1>
+                        <p><%= todo.description %></p>
+                    </div>
+                    <div class="todo-container">
+                        <div class="todo-header">
+                            <h1><%= todo.getAvgRating() %></h1>
+                        </div>
+                        <div class="todo-details">
+                            <figcaption><%= todo.getBothRateString(userId) %></figcaption>
+                            <figcaption>Created by <%= todo.creatorInfo.creatorName %></figcaption>
+                            <figcaption><%= todo.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-') %></figcaption>
+                        </div>
+                    </div>                                                                               
+                </div>
+                <div id="ModifyButtons" style="display:none;">
+                    <button class="btn <%= todo.completed ? 'btn-secondary' : 'btn-success' %>  btn-lg glow-on-hover complete-todo" data-id="<%= todo._id %>">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <a href="<%= todoType %>/modify/<%= todo._id %>" class="btn btn-warning btn-lg text-white glow-on-hover">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <button class="btn btn-danger btn-lg glow-on-hover delete-todo" data-id="<%= todo._id %>">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <button class="top-right-button glow-on-hover btn btn-secondary" onclick="toggleDisplay(this)">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </li>
+            
+        <% } %>
+        
+    </ul>
+    <% } else { %>
 
-                <h2 class="fw-bold text-uppercase text-light text-center">No <%= page_title %> Items</h2>
-    
-            <% } %> 
-        </div>
-    </div>
-</div>
+        <h2 class="fw-bold text-uppercase text-light text-center">No <%= page_title %> Items</h2>
+
+    <% } %> 
 
 <script>
     function toggleDisplay(button) {

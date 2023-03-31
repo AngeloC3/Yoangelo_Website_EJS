@@ -21,10 +21,20 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-                <a class="nav-link mx-2" href="/">Home</a>
+                <a class="nav-link mx-2" aria-current="page" href="/">Home</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link mx-2" href="/goals">Goals</a>
+                <a class="nav-link mx-2 dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Goals
+                </a>
+                <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item text-light" href="/todos/watch_list">Watch list</a></li>
+                    <li><a class="dropdown-item text-light" href="/todos/bucket_list">Bucket list</a></li>
+                    <li><a class="dropdown-item text-light" href="/todos/reading_list">Reading list</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mx-2" aria-current="page" href="/countdowns">Countdowns</a>
             </li>
         </ul>
 
@@ -61,7 +71,7 @@
   
 <script>
     // Get the current URL
-    const currentUrl = window.location.href;
+    const currentUrl = window.location.href.split('?')[0];
   
     // Find the link that matches the current URL
     const links = document.querySelectorAll('.navbar-nav a');

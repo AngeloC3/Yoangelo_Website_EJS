@@ -1,6 +1,7 @@
 const User = require('./models/User')
 const Notification = require('./models/Notification')
 const TodoItem = require('./models/TodoItem')
+const Countdown = require('./models/Countdown')
 const bcrypt = require("bcrypt");
 
 const mongoose = require("mongoose");
@@ -104,20 +105,47 @@ const seedTodos = async () => {
   const [u1, u2] = todoUsers;
   const howManyTodos = 20;
   for (let i = 0; i < howManyTodos; i++) {
-    let creator = undefined;
-    creator = (i % 2 === 0) ? u1 : u2;
+    const creator = (i % 2 === 0) ? u1 : u2;
     await createTodo(creator, i);
   }
   console.log(`created ${howManyTodos} todo items`);
 }
 
+const seedCountdowns = async () => {
+  const createCountdown = async (creator, i) => {
+    const now = new Date();
+    const randomMilisecs = Math.floor(Math.random() * 31536000000); // num milisecs in a year
+    const randomDate = new Date(now.getTime() + randomMilisecs);
+
+    return await Countdown.create({
+      creatorInfo: {
+        creatorId: creator._id,
+        creatorName: creator.username
+      },
+      title: "Countdown " + i,
+      endsAt: randomDate
+    });
+  };
+
+  await Countdown.deleteMany({});
+  const countdownUsers = [];
+  for (let i = 0; i < 2; i++) {
+    const user = await User.findOne({ email: userObjs[i].email });
+    countdownUsers.push(user);
+  }
+  const [u1, u2] = countdownUsers;
+  const howManyCountdowns = 5;
+  for (let i = 0; i < howManyCountdowns; i++) {
+    const creator = (i % 2 === 0) ? u1 : u2;
+    await createCountdown(creator, i);
+  }
+  console.log(`created ${howManyCountdowns} countdowns`);
+};
+
 seedUsers()
-.then(() => {
-  return (
-    seedPairRequests(true) 
-    && seedTodos()
-    );
-})
+.then(() => { return seedPairRequests(true) })
+.then(() => { return seedTodos() })
+.then(() => { return seedCountdowns() })
 .then(() => {
   console.log("closing")
   db.close()

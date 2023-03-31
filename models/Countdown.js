@@ -4,15 +4,22 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
 const countdownSchema = Schema( {
-  userId: {
-    type: ObjectId,
-    ref: "User"
+  creatorInfo: {
+    creatorId: {
+      type: ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    creatorName: {
+      type: String,
+      required: true,
+    }
   },
   title: {
     type: String,
     required: true,
   },
-  endTime: {
+  endsAt: {
     type: Date,
     required: true
   }

@@ -17,7 +17,7 @@ router.get('/login', (req, res) => {
     if (req.query.incorrect_login == 'true'){
         res.locals.incorrect_login = true;
       }
-    res.render("forms/formTemplate", {form: "loginForm"});
+    res.render("forms/formContainer", {form: "loginForm"});
 });
 
 router.post('/login', async (req, res) => {
@@ -41,7 +41,7 @@ router.get('/signup', (req, res) => {
     if (req.query.unavailable_email == 'true'){
         res.locals.unavailable_email = true;
       }
-    res.render("forms/formTemplate", {form: "signupForm"});
+    res.render("forms/formContainer", {form: "signupForm"});
 });
 
 router.post('/signup', async (req, res) => {

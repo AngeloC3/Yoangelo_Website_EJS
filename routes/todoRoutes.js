@@ -30,8 +30,9 @@ router.get('/', async (req, res) => {
     res.locals.page_title = todoTypeToTitle(req.params.todoType);
     res.locals.todoType = req.params.todoType;
     res.locals.userId = userId;
+    res.locals.addRoute = req.params.todoType + "/add"
     const success = req.flash('success');
-    res.render("todo", {success});
+    res.render("lists/listContainer", {success, innerList: "todoList"});
 });
 
 router.patch('/change_completed/:todoId', checkParamId("todoId"), async (req, res) => {
@@ -67,7 +68,7 @@ router.get('/add', (req, res) => {
     res.locals.descVal = undefined;
     res.locals.ratingVal = 0;
     res.locals.rateOnly = false;
-    res.render("forms/formTemplate", {form: "add-modifyTodoForm"});
+    res.render("forms/formContainer", {form: "add-modifyTodoForm"});
 });
 
 router.post('/add', async (req, res) => {
@@ -144,7 +145,7 @@ router.get('/modify/:todoId', checkParamId("todoId"), async (req, res, next) => 
             res.locals.notifNums.notifUnreadTotal -= 1;
         }
     }
-    res.render("forms/formTemplate", {form: "add-modifyTodoForm"});
+    res.render("forms/formContainer", {form: "add-modifyTodoForm"});
 });
 
 router.post('/modify/:todoId', checkParamId("todoId"), async (req, res) => {
