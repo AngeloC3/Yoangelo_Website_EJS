@@ -58,7 +58,7 @@ const NotificationSchema = Schema( {
 
 NotificationSchema.methods.getTypeInfo = function() {
   const infoObj = {
-    deleteRoute: "/notifications/delete/" + this._id,
+    deleteId: this._id,
   }
   switch (this.notifDetails.notifType) {
     case "system":

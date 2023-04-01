@@ -14,10 +14,8 @@ router.use(['/login', '/signup'], req_not_login);
 // self auth
 
 router.get('/login', (req, res) => {
-    if (req.query.incorrect_login == 'true'){
-        res.locals.incorrect_login = true;
-      }
-    res.render("forms/formContainer", {form: "loginForm"});
+    const error = req.flash('error');
+    res.render("forms/formContainer", {error, form: "loginForm"});
 });
 
 router.post('/login', async (req, res) => {
@@ -33,15 +31,14 @@ router.post('/login', async (req, res) => {
         res.redirect('/');
       } else {
         req.session.userId = null;
-        res.redirect('login' + '/?incorrect_login=' + true)
+        req.flash('error', 'Incorrect Login. Please try again.')
+        res.redirect('login')
       }
 });
 
 router.get('/signup', (req, res) => {
-    if (req.query.unavailable_email == 'true'){
-        res.locals.unavailable_email = true;
-      }
-    res.render("forms/formContainer", {form: "signupForm"});
+    const error = req.flash('error');
+    res.render("forms/formContainer", {error, form: "signupForm"});
 });
 
 router.post('/signup', async (req, res) => {
@@ -50,7 +47,8 @@ router.post('/signup', async (req, res) => {
 
     const found = await User.exists({ email: email })
     if (found) {
-        res.redirect('/signup' + '/?unavailable_email=' + true);
+        req.flash('error', 'The email address you entered is unavailable. Please try a different email address.')
+        res.redirect('/signup');
     } else {
         const user = await User.create({
             username: username,

@@ -14,13 +14,13 @@ router.get("/", async (req, res) => {
                 const sender = await User.findById(notif.senderId);
                 senderName = sender.username;
             }
-            const {message, viewRoute, deleteRoute} = notif.getTypeInfo()
+            const {message, viewRoute, deleteId} = notif.getTypeInfo()
             const notifObj = {
                 senderName: senderName,
                 message: message,
                 viewRoute: viewRoute,
                 createdAt: notif.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-'),
-                deleteIdRoute: deleteRoute,
+                deleteId: deleteId,
                 viewed: notif.viewed
             }
             notifs.push(notifObj);

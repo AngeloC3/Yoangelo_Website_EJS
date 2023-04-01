@@ -1,9 +1,9 @@
 <form action="/login" method="POST">
 
-    <% if (typeof incorrect_login !== 'undefined' && incorrect_login === true) {%>
-      <div class="alert alert-danger" role="alert">
-          Incorrect Login. Please try again.
-      </div>
+  <% if (error.length > 0) {%>
+    <div class="alert alert-danger" role="alert">
+      <h2><%= error %></h2>
+    </div>
    <% } %> 
 
     <h2 class="fw-bold mb-2 text-uppercase">Login</h2>

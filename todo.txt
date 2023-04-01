@@ -1,9 +1,9 @@
-- add req.flash for ALL forms
-- countdowns
+Pre-publish:
+- countdown shrink to phone
 - wishlist
 - homepage
+
+Rest:
 - upload images to todo list items
 - upload background images to countdowns
 - upload pfps
-- non refresh delete for notifs
-- functionalize the delete todo procedure

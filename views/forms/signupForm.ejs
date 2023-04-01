@@ -1,8 +1,9 @@
 <form action="/signup" method="POST">
     
-    <% if (typeof unavailable_email !== 'undefined' && unavailable_email === true) {%>
+    <% if (error.length > 0) {%>
+
         <div class="alert alert-danger" role="alert">
-            The email address you entered is unavailable. Please try a different email address.
+            <h2><%= error %></h2>
         </div>
     <% } %>
 
@@ -36,7 +37,6 @@
 
     <button class="btn btn-outline-light btn-lg px-5" type="submit" onclick="return checkMatches()">Signup</button>
 </form>
-
 
 <script>
     function checkMatches() {

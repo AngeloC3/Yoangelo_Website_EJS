@@ -8,7 +8,7 @@ devMode = true;
 // sets local that are needed constantly
 const set_locals = async (req,res,next) => {
     if (devMode && !req.session.userId) {
-        const user = await User.findOne({email: "user2@fake.com"});
+        const user = await User.findOne({email: "user1@fake.com"});
         req.session.userId = user._id;
     }
     if (req.session.userId) {
