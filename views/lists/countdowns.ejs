@@ -17,7 +17,6 @@
     }
 
     .countdown h1 {
-        font-size: 3em;
         margin-bottom: 1rem;
         text-align: center;
         text-shadow: 0.0625rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.8);
@@ -34,8 +33,6 @@
     }
 
     .countdown p {
-        margin: .5rem;
-        font-size: 4em;
         text-shadow: 0.0625rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.8);
     }
 
@@ -44,8 +41,80 @@
         font-size: 0.8rem;
         text-transform: uppercase;
         color: gray;
-        margin-left: .25rem;
         text-shadow: none;
+    }
+
+    .d-flex div {
+        min-width: 3em;
+    }
+
+    .countdown-label {
+    font-size: 5vw; /* vw references viewport width -> AKA screen width -> 1vw = 1% of viewport's width */
+    }
+
+    /* Optional: You can set a minimum font size to prevent the text from becoming too small on smaller screens */
+    @media (max-width: 480px) {
+    .countdown-label {
+        font-size: 16px;
+    }
+    }
+
+    .list-group-item {
+        padding: 1rem;
+    }
+
+    .countdown-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .d-flex.flex-row.bordered {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .flex-row {
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .countdown-item {
+        flex: 1;
+        text-align: center;
+        margin: 0 0.5rem;
+        flex-grow: 1;
+        min-width: 15%; /* Adjust this lower for more responsiveness */
+    }
+    .countdown-element {
+        font-size: 3vw;
+    }
+
+    @media (max-width: 480px) {
+    .countdown-title {
+        font-size: 1.2rem;
+    }
+
+    .countdown-element {
+        font-size: 5vw;
+    }
+
+    .flex-row {
+        flex-wrap: wrap;
+    }
+
+    .countdown-item {
+        flex-basis: 50%;
+        min-width: 25%; /* Adjust this lower for more responsiveness */
+    }
+    }
+
+    @media (min-width: 481px) and (max-width: 768px) {
+    .countdown-element {
+        font-size: 4vw;
+        min-width: 20%; /* Adjust this lower for more responsiveness */
+    }
     }
 </style>
 
@@ -59,19 +128,19 @@
         <!-- list group item-->
             <li class="list-group-item text-white mb-3 rounded box">
                 <div class="countdown" data-end-time="<%= countdown.endsAt %>">
-                    <h1><%= countdown.title %></h1>
-                    <div class="d-flex column bordered" style="max-width: 100%; overflow-x: auto;">
-                        <div>
-                            <p data-label="days">.</p>
+                    <h2 class="countdown-title"><%= countdown.title %></h2>
+                    <div class="d-flex flex-row bordered" style="overflow-x: auto;">
+                        <div class="countdown-item">
+                            <p class="countdown-element" data-label="Days">.</p>
                         </div>
-                        <div>
-                            <p data-label="hours">.</p>
+                        <div class="countdown-item">
+                            <p class="countdown-element" data-label="Hours">.</p>
                         </div>
-                        <div>
-                            <p data-label="minutes">.</p>
+                        <div class="countdown-item">
+                            <p class="countdown-element" data-label="Minutes">.</p>
                         </div>
-                        <div>
-                            <p data-label="seconds">.</p>
+                        <div class="countdown-item">
+                            <p class="countdown-element" data-label="Seconds">.</p>
                         </div>
                     </div>
                 </div>
@@ -92,58 +161,91 @@
 
 <% } %>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/listButtons.js"></script>
 <script>
-    const changeCountdownTexts = (countdown, endsAt) => {
-        const timeLeft = endsAt - new Date();
-            if (timeLeft > 0) {
-                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
-                const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
-                const seconds = Math.floor((timeLeft / 1000) % 60);
-                for (div of countdown.children[1].children){
-                    const child = div.children[0];
-                    let [hideDays, hideHours, hideMinutes] = [false, false, false]
-                    if (days <= 0){
-                        hideDays = true;
-                        if (hours <= 0){
-                            hideHours = true;
-                            if (minutes <= 0){
-                                hideMinutes = true;
-                            }
-                        }
-                    }
-                    switch (child.getAttribute('data-label')) {
-                        case 'days':
-                            child.textContent = days;
-                            hideDays? child.parentNode.style.display = 'none' : child.style.display = 'inline';
-                            break;
-                        case 'hours':
-                            child.textContent = hours;
-                            hideHours? child.parentNode.style.display = 'none' : child.style.display = 'inline';
-                            break;
-                        case 'minutes':
-                            child.textContent = minutes;
-                            hideMinutes? child.parentNode.style.display = 'none' : child.style.display = 'inline';
-                            break;
-                        case 'seconds':
-                            child.textContent = seconds;
-                            break;
-                    }
-                }
-            } else {
-                countdown.children[1].innerHTML = `<p>${endsAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'})
-                                                        .replace('at', '-')}</py>`;
-            }
-    };
+    // Call updateDataLabels on page load and when the window is resized
+    const updateDataLabels = () => {
+    const daysLabel = 'Days';
+    const hoursLabel = 'Hours';
+    const minutesLabel = 'Minutes';
+    const secondsLabel = 'Seconds';
+
     const countdowns = document.querySelectorAll('.countdown');
     countdowns.forEach((countdown) => {
-        const endsAt = new Date(countdown.getAttribute("data-end-time"));
-        changeCountdownTexts(countdown, endsAt)
-        setInterval(() => {
-            changeCountdownTexts(countdown, endsAt);
-        }, 1000);    
+      const countdownItems = countdown.querySelectorAll('.countdown-item');
+      countdownItems.forEach((item) => {
+        const child = item.querySelector('.countdown-element');
+        switch (child.getAttribute('data-label')) {
+        case 'Days':
+        case 'D':
+          child.setAttribute('data-label', daysLabel);
+          break;
+        case 'Hours':
+        case 'H':
+          child.setAttribute('data-label', hoursLabel);
+          break;
+        case 'Minutes':
+        case 'M':
+          child.setAttribute('data-label', minutesLabel);
+          break;
+        case 'Seconds':
+        case 'S':
+          child.setAttribute('data-label', secondsLabel);
+          break;
+      }
     });
+  });
+};
+// Call updateDataLabels on page load and when the window is resized
+document.addEventListener('DOMContentLoaded', updateDataLabels);
+window.addEventListener('resize', updateDataLabels);
+</script>
+<script>
+const changeCountdownTexts = (countdown, endsAt) => {
+  const timeLeft = endsAt - new Date();
+  if (timeLeft > 0) {
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+    const seconds = Math.floor((timeLeft / 1000) % 60);
 
-    addDeleteFunctionalityToButtons('countdown', '/countdowns');
+    const countdownItems = countdown.querySelectorAll('.countdown-item');
+    countdownItems.forEach((item) => {
+      const child = item.querySelector('.countdown-element');
+      switch (child.getAttribute('data-label')) {
+        case 'Days':
+          child.textContent = days;
+          break;
+        case 'Hours':
+          child.textContent = hours;
+          break;
+        case 'Minutes':
+          child.textContent = minutes;
+          break;
+        case 'Seconds':
+          child.textContent = seconds;
+          break;
+      }
+    });
+  } else {
+    const countdownItems = countdown.querySelectorAll('.countdown-item');
+    countdownItems.forEach((item) => {
+      const child = item.querySelector('.countdown-element');
+      child.textContent = '0';
+    });
+  }
+};
+
+const countdowns = document.querySelectorAll('.countdown');
+countdowns.forEach((countdown) => {
+  const endsAt = new Date(countdown.getAttribute("data-end-time"));
+  changeCountdownTexts(countdown, endsAt);
+  setInterval(() => {
+    changeCountdownTexts(countdown, endsAt);
+  }, 1000);
+});
+
+addDeleteFunctionalityToButtons('countdown', '/countdowns');
+
 </script>
