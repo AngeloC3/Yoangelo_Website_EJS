@@ -25,4 +25,11 @@ const CountdownSchema = Schema( {
   }
 });
 
+CountdownSchema.methods.isInPast = function(){
+  if (new Date(this.endsAt) - new Date() > 0 ){
+    return false;
+  }
+  return true;
+}
+
 module.exports = mongoose.model( 'Countdown', CountdownSchema );

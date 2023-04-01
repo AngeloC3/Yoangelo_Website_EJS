@@ -103,15 +103,28 @@
                 const seconds = Math.floor((timeLeft / 1000) % 60);
                 for (div of countdown.children[1].children){
                     const child = div.children[0];
+                    let [hideDays, hideHours, hideMinutes] = [false, false, false]
+                    if (days <= 0){
+                        hideDays = true;
+                        if (hours <= 0){
+                            hideHours = true;
+                            if (minutes <= 0){
+                                hideMinutes = true;
+                            }
+                        }
+                    }
                     switch (child.getAttribute('data-label')) {
                         case 'days':
                             child.textContent = days;
+                            hideDays? child.parentNode.style.display = 'none' : child.style.display = 'inline';
                             break;
                         case 'hours':
                             child.textContent = hours;
+                            hideHours? child.parentNode.style.display = 'none' : child.style.display = 'inline';
                             break;
                         case 'minutes':
                             child.textContent = minutes;
+                            hideMinutes? child.parentNode.style.display = 'none' : child.style.display = 'inline';
                             break;
                         case 'seconds':
                             child.textContent = seconds;
@@ -119,10 +132,8 @@
                     }
                 }
             } else {
-                for (div of countdown.children[1].children){
-                    const child = div.children[0];
-                    child.textContent = '0';
-                }
+                countdown.children[1].innerHTML = `<p>${endsAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'})
+                                                        .replace('at', '-')}</py>`;
             }
     };
     const countdowns = document.querySelectorAll('.countdown');

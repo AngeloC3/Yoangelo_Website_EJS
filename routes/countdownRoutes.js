@@ -9,8 +9,22 @@ router.get('/', async (req, res) => {
     const user = await User.findById(req.session.userId);
     const userId = user._id;
     const partnerId = user.partnerId;
-    res.locals.countdowns = await Countdown.find({'creatorInfo.creatorId': {$in: [userId, partnerId]}})
-        .sort({endsAt: 1});
+    await Countdown.find({'creatorInfo.creatorId': {$in: [userId, partnerId]}})
+    .then((countdowns) => {
+        res.locals.countdowns = countdowns.sort((a, b) => {
+            if (a.isInPast() && !b.isInPast()){
+                return 1;
+            }
+            if (b.isInPast() && !a.isInPast()){
+                return -1;
+            }
+            return new Date(a.endsAt) - new Date(b.endsAt);
+        });
+    }).catch((err) => {
+        console.log(err);
+        res.locals.countdowns = [];
+    });
+    
     res.locals.page_title = "Countdowns";
     res.locals.addRoute = "countdowns/add";
     const success = req.flash('success');
