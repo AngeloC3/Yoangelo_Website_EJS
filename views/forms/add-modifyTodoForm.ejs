@@ -25,7 +25,7 @@
     </div>
 
     <div class="form-outline form-white mb-4">
-        <input type="range" name="rating" min="0" max="10" value="<%= ratingVal %>" oninput="updateValue(this.value)" required>
+        <input class="multi-range" type="range" name="rating" min="0" max="10" value="<%= ratingVal %>" oninput="updateValue(this.value)" required>
         <p id="rating-value" style="font-size: 3em;"></p>
         <label class="form-label" for="rating">Rating</label>
     </div>

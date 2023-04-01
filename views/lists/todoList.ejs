@@ -27,6 +27,9 @@
         color: yellow;
         font-size: 2em;
     }
+    .todoItem {
+        background-color: #243447;
+    }
     .completed {
         background-color: #302f2b !important;
         text-decoration: line-through;
@@ -71,7 +74,7 @@
         <% for (let todo of todos) { %>
 
         <!-- list group item-->
-            <li class="list-group-item bg-secondary text-white mb-3 rounded bordered 
+            <li class="list-group-item todoItem text-white mb-3 rounded bordered 
                     <%= todo.completed ? 'completed' : '' %>
                     <%= !todo.didRate(userId) ? 'unrated' : '' %>
                     ">
