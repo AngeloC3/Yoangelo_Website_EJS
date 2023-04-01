@@ -3,11 +3,12 @@ const TodoItem = require('../models/TodoItem');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const { checkParamId } = require("../public/js/middlewares");
+const { findUserByIdAndUpdateReqSession } = require("../public/js/utils");
 
 // Every route has param todoType that specifies which type of todo list it is
 
 router.get('/', async (req, res) => {
-    const user = await User.findById(req.session.userId);
+    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
     const userId = user._id;
     const partnerId = user.partnerId;
     if (req.query.sortByRating == "true") {
@@ -51,8 +52,10 @@ router.patch('/change_completed/:todoId', checkParamId("todoId"), async (req, re
 router.delete('/delete/:todoId', checkParamId("todoId"), async (req, res) => {
     try{
         await TodoItem.findByIdAndRemove(req.params.todoId)
-        .then(() =>{
-            res.status(200).send("Todo item successfully deleted");
+        .then(async () =>{
+            await Notification.findOneAndDelete({'related.relatedId': req.params.todoId}).then(() => {
+                res.status(200).send("Todo item successfully deleted");
+            });
         });
     } catch (err) {
         res.status(500).send("Todo item failed to delete");
@@ -73,7 +76,7 @@ router.get('/add', (req, res) => {
 
 router.post('/add', async (req, res) => {
     const {title, rating} = req.body;
-    const user = await User.findById(req.session.userId);
+    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
     const username = user.username;
     let description = req.body.description;
     if (!description){

@@ -109,11 +109,11 @@
                     <a href="<%= todoType %>/modify/<%= todo._id %>" class="btn btn-warning btn-lg text-white glow-on-hover">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <button class="btn btn-danger btn-lg glow-on-hover delete-todo" data-id="<%= todo._id %>">
+                    <button class="btn btn-danger btn-lg glow-on-hover delete-list-item" data-id="<%= todo._id %>">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
-                <button class="top-right-button glow-on-hover btn btn-secondary" onclick="toggleDisplay(this)">
+                <button class="top-right glow-on-hover btn btn-secondary details-button" onclick="toggleDisplay(this)">
                     <i class="fas fa-info-circle"></i>
                 </button>
             </li>
@@ -127,6 +127,7 @@
 
     <% } %> 
 
+<script src="/js/listButtons.js"></script>
 <script>
     function toggleDisplay(button) {
         // Find the parent list item of the clicked button
@@ -143,34 +144,7 @@
         }
     }
 
-    const todoType = '<%= todoType %>';
-    const pageName = '<%= page_title %>';
-    // Add event listener for delete button clicks
-    const deleteButtons = document.querySelectorAll('.delete-todo');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const confirmDelete = confirm(`Are you sure you want to delete this ${pageName} item?`);
-            if (!confirmDelete) return;
-            const todoId = this.getAttribute('data-id');
-            // Send DELETE request to server
-            fetch(`/todos/${todoType}/delete/${todoId}`, { method: 'DELETE' })
-            .then(response => {
-                if (!response.ok) {
-                throw new Error('Network response was not ok');
-                }
-                // Remove deleted todo from the screen
-                const todoList = this.closest('.list-group-item');
-                const remaining_num = todoList.parentNode.children.length - 1;
-                if (remaining_num < 1){
-                    location.reload();
-                }
-                todoList.remove();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    });
+    addDeleteFunctionalityToButtons('<%= page_title %>', '/todos/<%= todoType %>');
 
     // Add event listener for complete button clicks
     const completeButtons = document.querySelectorAll('.complete-todo');
@@ -179,7 +153,7 @@
             const todoId = this.getAttribute('data-id');
             const todoListItem = this.closest('.list-group-item');
             // Send PUT request to server
-            fetch(`/todos/${todoType}/change_completed/${todoId}`, { method: 'PATCH' })
+            fetch(`/todos/<%= todoType %>/change_completed/${todoId}`, { method: 'PATCH' })
             .then(response => {
                 if (!response.ok) {
                 throw new Error('Network response was not ok');

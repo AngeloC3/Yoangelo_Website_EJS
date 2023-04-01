@@ -19,7 +19,7 @@ const NotificationSchema = Schema( {
       type: String,
       required: true,
       trim: true,
-      enum: ["system", "pair-request", "new-todo-item"]
+      enum: ["system", "pair-request", "new-todo-item", "new-countdown"]
     },
     notifMessage: {
       type: String,
@@ -72,6 +72,9 @@ NotificationSchema.methods.getTypeInfo = function() {
       infoObj.message = this.notifDetails.notifMessage;
       infoObj.viewRoute = `/todos/${this.related.relatedSchema}/modify/${this.related.relatedId}?rateOnly=true&viewNotifId=${this._id}`;
       break;
+    case 'new-countdown':
+      infoObj.message = this.notifDetails.notifMessage;
+      infoObj.viewRoute = '/countdowns';
     default:
       infoObj.message = 'You have a new notification';
   }

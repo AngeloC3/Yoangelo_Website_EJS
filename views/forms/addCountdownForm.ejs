@@ -1,0 +1,31 @@
+<style>
+
+/* Style for the input */
+.form-outline input[type=datetime-local] {
+  color: #333333; /* Set text color to dark gray */
+  font-size: 1.2rem; /* Set font size to 1.2rem */
+  border-radius: 10px;
+  padding: .6rem; /* Add some padding */
+}
+</style>
+
+
+<form action='/countdowns/add' method="POST">
+
+    <h2 class="fw-bold mb-2 text-uppercase">Add item to Countdowns</h2>
+    <p class="text-white-50 mb-5">Please fill out the form to add a new countdown!</p>
+
+    <div class="form-outline form-white mb-4">
+        <input type="text" name="title" class="form-control form-control-lg" required/>
+        <label class="form-label" for="title">Title</label>
+    </div>
+
+    <div class="form-outline form-white mb-4">
+        <input type="datetime-local" name="date">
+        <figcaption class="form-label">Date</figcaption>
+    </div>
+
+
+
+    <button class="btn btn-outline-light btn-lg px-5" type="submit">Add</button>
+</form>

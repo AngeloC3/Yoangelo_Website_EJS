@@ -1,28 +1,42 @@
 <style>
+    .box {
+        background: linear-gradient(to bottom, #141d26, #2b3844);
+        border: 0.125rem solid #E1D9D1 !important; 
+    }
+
     .countdown {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        font-size: 2rem;
         font-weight: bold;
         color: white;
-        border-radius: 10px;
-        padding: 20px;
+        border-radius: 1rem;
+        padding: 1rem;
+        position: relative;
+    }
+
+    .countdown h1 {
+        font-size: 3em;
+        margin-bottom: 1rem;
+        text-align: center;
+        text-shadow: 0.0625rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.8);
     }
 
     .countdown div {
+        display: flex;
         align-items: center;
-        margin: 0 20px;
+        margin: 0 1.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: .5rem;
+        /* box-shadow: inset 0rem 0rem .5rem rgba(0, 0, 0, 0.2); */
     }
 
     .countdown p {
         margin: .5rem;
-    }
-
-    .countdown p:first-child {
-        font-size: 1.2rem;
-        margin-bottom: 10px;
+        font-size: 4em;
+        text-shadow: 0.0625rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.8);
     }
 
     .countdown p[data-label]::after {
@@ -30,43 +44,55 @@
         font-size: 0.8rem;
         text-transform: uppercase;
         color: gray;
-    }
-
-    .countdown p[data-label] {
-        font-size: 2.5rem;
+        margin-left: .25rem;
+        text-shadow: none;
     }
 </style>
 
-<!-- List group-->
-<ul class="list-group shadow">
-    
-    <% for (let countdown of countdowns) { %>
+<% if (countdowns.length !== 0) { %>
 
-    <!-- list group item-->
-        <li class="list-group-item text-white mb-3 rounded bordered" style="background-color: 	#141d26;">
-            <div class="countdown" data-end-time="<%= countdown.endsAt %>">  
-                <h1><%= countdown.title %></h1>
-                <div class="d-flex column">
-                    <div>
-                        <p data-label="days">.</p>
-                    </div>   
-                    <div>
-                        <p data-label="hours">.</p>
-                    </div> 
-                    <div>
-                        <p data-label="minutes">.</p>
-                    </div> 
-                    <div>
-                        <p data-label="seconds">.</p>
+    <!-- List group-->
+    <ul class="list-group shadow">
+
+        <% for (let countdown of countdowns) { %>
+
+        <!-- list group item-->
+            <li class="list-group-item text-white mb-3 rounded box">
+                <div class="countdown" data-end-time="<%= countdown.endsAt %>">
+                    <h1><%= countdown.title %></h1>
+                    <div class="d-flex column bordered" style="max-width: 100%;">
+                        <div>
+                            <p data-label="days">.</p>
+                        </div>
+                        <div>
+                            <p data-label="hours">.</p>
+                        </div>
+                        <div>
+                            <p data-label="minutes">.</p>
+                        </div>
+                        <div>
+                            <p data-label="seconds">.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </li>
-        
-    <% } %>
-    
-</ul>
+                <button class="btn btn-lg text-white glow-on-hover delete-list-item top-right" data-id="<%= countdown._id %>">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <figcaption>Created by <%= countdown.creatorInfo.creatorName %></figcaption>
 
+            </li>
+
+        <% } %>
+
+    </ul>
+
+<% } else { %>
+
+    <h2 class="fw-bold text-uppercase text-light text-center">No Countdowns</h2>
+
+<% } %>
+
+<script src="/js/listButtons.js"></script>
 <script>
     const changeCountdownTexts = (countdown, endsAt) => {
         const timeLeft = endsAt - new Date();
@@ -93,8 +119,8 @@
                     }
                 }
             } else {
-                for (div of countdown.children){
-                    const child = div.children[1];
+                for (div of countdown.children[1].children){
+                    const child = div.children[0];
                     child.textContent = '0';
                 }
             }
@@ -107,4 +133,6 @@
             changeCountdownTexts(countdown, endsAt);
         }, 1000);    
     });
+
+    addDeleteFunctionalityToButtons('countdown', '/countdowns');
 </script>

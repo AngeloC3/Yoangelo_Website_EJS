@@ -10,7 +10,7 @@ body {
     box-shadow: 0 0 10px pink;
 }   
 
-.top-right-button {
+.top-right {
     margin-top: .1rem;
     margin-right: .2rem;
     position:absolute;
@@ -20,14 +20,10 @@ body {
 }
 
 .bordered {
-    border: 2px solid white !important; 
+    border: 0.125rem solid #E1D9D1 !important; 
     box-shadow: 0 0 .5rem #ff69b4;
 }
 
-.transparentNav {
-    background: rgb(33, 37, 41, .6);
-}
-
 .transparentMain {
-    background: rgb(33, 37, 41, .9);
+    background: rgb(33, 37, 41, .8);
 }
