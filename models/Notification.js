@@ -19,13 +19,14 @@ const NotificationSchema = Schema( {
       type: String,
       required: true,
       trim: true,
-      enum: ["system", "pair-request", "new-todo-item", "new-countdown", "new-wishlist-item"]
+      enum: ["system", "pair-request", "new-todo-item", "new-countdown", "new-wishlist-item", "new-todo-list"]
     },
     notifMessage: {
       type: String,
       trim: true,
       required: function() {
-        return this.notifDetails.notifType === 'system' || this.notifDetails.notifType === 'new-todo-item';
+        return this.notifDetails.notifType === 'system' || this.notifDetails.notifType === 'new-todo-item' 
+        || this.notifDetails.notifType === 'new-todo-list';
       },
     },
   },
@@ -52,6 +53,10 @@ const NotificationSchema = Schema( {
       validate: function() {
         return (this.relatedSchema && this.relatedId) || (!this.relatedSchema && !this.relatedId);
       }
+    },
+    relatedParam: {
+      type: String,
+      trim: true,
     }
   }
 } );
@@ -79,6 +84,10 @@ NotificationSchema.methods.getTypeInfo = function() {
     case "new-wishlist-item":
       infoObj.message = "A new item has been added to your wishlist!";
       infoObj.viewRoute = `/wishlist?viewNotifId=${this._id}`;
+      break;
+    case "new-todo-list":
+      infoObj.message = this.notifDetails.notifMessage;
+      infoObj.viewRoute = `/todos/${this.related.relatedParam}?viewNotifId=${this._id}`;
       break;
     default:
       infoObj.message = 'You have a new notification';

@@ -27,9 +27,9 @@ router.get('/', async (req, res) => {
     
     res.locals.page_title = "Countdowns";
     res.locals.addRoute = "countdowns/add";
-    const success = req.flash('success');
+    res.locals.success = req.flash('success');
     await checkForNotifAndDelete(req.query.viewNotifId, res);
-    res.render('lists/listContainer', {success, innerList: "countdowns"});
+    res.render('lists/listContainer', {innerList: "countdowns"});
 });
 
 router.get('/add', (req, res) =>{

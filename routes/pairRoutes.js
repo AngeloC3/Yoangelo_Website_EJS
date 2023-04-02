@@ -7,9 +7,9 @@ const { findUserByIdAndUpdateReqSession } = require("../public/js/utils");
 // partner auth
 
 router.get('/request_pair', (req, res) => {
-    const error = req.flash('error');
-    const success = req.flash('success');
-    res.render("forms/formContainer", {form: "requestPairForm", error, success});
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
+    res.render("forms/formContainer", {form: "requestPairForm"});
 });
 
 router.post('/request_pair', async (req, res) => {
@@ -57,8 +57,8 @@ router.get('/respond_pair_request/:notifId', checkParamId('notifId'), async (req
 });
 
 router.post('/respond_pair_request/:notifId', checkParamId('notifId'), async (req, res) => {
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req)
-    const choice = req.body.yesno
+    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    const choice = req.body.yesno;
     if (choice === "accept"){
         // find the one that you are recipient
         const userId = user._id;
@@ -76,8 +76,15 @@ router.post('/respond_pair_request/:notifId', checkParamId('notifId'), async (re
             const ex = await User.findByIdAndUpdate(user.partnerId, { partnerId: null});
         }
         // connect pairs
-        const pair = await User.findByIdAndUpdate(partnerId, { partnerId: userId });
-        await User.findByIdAndUpdate(userId, { partnerId: partnerId });
+        const pair = await User.findById(partnerId);
+        pair.partnerId = userId;
+        user.partnerId = partnerId;
+        const combinedTodos = [...new Set([...user.todoTypes, ...pair.todoTypes])];
+        user.todoTypes = combinedTodos;
+        pair.todoTypes = combinedTodos;
+        await user.save();
+        await pair.save();
+        
         req.session.hasPartner = true;
         // send notification saying that it was successfull
         await sendSuccessfulPairAlert(userId, pair.username);

@@ -25,6 +25,11 @@ const UserSchema = Schema( {
     ref: 'User',
     default: null
   },
+  todoTypes: {
+    type: [String],
+    default: [],
+    trim: true
+  }
 } );
 
 module.exports = mongoose.model( 'User', UserSchema );

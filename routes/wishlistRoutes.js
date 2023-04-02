@@ -16,9 +16,9 @@ router.get("/", async (req, res) => {
     res.locals.wishlist = wishlist;
     res.locals.page_title = "Wishlist";
     res.locals.addRoute = "wishlist/add";
-    const success = req.flash('success');
+    res.locals.success = req.flash('success');
     await checkForNotifAndDelete(req.query.viewNotifId, res);
-    res.render("lists/listContainer", {success, innerList: 'wishlist'});
+    res.render("lists/listContainer", {innerList: 'wishlist'});
 });
 
 router.get('/add', (req, res) => {

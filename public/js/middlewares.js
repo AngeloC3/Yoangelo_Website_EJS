@@ -44,12 +44,12 @@ const req_login = (req,res,next) => {
     else res.redirect('/login')
 }
 
-// cchecks that the paramId is a valid Mongoose Id, and if not --> error
+// checks that the paramId is a valid Mongoose Id, and if not --> error
 const checkParamId = (paramName) => {
     return (req, res, next) => {
         const paramVal = req.params[paramName];
         if (!isValidMongooseId(paramVal)){
-            const error = new Error(`Invalid ID in Route`);
+            const error = new Error('Invalid ID in Route');
             error.status = 400;
             return next(error);
         }
@@ -57,10 +57,23 @@ const checkParamId = (paramName) => {
     }
 }
 
+// checks if the todoType is valid
+const checkTodoType = async (req, res, next) => {
+    const user = await User.findById(req.session.userId);
+    const todoType = req.params.todoType;
+    if (!user.todoTypes.includes(todoType)){
+        const error = new Error(`This Todo List (${todoType}) Does not Exist`);
+        error.status = 400;
+        return next(error);
+    }
+    next();
+}
+
 module.exports = {
     set_locals,
     req_login,
     checkParamId,
+    checkTodoType,
 }
 
 // helpers

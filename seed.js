@@ -16,6 +16,9 @@ const db = mongoose.connection;
 
 const userObjs = []
 howManyUsers = 3
+let todoTypes = ['watch_list', 'bucket_list', 'reading_list'];
+todoTypes = todoTypes.concat(["todooooooooooooooooooooooooooooooooooooooooooooooooooo_list"])
+// above line is to test stupidly long title and desc
 
 const seedUsers = async () => {
   for (let i = 1; i <= howManyUsers; i++){
@@ -25,6 +28,7 @@ const seedUsers = async () => {
         username: userString,
         email: userString + "@" + "fake.com",
         password: hashedPassword,
+        todoTypes: todoTypes
     };
     userObjs.push(tempUser);
   } 
@@ -73,8 +77,6 @@ const seedPairRequests = async (u1u2_pair = false) => {
 }
 
 const seedTodos = async () => {
-
-  const todoTypes = ['watch_list', 'bucket_list', 'reading_list'];
 
   const createTodo = async (creator, i) => {
     const randType = todoTypes[Math.floor(Math.random() * todoTypes.length)];

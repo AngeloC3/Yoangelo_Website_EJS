@@ -1,7 +1,6 @@
 Pre-publish:
-- countdown shrink to phone
-- wishlist
 - homepage
+- infinite todo lists
 
 Rest:
 - upload images to todo list items

@@ -16,7 +16,14 @@ const checkForNotifAndDelete = async (notifId, res) => {
     }
 }
 
+const todoTypeToTitle = (type) => {
+    const words = type.split("_");
+    const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+    return capitalizedWords.join(" ");
+  };
+
 module.exports = {
     findUserByIdAndUpdateReqSession,
     checkForNotifAndDelete,
+    todoTypeToTitle,
 }

@@ -1,0 +1,42 @@
+<style>
+    .goalContainer {
+    text-align: center;
+    }
+
+    .goalBox {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    /* flex-direction: row; */
+    }
+  
+  .goal {
+    background-color: #243447;
+    border-radius: 1.25rem;
+    box-shadow: 0rem 0rem 0.625rem black;
+    padding: 2.5rem;
+    text-align: center;
+    width: 75%;
+    overflow-wrap: break-word;
+    text-decoration: none;
+    margin: 0 1.25rem 2rem 1.25rem;
+  }
+</style>
+
+<div class="goalContainer">
+    <% for (todoType of todoTypes) { %>
+      <% todoTitle = todoType.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ") %>
+      <a href="/manage-todos/delete/<%= todoType %>" class="btn btn-lg text-white" style="transform: scale(1.5);">
+        <i class="fas fa-trash"></i>
+      </a>   
+        <div class="goalBox">
+          <a href="todos/<%=todoType%>" class="goal text-white glow-on-hover">
+            <div style="display: block;">
+                <h2><%=todoTitle%></h2>
+            </div>
+          </a>
+        </div>   
+    <% } %>
+</div>
+

@@ -1,0 +1,32 @@
+<form action="" method="POST" id="confirmDeleteForm">
+    <input type="hidden" name="userId" value="<%= userId %>">
+    <input type="hidden" name="partnerId" value="<%= partnerId %>">
+
+    <h2 class="fw-bold mb-2 text-uppercase text-und">Delete <%= todoTitle %>?</h2>
+    <p class="mb-5">Confirm that you wish to delete the list and the <%= numPhrase %> inside</p>
+
+    <a type="button" class="btn btn-success me-2 btn-lg px-4 glow-on-hover" href="/manage-todos" style="margin-right: 3rem !important;"> Go Back</a>
+    <button type="button" class="btn btn-danger btn-lg px-4 glow-on-hover" onclick="confirmChoice()">Delete</button>
+    
+</form>
+
+<script>
+  
+window.addEventListener('DOMContentLoaded', function() {
+    const currentLink = window.location.href;
+    const form = document.getElementById('confirmDeleteForm');
+    form.setAttribute('action', currentLink);
+  });
+
+function confirmChoice() {
+  if (confirm('Are you sure you want to delete your <%= todoTitle %>?')) {
+    const delete_form = document.getElementById('confirmDeleteForm');
+    const input = document.createElement('input');
+    input.setAttribute('type', 'hidden');
+    input.setAttribute('name', 'shouldDelete');
+    input.setAttribute('value', true);
+    delete_form.appendChild(input);
+    delete_form.submit();
+  }
+}
+</script>

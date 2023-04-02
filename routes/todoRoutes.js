@@ -3,7 +3,7 @@ const TodoItem = require('../models/TodoItem');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const { checkParamId } = require("../public/js/middlewares");
-const { findUserByIdAndUpdateReqSession, checkForNotifAndDelete } = require("../public/js/utils");
+const { findUserByIdAndUpdateReqSession, checkForNotifAndDelete, todoTypeToTitle } = require("../public/js/utils");
 
 // Every route has param todoType that specifies which type of todo list it is
 
@@ -28,12 +28,13 @@ router.get('/', async (req, res) => {
             todoType: req.params.todoType 
           }).sort({completed: 1, createdAt: -1});
     }
+    await checkForNotifAndDelete(req.query.viewNotifId, res);
     res.locals.page_title = todoTypeToTitle(req.params.todoType);
     res.locals.todoType = req.params.todoType;
     res.locals.userId = userId;
     res.locals.addRoute = req.params.todoType + "/add"
-    const success = req.flash('success');
-    res.render("lists/listContainer", {success, innerList: "todoList"});
+    res.locals.success = req.flash('success');
+    res.render("lists/listContainer", {innerList: "todoList"});
 });
 
 router.patch('/change_completed/:todoId', checkParamId("todoId"), async (req, res) => {
@@ -165,12 +166,6 @@ module.exports = router;
 
 
 // helpers
-
-const todoTypeToTitle = (type) => {
-    const words = type.split("_");
-    const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
-    return capitalizedWords.join(" ");
-  };
 
 const todoTypeToSplit = (type) => {
     return type.split("_").join(" ");

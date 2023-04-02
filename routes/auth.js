@@ -14,8 +14,8 @@ router.use(['/login', '/signup'], req_not_login);
 // self auth
 
 router.get('/login', (req, res) => {
-    const error = req.flash('error');
-    res.render("forms/formContainer", {error, form: "loginForm"});
+    res.locals.error = req.flash('error');
+    res.render("forms/formContainer", {form: "loginForm"});
 });
 
 router.post('/login', async (req, res) => {
@@ -37,8 +37,8 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/signup', (req, res) => {
-    const error = req.flash('error');
-    res.render("forms/formContainer", {error, form: "signupForm"});
+    res.locals.error = req.flash('error');
+    res.render("forms/formContainer", {form: "signupForm"});
 });
 
 router.post('/signup', async (req, res) => {
