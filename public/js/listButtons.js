@@ -26,3 +26,18 @@ const addDeleteFunctionalityToButtons = (listType, deleteRoutePrefix) => {
         });
     });
 };
+
+const toggleDisplay = (button) =>{
+    // Find the parent list item of the clicked button
+    const listItem = button.closest('li');
+
+    // Find the ModifyButtons div within the list item
+    const modifyButtons = listItem.querySelector('#ModifyButtons');
+
+    // Toggle the display style between 'none' and 'flex'
+    if (modifyButtons.style.display === 'none') {
+    modifyButtons.style.display = 'flex';
+    } else {
+    modifyButtons.style.display = 'none';
+    }
+}

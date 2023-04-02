@@ -2,6 +2,7 @@ const User = require('./models/User')
 const Notification = require('./models/Notification')
 const TodoItem = require('./models/TodoItem')
 const Countdown = require('./models/Countdown')
+const Wishlist = require('./models/Wishlist')
 const bcrypt = require("bcrypt");
 
 const mongoose = require("mongoose");
@@ -142,10 +143,51 @@ const seedCountdowns = async () => {
   console.log(`created ${howManyCountdowns} countdowns`);
 };
 
+const seedWishlists = async () => {
+  const createWishlist = async (creator, i) => {
+    const randType = 'wishlist';
+    const randInt = Math.floor(Math.random() * 10) + 1;
+    const randomPrice = Math.floor(Math.random() * 999) + 1;
+    const randomSpaces = Math.floor(Math.random() * 20) + 1; // change inner val to higher for longer descrptions
+    let description = randType;
+    for (let i = 0; i < randomSpaces; i++) {
+      description += " " + randType;
+    }
+    let url = undefined
+    if (Math.random() >= .5) url = '#';
+
+    return await Wishlist.create({
+      creatorInfo: {
+        creatorId: creator._id,
+        creatorName: creator.username
+      },
+      title: "Wishlist " + i,
+      description: description,
+      price: randomPrice,
+      rating: randInt,
+      url: url
+    });
+  };
+
+  await Wishlist.deleteMany({});
+  const wishlistUsers = [];
+  for (let i = 0; i < 2; i++) {
+    const user = await User.findOne({ email: userObjs[i].email });
+    wishlistUsers.push(user);
+  }
+  const [u1, u2] = wishlistUsers;
+  const howManyCountdowns = 5;
+  for (let i = 0; i < howManyCountdowns; i++) {
+    const creator = (i % 2 === 0) ? u1 : u2;
+    await createWishlist(creator, i);
+  }
+};
+
 seedUsers()
 .then(() => { return seedPairRequests(true) })
 .then(() => { return seedTodos() })
 .then(() => { return seedCountdowns() })
+.then(() => { return seedWishlists() })
 .then(() => {
   console.log("closing")
   db.close()

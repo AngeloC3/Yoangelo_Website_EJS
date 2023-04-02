@@ -27,7 +27,7 @@
         align-items: center;
         margin: 0 1.5rem;
         background: rgba(255, 255, 255, 0.1);
-        padding: 1rem;
+        padding: 1.5rem;
         border-radius: .5rem;
         /* box-shadow: inset 0rem 0rem .5rem rgba(0, 0, 0, 0.2); */
     }
@@ -129,7 +129,7 @@
             <li class="list-group-item text-white mb-3 rounded box">
                 <div class="countdown" data-end-time="<%= countdown.endsAt %>">
                     <h2 class="countdown-title"><%= countdown.title %></h2>
-                    <div class="d-flex flex-row bordered" style="overflow-x: auto;">
+                    <div class="d-flex flex-row bordered">
                         <div class="countdown-item">
                             <p class="countdown-element" data-label="days">.</p>
                         </div>
@@ -201,8 +201,8 @@ const changeCountdownTexts = (countdown, endsAt) => {
           }
       }
   } else {
-      countdown.children[1].innerHTML = `<p>${endsAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'})
-                                              .replace('at', '-')}</py>`;
+      countdown.children[1].innerHTML = `<p style='font-size: 1.5em;'>${endsAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'})
+                                              .replace('at', '-')}</p>`;
   }
 };
 

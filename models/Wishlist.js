@@ -26,14 +26,12 @@ const WishlistSchema = Schema( {
     },
     price: {
         type: Number,
-        required: true,
-        get: (v) => Number(v.toFixed(2)),
     },
-    priority: {
+    rating: {
         type: Number,
         required: true,
-        min: [0, "The Priority must be at least 0"],
-        max: [10, "The Priority must be at most 10"]   
+        min: [0, "The Rating must be at least 0"],
+        max: [10, "The Rating must be at most 10"]   
     },
     url: {
         type: String,

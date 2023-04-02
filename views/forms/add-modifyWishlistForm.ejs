@@ -1,0 +1,54 @@
+<form action='<%= postAction %>' method="POST">
+
+    <% if (buttonText === 'Add') { %>
+        <h2 class="fw-bold mb-2 text-uppercase">Add item to your wishlist</h2>
+        <p class="text-white-50 mb-5">Please fill out the form to add a new wishlist item!</p>
+    <% } else { %>
+        <h2 class="fw-bold mb-2 text-uppercase">Modify item from your wishlist</h2>
+        <p class="text-white-50 mb-5">Please fill out the form to modify this wishlist item!</p>
+    <% } %>
+
+    <div class="form-outline form-white mb-4">
+        <input type="text" name="title" class="form-control form-control-lg" value="<%= titleVal %>" required/>
+        <label class="form-label" for="title">Title</label>
+    </div>
+
+    <div class="form-outline form-white mb-4">
+        <textarea id="descTextArea" name="description" class="form-control form-control-lg" rows="5"></textarea>
+        <label class="form-label" for="description">Description</label>
+        <small class="form-text text-muted">*Optional</small>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-center">
+        <span class="input-group-text" style="font-size: 1.5em;">$</span>
+        <div class="form-outline form-white">
+          <input id="priceInput" type="number" class="form-control" name="price" min="0" step="0.01" oninput="this.value = parseFloat(this.value).toFixed(2)" style="font-size: 1.5em;">
+        </div>
+    </div>
+    <label class="form-label mb-4" for="price">Price</label>
+    <small class="form-text text-muted">*Optional</small>
+
+      
+    <div class="form-outline form-white mb-4">
+        <input type="url" name="url" class="form-control form-control-lg" value="<%= url %>"/>
+        <label class="form-label" for="url">Link</label>
+        <small class="form-text text-muted">*Optional</small>
+    </div>
+
+    <div class="form-outline form-white mb-4">
+        <input class="multi-range" type="range" name="rating" min="0" max="10" value="<%= rating %>" oninput="updateValue(this.value)" required>
+        <p id="rating-value" style="font-size: 3em;"></p>
+        <label class="form-label" for="rating">Rating</label>
+    </div>
+
+    <button class="btn btn-outline-light btn-lg px-5" type="submit"><%= buttonText %></button>
+</form>
+
+<script>
+    function updateValue(val) {
+        document.getElementById('rating-value').textContent = val;
+    }
+    document.getElementById('rating-value').textContent = '<%= rating %>';
+    document.getElementById('descTextArea').textContent = '<%= descVal %>';
+    document.getElementById('priceInput').value = parseFloat('<%= price %>').toFixed(2);
+</script>

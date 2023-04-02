@@ -27,3 +27,28 @@ body {
 .transparentMain {
     background: rgb(33, 37, 41, .8);
 }
+
+.extras-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  
+.extras-header {
+    text-align: center;
+}
+
+.extras-header * {
+    font-size: 6em;
+    font-weight: bold;
+    color: pink;
+}
+.extras-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#ModifyButtons {
+    justify-content: center;
+    gap: 10px;
+}

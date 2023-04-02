@@ -1,28 +1,4 @@
 <style>
-    .todo-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .todo-header {
-      text-align: center;
-    }
-    
-    .todo-header * {
-      font-size: 6em;
-      font-weight: bold;
-      color: pink;
-    }
-    .todo-details {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    #ModifyButtons {
-        justify-content: center;
-        gap: 10px;
-    }
     #rateButton {
         color: yellow;
         font-size: 2em;
@@ -46,7 +22,7 @@
         flex-wrap: wrap;
     }
 
-    .d-flex > div {
+    .sectioned-children > div {
         flex-basis: calc(33.33% - 10px);
         margin-bottom: 1rem;
     }
@@ -83,7 +59,7 @@
                         <a href="<%= todoType %>/modify/<%= todo._id %>?rateOnly=true" class="btn glow-on-hover" id='rateButton'><i class="fa fa-star"></i></a>
                     </div>
                 <% } %>
-                <div class="d-flex">
+                <div class="d-flex sectioned-children">
                     <div>
                         <img id='listImage' src="/images/check.png">
                     </div>
@@ -91,11 +67,11 @@
                         <h1 style="margin-bottom: 2rem;"><%= todo.title %></h1>
                         <p><%= todo.description %></p>
                     </div>
-                    <div class="todo-container">
-                        <div class="todo-header">
+                    <div class="extras-container">
+                        <div class="extras-header">
                             <h1><%= todo.getAvgRating() %></h1>
                         </div>
-                        <div class="todo-details">
+                        <div class="extras-details">
                             <figcaption><%= todo.getBothRateString(userId) %></figcaption>
                             <figcaption>Created by <%= todo.creatorInfo.creatorName %></figcaption>
                             <figcaption><%= todo.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-') %></figcaption>
@@ -129,21 +105,6 @@
 
 <script src="/js/listButtons.js"></script>
 <script>
-    function toggleDisplay(button) {
-        // Find the parent list item of the clicked button
-        const listItem = button.closest('li');
-
-        // Find the ModifyButtons div within the list item
-        const modifyButtons = listItem.querySelector('#ModifyButtons');
-
-        // Toggle the display style between 'none' and 'flex'
-        if (modifyButtons.style.display === 'none') {
-        modifyButtons.style.display = 'flex';
-        } else {
-        modifyButtons.style.display = 'none';
-        }
-    }
-
     addDeleteFunctionalityToButtons('<%= page_title %>', '/todos/<%= todoType %>');
 
     // Add event listener for complete button clicks

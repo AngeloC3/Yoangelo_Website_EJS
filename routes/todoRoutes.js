@@ -3,7 +3,7 @@ const TodoItem = require('../models/TodoItem');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const { checkParamId } = require("../public/js/middlewares");
-const { findUserByIdAndUpdateReqSession } = require("../public/js/utils");
+const { findUserByIdAndUpdateReqSession, checkForNotifAndDelete } = require("../public/js/utils");
 
 // Every route has param todoType that specifies which type of todo list it is
 
@@ -77,15 +77,11 @@ router.get('/add', (req, res) => {
 router.post('/add', async (req, res) => {
     const {title, rating} = req.body;
     const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
-    const username = user.username;
-    let description = req.body.description;
-    if (!description){
-        description = undefined
-    }
+    const description = req.body.description || undefined;
     const new_todo_item = await TodoItem.create({
         creatorInfo: {
             creatorId: req.session.userId,
-            creatorName: username
+            creatorName: user.username
         },
         todoType: req.params.todoType,
         title: title,
@@ -117,7 +113,6 @@ router.get('/modify/:todoId', checkParamId("todoId"), async (req, res, next) => 
     res.locals.postAction = `/todos/${req.params.todoType}/modify/${req.params.todoId}`;
     res.locals.page_title = todoTypeToTitle(req.params.todoType);
     const todo_item = await TodoItem.findById(req.params.todoId);
-    // TODO: Test this
     if (!todo_item) {
         const error = new Error(`Todo Item Not Found`);
         error.status = 400;
@@ -142,26 +137,20 @@ router.get('/modify/:todoId', checkParamId("todoId"), async (req, res, next) => 
     } else {
         res.locals.rateOnly = false;
     }
-    if (req.query.viewNotifId){
-        const relatedNotif = await Notification.findByIdAndUpdate(req.query.viewNotifId, {viewed: true}, {new: false});
-        if (relatedNotif && !relatedNotif.viewed){
-            res.locals.notifNums.notifUnreadTotal -= 1;
-        }
-    }
+    await checkForNotifAndDelete(req.query.viewNotifId, res);
     res.render("forms/formContainer", {form: "add-modifyTodoForm"});
 });
 
 router.post('/modify/:todoId', checkParamId("todoId"), async (req, res) => {
     const {title, rating, description} = req.body;
     const toModify = await TodoItem.findById(req.params.todoId);
-    // TODO: Test this
     if (!toModify) {
         const error = new Error(`Todo Item Not Found`);
         error.status = 400;
         return next(error);
     }
     if (title) toModify.title = title;
-    if (description) toModify.description = description;
+    if (description || toModify.description) toModify.description = description;
     if (req.session.userId.equals(toModify.creatorInfo.creatorId)){
         toModify.creatorRate = rating;
     } else {
