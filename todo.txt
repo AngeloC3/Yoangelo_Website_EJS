@@ -1,6 +1,6 @@
 Pre-publish:
-- homepage
-- infinite todo lists
+- max text on names / descriptions
+- fix too long name for error / success msgs
 
 Rest:
 - upload images to todo list items

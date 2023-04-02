@@ -90,7 +90,7 @@ router.post('/modify/:wishlistItemId', checkParamId("wishlistItemId"), async (re
         return next(error);
     }
     if (title) toModify.title = title;
-    if (rating) toModify.title = rating;
+    if (rating) toModify.rating = rating;
     const optionals = [ ["description", description], ["price", price], ["url", url]];
     for (optional of optionals){
         if (optional[1] || toModify[optional[0]]) toModify[optional[0]] = optional[1];

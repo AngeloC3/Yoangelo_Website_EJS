@@ -36,7 +36,7 @@ app.use(require('connect-flash')());
 app.use(require("./public/js/middlewares").set_locals);
 app.use(require("./routes/auth"));
 app.get("/", (req, res,) => {
-  res.render("blank");
+  res.render("home");
 });
 
 // log in only routes
