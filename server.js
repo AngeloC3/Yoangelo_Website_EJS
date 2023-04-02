@@ -45,6 +45,7 @@ app.use("/pair", require("./routes/pairRoutes"));
 app.use("/notifications", require("./routes/notificationRoutes"));
 app.use("/todos/:todoType", require('./routes/todoRoutes'));
 app.use("/countdowns", require('./routes/countdownRoutes'));
+app.use("/wishlist", require('./routes/wishlistRoutes'))
 
 // errors
 const errorController = require('./controllers/errorController');

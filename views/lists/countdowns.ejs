@@ -131,16 +131,16 @@
                     <h2 class="countdown-title"><%= countdown.title %></h2>
                     <div class="d-flex flex-row bordered" style="overflow-x: auto;">
                         <div class="countdown-item">
-                            <p class="countdown-element" data-label="Days">.</p>
+                            <p class="countdown-element" data-label="days">.</p>
                         </div>
                         <div class="countdown-item">
-                            <p class="countdown-element" data-label="Hours">.</p>
+                            <p class="countdown-element" data-label="hours">.</p>
                         </div>
                         <div class="countdown-item">
-                            <p class="countdown-element" data-label="Minutes">.</p>
+                            <p class="countdown-element" data-label="minutes">.</p>
                         </div>
                         <div class="countdown-item">
-                            <p class="countdown-element" data-label="Seconds">.</p>
+                            <p class="countdown-element" data-label="seconds">.</p>
                         </div>
                     </div>
                 </div>
@@ -161,79 +161,48 @@
 
 <% } %>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/listButtons.js"></script>
-<script>
-    // Call updateDataLabels on page load and when the window is resized
-    const updateDataLabels = () => {
-    const daysLabel = 'Days';
-    const hoursLabel = 'Hours';
-    const minutesLabel = 'Minutes';
-    const secondsLabel = 'Seconds';
-
-    const countdowns = document.querySelectorAll('.countdown');
-    countdowns.forEach((countdown) => {
-      const countdownItems = countdown.querySelectorAll('.countdown-item');
-      countdownItems.forEach((item) => {
-        const child = item.querySelector('.countdown-element');
-        switch (child.getAttribute('data-label')) {
-        case 'Days':
-        case 'D':
-          child.setAttribute('data-label', daysLabel);
-          break;
-        case 'Hours':
-        case 'H':
-          child.setAttribute('data-label', hoursLabel);
-          break;
-        case 'Minutes':
-        case 'M':
-          child.setAttribute('data-label', minutesLabel);
-          break;
-        case 'Seconds':
-        case 'S':
-          child.setAttribute('data-label', secondsLabel);
-          break;
-      }
-    });
-  });
-};
-// Call updateDataLabels on page load and when the window is resized
-document.addEventListener('DOMContentLoaded', updateDataLabels);
-window.addEventListener('resize', updateDataLabels);
-</script>
 <script>
 const changeCountdownTexts = (countdown, endsAt) => {
   const timeLeft = endsAt - new Date();
-  if (timeLeft > 0) {
-    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
-    const seconds = Math.floor((timeLeft / 1000) % 60);
-
-    const countdownItems = countdown.querySelectorAll('.countdown-item');
-    countdownItems.forEach((item) => {
-      const child = item.querySelector('.countdown-element');
-      switch (child.getAttribute('data-label')) {
-        case 'Days':
-          child.textContent = days;
-          break;
-        case 'Hours':
-          child.textContent = hours;
-          break;
-        case 'Minutes':
-          child.textContent = minutes;
-          break;
-        case 'Seconds':
-          child.textContent = seconds;
-          break;
+    if (timeLeft > 0) {
+      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+      const seconds = Math.floor((timeLeft / 1000) % 60);
+      for (div of countdown.children[1].children){
+          const child = div.children[0];
+          let [hideDays, hideHours, hideMinutes] = [false, false, false]
+          if (days <= 0){
+              hideDays = true;
+              if (hours <= 0){
+                  hideHours = true;
+                  if (minutes <= 0){
+                      hideMinutes = true;
+                  }
+              }
+          }
+          switch (child.getAttribute('data-label')) {
+              case 'days':
+                  child.textContent = days;
+                  hideDays? child.parentNode.style.display = 'none' : child.style.display = 'inline';
+                  break;
+              case 'hours':
+                  child.textContent = hours;
+                  hideHours? child.parentNode.style.display = 'none' : child.style.display = 'inline';
+                  break;
+              case 'minutes':
+                  child.textContent = minutes;
+                  hideMinutes? child.parentNode.style.display = 'none' : child.style.display = 'inline';
+                  break;
+              case 'seconds':
+                  child.textContent = seconds;
+                  break;
+          }
       }
-    });
   } else {
-    const countdownItems = countdown.querySelectorAll('.countdown-item');
-    countdownItems.forEach((item) => {
-      const child = item.querySelector('.countdown-element');
-      child.textContent = '0';
-    });
+      countdown.children[1].innerHTML = `<p>${endsAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'})
+                                              .replace('at', '-')}</py>`;
   }
 };
 

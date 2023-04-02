@@ -53,7 +53,7 @@ const TodoItemSchema = Schema( {
     required: true,
     default: Date.now,
   },
-} );
+});
 
 TodoItemSchema.methods.getAvgRating = function() {
   // TODO: round this?
