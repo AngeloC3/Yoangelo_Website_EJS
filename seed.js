@@ -72,9 +72,9 @@ const seedPairRequests = async (u1u2_pair = false) => {
   await sendPairRequest(u3, u1);
   if (u1u2_pair) {
     userId = u1._id;
-    partnerId = u2._id;
-    await User.findByIdAndUpdate(partnerId, { partnerId: userId });
-    await User.findByIdAndUpdate(userId, { partnerId: partnerId });
+    pairId = u2._id;
+    await User.findByIdAndUpdate(pairId, { pairId: userId });
+    await User.findByIdAndUpdate(userId, { pairId: pairId });
     await Notification.create({
       recipientId: userId,
       notifDetails: {

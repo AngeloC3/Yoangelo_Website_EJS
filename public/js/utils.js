@@ -3,7 +3,7 @@ const Notification = require('../../models/Notification');
 
 const findUserByIdAndUpdateReqSession = async (id, req) => {
     const user = await User.findById(id);
-    req.session.hasPartner = user.partnerId !== null;
+    req.session.hasPair = user.pairId !== null;
     return user;
 }
 

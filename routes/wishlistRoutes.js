@@ -7,11 +7,11 @@ const { findUserByIdAndUpdateReqSession, checkForNotifAndDelete } = require("../
 
 router.get("/", async (req, res) => {
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
-    let [userId, partnerId] = [undefined, undefined];
+    let [userId, pairId] = [undefined, undefined];
     if (req.query.oneHalf !== 'pair') userId = user._id;
-    if (req.query.oneHalf !== 'user') partnerId = user.partnerId;
+    if (req.query.oneHalf !== 'user') pairId = user.pairId;
     const sortBy = req.query.sortBy || 'createdAt';
-    const wishlist = await Wishlist.find({'creatorInfo.creatorId': {$in: [userId, partnerId]}})
+    const wishlist = await Wishlist.find({'creatorInfo.creatorId': {$in: [userId, pairId]}})
     .sort({[sortBy]: -1});
     res.locals.wishlist = wishlist;
     res.locals.page_title = "Wishlist";
@@ -50,8 +50,8 @@ router.post('/add', async (req, res) => {
         rating: rating,
         url: url
     });
-    if (user.partnerId){
-        await User.findById(user.partnerId).then(async (pair) => {
+    if (user.pairId){
+        await User.findById(user.pairId).then(async (pair) => {
             await Notification.create({
                 recipientId: pair._id,
                 senderId: user._id,

@@ -8,8 +8,8 @@ const { findUserByIdAndUpdateReqSession, checkForNotifAndDelete } = require("../
 router.get('/', async (req, res) => {
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const userId = user._id;
-    const partnerId = user.partnerId;
-    await Countdown.find({'creatorInfo.creatorId': {$in: [userId, partnerId]}})
+    const pairId = user.pairId;
+    await Countdown.find({'creatorInfo.creatorId': {$in: [userId, pairId]}})
     .then((countdowns) => {
         res.locals.countdowns = countdowns.sort((a, b) => {
             if (a.isInPast() && !b.isInPast()){
@@ -47,8 +47,8 @@ router.post('/add', async (req, res) => {
         title: title,
         endsAt: date
     });
-    if (user.partnerId){
-        await User.findById(user.partnerId).then(async (pair) => {
+    if (user.pairId){
+        await User.findById(user.pairId).then(async (pair) => {
             await Notification.create({
                 recipientId: pair._id,
                 senderId: user._id,

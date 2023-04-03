@@ -10,9 +10,9 @@ const { findUserByIdAndUpdateReqSession, checkForNotifAndDelete, todoTypeToTitle
 router.get('/', async (req, res) => {
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const userId = user._id;
-    const partnerId = user.partnerId;
+    const pairId = user.pairId;
     if (req.query.sortByRating == "true") {
-        const todos = await TodoItem.find({'creatorInfo.creatorId': {$in: [userId, partnerId]}, todoType: req.params.todoType})
+        const todos = await TodoItem.find({'creatorInfo.creatorId': {$in: [userId, pairId]}, todoType: req.params.todoType})
         res.locals.todos = todos.sort((a, b) => {
             if (a.completed && !b.completed){
                 return 1;
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
         });
     } else {
         res.locals.todos = await TodoItem.find({
-            'creatorInfo.creatorId': {$in: [userId, partnerId]}, 
+            'creatorInfo.creatorId': {$in: [userId, pairId]}, 
             todoType: req.params.todoType 
           }).sort({completed: 1, createdAt: -1});
     }
@@ -89,8 +89,8 @@ router.post('/add', async (req, res) => {
         description: description,
         creatorRate: rating,
     });
-    if (user.partnerId){
-        await User.findById(user.partnerId).then(async (pair) => {
+    if (user.pairId){
+        await User.findById(user.pairId).then(async (pair) => {
             await Notification.create({
                 recipientId: pair._id,
                 senderId: user._id,
@@ -127,7 +127,7 @@ router.get('/modify/:todoId', checkParamId("todoId"), async (req, res, next) => 
         if (userId.equals(todo_item.creatorInfo.creatorId)){
             res.locals.ratingVal = todo_item.creatorRate;
         } else {
-            res.locals.ratingVal = todo_item.partnerRate;
+            res.locals.ratingVal = todo_item.pairRate;
         }
     } else {
         res.locals.ratingVal = 0;
@@ -155,7 +155,7 @@ router.post('/modify/:todoId', checkParamId("todoId"), async (req, res) => {
     if (req.user.equals(toModify.creatorInfo.creatorId)){
         toModify.creatorRate = rating;
     } else {
-        toModify.partnerRate = rating;
+        toModify.pairRate = rating;
     }
     await toModify.save();
     req.flash("success", `${title} successfully modified!`)

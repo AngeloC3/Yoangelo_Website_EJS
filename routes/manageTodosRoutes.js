@@ -18,13 +18,13 @@ router.get('/delete/:todoType', async(req, res) => {
     res.locals.todoTitle = todoTypeToTitle(req.params.todoType);
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const userId = user._id;
-    const partnerId = user.partnerId;
-    const numDocuments = await TodoItem.countDocuments({'creatorInfo.creatorId': {$in: [userId, partnerId]}, todoType: req.params.todoType});
+    const pairId = user.pairId;
+    const numDocuments = await TodoItem.countDocuments({'creatorInfo.creatorId': {$in: [userId, pairId]}, todoType: req.params.todoType});
     let numPhrase = numDocuments + " item";
     if (numDocuments !== 1) numPhrase += "s";
     res.locals.numPhrase = numPhrase;
     res.locals.userId = userId;
-    res.locals.partnerId = partnerId;
+    res.locals.pairId = pairId;
     res.render('forms/formContainer', {form: 'confirmTodoListDeleteForm'});
 });
 
@@ -34,12 +34,12 @@ router.post('/delete/:todoType', async(req, res) => {
     }
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const userId = user._id;
-    const pair = await User.findById(user.partnerId);
-    const partnerId = pair._id;
-    await TodoItem.deleteMany({'creatorInfo.creatorId': {$in: [userId, partnerId]}, todoType: req.params.todoType});
+    const pair = await User.findById(user.pairId);
+    const pairId = pair._id;
+    await TodoItem.deleteMany({'creatorInfo.creatorId': {$in: [userId, pairId]}, todoType: req.params.todoType});
     deleteTodoTypeAndSave(user, req.params.todoType);
     deleteTodoTypeAndSave(pair, req.params.todoType);
-    await Notification.findOneAndDelete({'related.relatedParam': req.params.todoType, senderId: { $in: [userId, partnerId] }, recipientId: { $in: [userId, partnerId] }});
+    await Notification.findOneAndDelete({'related.relatedParam': req.params.todoType, senderId: { $in: [userId, pairId] }, recipientId: { $in: [userId, pairId] }});
     res.redirect('/manage-todos')
 });
 
@@ -61,10 +61,10 @@ router.post('/create', async(req, res) => {
         error.status = 400;
         return next(error);
     }
-    const pair = await User.findById(user.partnerId);
+    const pair = await User.findById(user.pairId);
     addTodoTypeAndSave(user, todoType);
     addTodoTypeAndSave(pair, todoType);
-    if (user.partnerId){
+    if (user.pairId){
         await Notification.create({
             recipientId: pair._id,
             senderId: user._id,

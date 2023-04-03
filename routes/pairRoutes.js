@@ -4,7 +4,7 @@ const User = require('../models/User');
 const { checkParamId } = require("../public/js/middlewares");
 const { findUserByIdAndUpdateReqSession } = require("../public/js/utils");
 
-// partner auth
+// pair auth
 
 router.get('/request_pair', (req, res) => {
     res.locals.error = req.flash('error');
@@ -37,7 +37,7 @@ router.post('/request_pair', async (req, res) => {
     })       
 });
 
-// partner related views
+// pair related views
 
 router.get('/respond_pair_request/:notifId', checkParamId('notifId'), async (req, res) => {
     // returns the non-updated pair request
@@ -63,32 +63,32 @@ router.post('/respond_pair_request/:notifId', checkParamId('notifId'), async (re
         // find the one that you are recipient
         const userId = user._id;
         const pair_request = await Notification.findById(req.params.notifId);
-        const partnerId = pair_request.senderId
-        // delete all pair requests involving you or the partner
+        const pairId = pair_request.senderId
+        // delete all pair requests involving you or the pair
         await Notification.deleteMany({ 
             $and: [
               { 'notifDetails.notifType': 'pair-request' },
-              { $or: [ { recipientId: partnerId }, { recipientId: userId }, { senderId: partnerId }, {senderId: userId} ] }
+              { $or: [ { recipientId: pairId }, { recipientId: userId }, { senderId: pairId }, {senderId: userId} ] }
             ]
           });
-        // if you have a current partner -- make their current partner null, and yours will change
-        if (user.partnerId){
-            const ex = await User.findByIdAndUpdate(user.partnerId, { partnerId: null});
+        // if you have a current pair -- make their current pair null, and yours will change
+        if (user.pairId){
+            const ex = await User.findByIdAndUpdate(user.pairId, { pairId: null});
         }
         // connect pairs
-        const pair = await User.findById(partnerId);
-        pair.partnerId = userId;
-        user.partnerId = partnerId;
+        const pair = await User.findById(pairId);
+        pair.pairId = userId;
+        user.pairId = pairId;
         const combinedTodos = [...new Set([...user.todoTypes, ...pair.todoTypes])];
         user.todoTypes = combinedTodos;
         pair.todoTypes = combinedTodos;
         await user.save();
         await pair.save();
         
-        req.session.hasPartner = true;
+        req.session.hasPair = true;
         // send notification saying that it was successfull
         await sendSuccessfulPairAlert(userId, pair.username);
-        await sendSuccessfulPairAlert(partnerId, user.username)
+        await sendSuccessfulPairAlert(pairId, user.username)
     } else {
         await Notification.findByIdAndDelete(req.params.notifId);
     }

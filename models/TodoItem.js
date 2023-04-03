@@ -38,7 +38,7 @@ const TodoItemSchema = Schema( {
     min: minRate,
     max: maxRate,
   },
-  partnerRate: {
+  pairRate: {
     type: Number,
     minRate: minRate,
     maxRate: maxRate
@@ -58,8 +58,8 @@ const TodoItemSchema = Schema( {
 TodoItemSchema.methods.getAvgRating = function() {
   // TODO: round this?
   let num = undefined;
-  if (this.partnerRate !== undefined){
-    num = (this.creatorRate + this.partnerRate) / 2;
+  if (this.pairRate !== undefined){
+    num = (this.creatorRate + this.pairRate) / 2;
   } else {
     num = this.creatorRate;
   }
@@ -70,7 +70,7 @@ TodoItemSchema.methods.didRate = function(id) {
   if (id.equals(this.creatorInfo.creatorId)) {
     return true;
   }
-  if (this.partnerRate === undefined){
+  if (this.pairRate === undefined){
     return false;
   }
   return true;
@@ -88,10 +88,10 @@ TodoItemSchema.methods.getBothRateString = function(id) {
   let num2 = null;
   if (id.equals(this.creatorInfo.creatorId)) {
     num1 = this.creatorRate;
-    if (this.partnerRate !== undefined) num2 = this.partnerRate;
+    if (this.pairRate !== undefined) num2 = this.pairRate;
   } else {
     num2 = this.creatorRate;
-    if (this.partnerRate !== undefined) num1 = this.partnerRate;
+    if (this.pairRate !== undefined) num1 = this.pairRate;
   }
   return getRateString(num1) + " - " + getRateString(num2);
 }

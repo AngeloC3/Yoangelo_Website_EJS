@@ -28,7 +28,7 @@ const set_locals = async (req,res,next) => {
                 notifUnreadTotal: 0
             }
         }
-        res.locals.hasPartner = req.session.hasPartner;
+        res.locals.hasPair = req.session.hasPair;
     } else {
         res.locals.loggedIn = false;
         res.locals.notifNums = {}

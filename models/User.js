@@ -21,7 +21,7 @@ const UserSchema = Schema( {
   //   required: true,
   //   trim: true,
   // },
-  partnerId: {
+  pairId: {
     type: ObjectId,
     ref: 'User',
     default: null,
