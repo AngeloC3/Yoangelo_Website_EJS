@@ -1,160 +1,181 @@
 <style>
-  .wishlistItem {
+    .wishlistItem {
         background-color: #243447;
-    }
-  .d-flex {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-  }
-
-  .sectioned-children > div {
+        }
+    
+    .d-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+        }
+    
+    .sectioned-children > div {
         flex-basis: calc(33.33% - 10px);
         margin-bottom: 1rem;
-    }
-
-  #listImage {
-      width: 35%; height: 35%; 
-  }
-</style>
-
-
-<% if (wishlist.length !== 0) { %>
+        }
     
-    <div class="d-flex mb-1" id="topButtonContainer">
-        <div>
-
-        </div>
-        <div class="d-flex column" style="gap: 10px">
+    #listImage {
+        width: 35%; height: 35%; 
+        }
+    
+    .wishlistTextContainer {
+        padding-right: 2em;
+        min-height: 25em;
+        }
+    
+    .wishlistTitle {
+        max-width: 6em;
+        align-content: stretch;
+        overflow-wrap: break-word;
+        overflow: hidden;
+        /* padding-bottom: 1.5em; */
+        }
+    
+    .wishlistDescription {
+        max-width: 10em;
+        overflow: hidden;
+        overflow-wrap: break-word;
+    }
+    
+    </style>
+    
+    
+    <% if (wishlist.length !== 0) { %>
         
-        </div>
-    </div>
-
-    <!-- List group-->
-    <ul class="list-group shadow">
-        
-        <% for (let wishlistItem of wishlist) { %>
-
-        <!-- list group item-->
-            <li class="list-group-item wishlistItem text-white mb-3 rounded bordered">
-                <div class="d-flex sectioned-children">
-                    <div id="smaller">
-                        <img id='listImage' src="/images/kirby.png">
-                    </div>
-                    <div style="text-align: center;">
-                        <h1 style="margin-bottom: 2rem;"><%= wishlistItem.title %></h1>
-                        <p><%= wishlistItem.description %></p>
-                    </div>
-                    <div class="extras-container">
-                        <div class="extras-header">
-                            <h1><%= wishlistItem.rating %></h1>
-                        </div>
-                        <div class="extras-details">
-                            <% if (wishlistItem.price) { %>
-                                <h2>$<%= wishlistItem.price %></h2>
-                            <% } %>
-                            <figcaption>Created by <%= wishlistItem.creatorInfo.creatorName %></figcaption>
-                            <figcaption><%= wishlistItem.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-') %></figcaption>
-                            <% if (wishlistItem.url) { %>
-                                <figcaption class="glow-on-hover"><a  href="<%= wishlistItem.url %>"><i class="fa fa-link text-white" style="transform: scale(1.5);"></i></a></figcaption>
-                            <% } %>
-                        </div>
-                    </div>                                                                               
-                </div>
-                <div id="ModifyButtons" style="display:none;">
-                    <a href="/wishlist/modify/<%= wishlistItem._id %>" class="btn btn-warning btn-lg text-white glow-on-hover">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                    <button class="btn btn-danger btn-lg glow-on-hover delete-list-item" data-id="<%= wishlistItem._id %>">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <button class="top-right glow-on-hover btn btn-secondary details-button" onclick="toggleDisplay(this)">
-                    <i class="fas fa-info-circle"></i>
-                </button>
-            </li>
+        <div class="d-flex mb-1" id="topButtonContainer">
+            <div>
+    
+            </div>
+            <div class="d-flex column" style="gap: 10px">
             
-        <% } %>
-        
-    </ul>
-    <% } else { %>
-
-        <h2 class="fw-bold text-uppercase text-light text-center">No <%= page_title %> Items</h2>
-
-    <% } %> 
-
-<script src="/js/listButtons.js"></script>
-<script>
-  addDeleteFunctionalityToButtons('<%= page_title %>', '/wishlist');
-
-  function createDropdown(text, halfParam = "") {
-    // Create the main dropdown container
-    const dropdown = document.createElement('div');
-    dropdown.classList.add('dropdown', 'mb-2');
-
-    // Create the dropdown button
-    const button = document.createElement('button');
-    button.classList.add('btn', 'btn-secondary', 'glow-on-hover');
-    button.setAttribute('type', 'button');
-    button.setAttribute('data-bs-toggle', 'dropdown');
-    button.innerHTML = text + ' <i class="fas fa-sort"></i>';
-
-    // Create the dropdown menu
-    const menu = document.createElement('ul');
-    menu.classList.add('dropdown-menu', 'bg-secondary');
-    menu.setAttribute('aria-labelledby', 'sortButton');
-
-    // Create the menu items and links
-    let andSign = "";
-    if (halfParam !== "") andSign = "&";
-    const priorityLink = document.createElement('a');
-    priorityLink.classList.add('dropdown-item', 'text-light');
-    priorityLink.setAttribute('href', '?sortBy=rating' + andSign + halfParam);
-    priorityLink.innerHTML = 'Rating';
-
-    const priceLink = document.createElement('a');
-    priceLink.classList.add('dropdown-item', 'text-light');
-    priceLink.setAttribute('href', '?sortBy=price' + andSign + halfParam);
-    priceLink.innerHTML = 'Price';
-
-    if (halfParam !== "") halfParam = "?" + halfParam;
-    const recentLink = document.createElement('a');
-    recentLink.classList.add('dropdown-item', 'text-light');
-    recentLink.setAttribute('href', 'wishlist' + halfParam);
-    recentLink.innerHTML = 'Recent';
-
-    // Add the links to the menu items
-    const priorityItem = document.createElement('li');
-    priorityItem.appendChild(priorityLink);
-
-    const priceItem = document.createElement('li');
-    priceItem.appendChild(priceLink);
-
-    const recentItem = document.createElement('li');
-    recentItem.appendChild(recentLink);
-
-    // Add the menu items to the dropdown menu
-    menu.appendChild(priorityItem);
-    menu.appendChild(priceItem);
-    menu.appendChild(recentItem);
-
-    // Add the button and menu to the dropdown container
-    dropdown.appendChild(button);
-    dropdown.appendChild(menu);
-
-    // Return the dropdown container
-    return dropdown;
-  }
-
-  // create dropdowns for the top buttons
-  const regular = document.querySelector('#topButtonContainer > div:first-child');
-  const half = document.querySelector('#topButtonContainer > div:last-child');
-  const regularDropdown = createDropdown("Sort All");
-  const userDropdown = createDropdown("Yours Only", "oneHalf=user");
-  const pairDropdown = createDropdown("Pair's Only", "oneHalf=pair");
-  regular.appendChild(regularDropdown);
-  half.appendChild(userDropdown);
-  half.appendChild(pairDropdown);
-
-</script>
+            </div>
+        </div>
+    
+        <!-- List group-->
+        <ul class="list-group shadow">
+            
+            <% for (let wishlistItem of wishlist) { %>
+    
+            <!-- list group item-->
+                <li class="list-group-item wishlistItem text-white mb-3 rounded bordered">
+                    <div class="d-flex sectioned-children">
+                        <div id="smaller">
+                            <img id='listImage' src="/images/kirby.png">
+                        </div>
+                        <div class="wishlistTextContainer"style="text-align: center;">
+                            <h1 class= "wishlistTitle"style="margin-bottom: 2rem;"><%= wishlistItem.title %></h1>
+                            <p class="wishlistDescription"><%= wishlistItem.description %></p>
+                        </div>
+                        <div class="extras-container">
+                            <div class="extras-header">
+                                <h1><%= wishlistItem.rating %></h1>
+                            </div>
+                            <div class="extras-details">
+                                <% if (wishlistItem.price) { %>
+                                    <h2>$<%= wishlistItem.price %></h2>
+                                <% } %>
+                                <figcaption>Created by <%= wishlistItem.creatorInfo.creatorName %></figcaption>
+                                <figcaption><%= wishlistItem.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-') %></figcaption>
+                                <% if (wishlistItem.url) { %>
+                                    <figcaption class="glow-on-hover"><a  href="<%= wishlistItem.url %>"><i class="fa fa-link text-white" style="transform: scale(1.5);"></i></a></figcaption>
+                                <% } %>
+                            </div>
+                        </div>                                                                               
+                    </div>
+                    <div id="ModifyButtons" style="display:none;">
+                        <a href="/wishlist/modify/<%= wishlistItem._id %>" class="btn btn-warning btn-lg text-white glow-on-hover">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="btn btn-danger btn-lg glow-on-hover delete-list-item" data-id="<%= wishlistItem._id %>">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <button class="top-right glow-on-hover btn btn-secondary details-button" onclick="toggleDisplay(this)">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </li>
+                
+            <% } %>
+            
+        </ul>
+        <% } else { %>
+    
+            <h2 class="fw-bold text-uppercase text-light text-center">No <%= page_title %> Items</h2>
+    
+        <% } %> 
+    
+    <script src="/js/listButtons.js"></script>
+    <script>
+      addDeleteFunctionalityToButtons('<%= page_title %>', '/wishlist');
+    
+      function createDropdown(text, halfParam = "") {
+        // Create the main dropdown container
+        const dropdown = document.createElement('div');
+        dropdown.classList.add('dropdown', 'mb-2');
+    
+        // Create the dropdown button
+        const button = document.createElement('button');
+        button.classList.add('btn', 'btn-secondary', 'glow-on-hover');
+        button.setAttribute('type', 'button');
+        button.setAttribute('data-bs-toggle', 'dropdown');
+        button.innerHTML = text + ' <i class="fas fa-sort"></i>';
+    
+        // Create the dropdown menu
+        const menu = document.createElement('ul');
+        menu.classList.add('dropdown-menu', 'bg-secondary');
+        menu.setAttribute('aria-labelledby', 'sortButton');
+    
+        // Create the menu items and links
+        let andSign = "";
+        if (halfParam !== "") andSign = "&";
+        const priorityLink = document.createElement('a');
+        priorityLink.classList.add('dropdown-item', 'text-light');
+        priorityLink.setAttribute('href', '?sortBy=rating' + andSign + halfParam);
+        priorityLink.innerHTML = 'Rating';
+    
+        const priceLink = document.createElement('a');
+        priceLink.classList.add('dropdown-item', 'text-light');
+        priceLink.setAttribute('href', '?sortBy=price' + andSign + halfParam);
+        priceLink.innerHTML = 'Price';
+    
+        if (halfParam !== "") halfParam = "?" + halfParam;
+        const recentLink = document.createElement('a');
+        recentLink.classList.add('dropdown-item', 'text-light');
+        recentLink.setAttribute('href', 'wishlist' + halfParam);
+        recentLink.innerHTML = 'Recent';
+    
+        // Add the links to the menu items
+        const priorityItem = document.createElement('li');
+        priorityItem.appendChild(priorityLink);
+    
+        const priceItem = document.createElement('li');
+        priceItem.appendChild(priceLink);
+    
+        const recentItem = document.createElement('li');
+        recentItem.appendChild(recentLink);
+    
+        // Add the menu items to the dropdown menu
+        menu.appendChild(priorityItem);
+        menu.appendChild(priceItem);
+        menu.appendChild(recentItem);
+    
+        // Add the button and menu to the dropdown container
+        dropdown.appendChild(button);
+        dropdown.appendChild(menu);
+    
+        // Return the dropdown container
+        return dropdown;
+      }
+    
+      // create dropdowns for the top buttons
+      const regular = document.querySelector('#topButtonContainer > div:first-child');
+      const half = document.querySelector('#topButtonContainer > div:last-child');
+      const regularDropdown = createDropdown("Sort All");
+      const userDropdown = createDropdown("Yours Only", "oneHalf=user");
+      const pairDropdown = createDropdown("Pair's Only", "oneHalf=pair");
+      regular.appendChild(regularDropdown);
+      half.appendChild(userDropdown);
+      half.appendChild(pairDropdown);
+    
+    </script>
