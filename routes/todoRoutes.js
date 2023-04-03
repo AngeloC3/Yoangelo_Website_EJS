@@ -3,7 +3,7 @@ const TodoItem = require('../models/TodoItem');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const { checkParamId } = require("../public/js/middlewares");
-const { findUserByIdAndUpdateReqSession, checkForNotifAndDelete, todoTypeToTitle } = require("../public/js/utils");
+const { findUserByIdAndUpdateReqSession, todoTypeToTitle } = require("../public/js/utils");
 
 // Every route has param todoType that specifies which type of todo list it is
 
@@ -28,12 +28,10 @@ router.get('/', async (req, res) => {
             todoType: req.params.todoType 
           }).sort({completed: 1, createdAt: -1});
     }
-    await checkForNotifAndDelete(req.query.viewNotifId, res);
     res.locals.page_title = todoTypeToTitle(req.params.todoType);
     res.locals.todoType = req.params.todoType;
     res.locals.userId = userId;
-    res.locals.addRoute = req.params.todoType + "/add"
-    res.locals.success = req.flash('success');
+    res.locals.addRoute = req.params.todoType + "/add";
     res.render("lists/listContainer", {innerList: "todoList"});
 });
 
@@ -138,7 +136,6 @@ router.get('/modify/:todoId', checkParamId("todoId"), async (req, res, next) => 
     } else {
         res.locals.rateOnly = false;
     }
-    await checkForNotifAndDelete(req.query.viewNotifId, res);
     res.render("forms/formContainer", {form: "add-modifyTodoForm"});
 });
 

@@ -1,6 +1,12 @@
 <link rel="stylesheet" href="css/home.css">
 
 <div class="homeContainer" style="overflow-x: hidden;">
+    <% if (success.length > 0) {%>
+        <div class="alert alert-success alert-sm" role="alert" style="padding: .2rem; margin-top: .5rem;">
+            <h2><%= success %></h2>
+        </div>
+    <% } %>
+
     <div class="content mt-5 cursorHover">
         <a style="text-decoration: none;">
 

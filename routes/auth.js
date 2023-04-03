@@ -12,7 +12,6 @@ const req_not_login = (req,res,next) => {
 router.use(['/login', '/signup'], req_not_login);
 
 router.get('/login', (req, res) => {
-    res.locals.error = req.flash('error');
     res.render("forms/formContainer", {form: "loginForm"});
 });
 
@@ -22,8 +21,11 @@ router.post('/login', passport.authenticate("local", {
     successRedirect: "/",
 }));
 
+router.get("/logout", (req, res, next) => {
+  res.send("LOGGED OUT")
+});
+
 router.get('/signup', (req, res) => {
-    res.locals.error = req.flash('error');
     res.render("forms/formContainer", {form: "signupForm"});
 });
 

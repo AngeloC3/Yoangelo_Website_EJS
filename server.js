@@ -63,9 +63,13 @@ passport.deserializeUser((id, done) => {
 });
 passport.deserializeUser(User.deserializeUser());
 
+// get middleware
+const { set_locals, req_login, checkTodoType, checkForNotifAndDelete} = require("./public/js/middlewares");
+
 // fully accessible routes and middleware
 app.use(require('connect-flash')());
-app.use(require("./public/js/middlewares").set_locals);
+app.use(set_locals);
+app.use(checkForNotifAndDelete);
 app.use(require("./routes/auth"));
 app.use("/password", require('./routes/passwordResetRoutes'))
 app.get("/", (req, res,) => {
@@ -73,11 +77,11 @@ app.get("/", (req, res,) => {
 });
 
 // log in only routes
-app.use(require("./public/js/middlewares").req_login);
+app.use(req_login);
 app.use("/pair", require("./routes/pairRoutes"));
 app.use("/notifications", require("./routes/notificationRoutes"));
 app.use("/manage-todos", require('./routes/manageTodosRoutes'))
-app.use("/todos/:todoType", require("./public/js/middlewares").checkTodoType, require('./routes/todoRoutes'));
+app.use("/todos/:todoType", checkTodoType, require('./routes/todoRoutes'));
 app.use("/countdowns", require('./routes/countdownRoutes'));
 app.use("/wishlist", require('./routes/wishlistRoutes'))
 

@@ -3,12 +3,12 @@ const User = require('../../models/User')
 const ObjectId = require('mongoose').Types.ObjectId;
 const isValidMongooseId = ObjectId.isValid;
 
-devMode = process.env.devMode|| false;
+devMode = process.env.devMode || true;
 
 // sets local that are needed constantly
 const set_locals = async (req,res,next) => {
     if (devMode && !req.user) {
-        const user = await User.findOne({email: "user1@fake.com"});
+        const user = await User.findOne({email: "user2@fake.com"});
         req.user = user._id;
     }
     if (req.user) {
@@ -33,6 +33,8 @@ const set_locals = async (req,res,next) => {
         res.locals.loggedIn = false;
         res.locals.notifNums = {}
     }
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
     next();
 };
 
@@ -69,11 +71,24 @@ const checkTodoType = async (req, res, next) => {
     next();
 }
 
+// checks for the viewnotif query and marks it as viewed if it exists and changes the local unread val
+const checkForNotifAndDelete = async (req, res, next) => {
+    const notifId = req.query.viewNotifId;
+    if (notifId){
+        const relatedNotif = await Notification.findByIdAndUpdate(notifId, {viewed: true}, {new: false});
+        if (relatedNotif && !relatedNotif.viewed){
+            res.locals.notifNums.notifUnreadTotal -= 1;
+        }
+    }
+    next();
+}
+
 module.exports = {
     set_locals,
     req_login,
     checkParamId,
     checkTodoType,
+    checkForNotifAndDelete, 
 }
 
 // helpers

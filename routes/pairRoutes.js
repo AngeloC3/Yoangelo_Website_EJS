@@ -7,8 +7,6 @@ const { findUserByIdAndUpdateReqSession } = require("../public/js/utils");
 // pair auth
 
 router.get('/request_pair', (req, res) => {
-    res.locals.error = req.flash('error');
-    res.locals.success = req.flash('success');
     res.render("forms/formContainer", {form: "requestPairForm"});
 });
 

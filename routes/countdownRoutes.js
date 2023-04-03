@@ -3,7 +3,7 @@ const Countdown = require('../models/Countdown');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const { checkParamId } = require("../public/js/middlewares");
-const { findUserByIdAndUpdateReqSession, checkForNotifAndDelete } = require("../public/js/utils");
+const { findUserByIdAndUpdateReqSession } = require("../public/js/utils");
 
 router.get('/', async (req, res) => {
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
@@ -27,8 +27,6 @@ router.get('/', async (req, res) => {
     
     res.locals.page_title = "Countdowns";
     res.locals.addRoute = "countdowns/add";
-    res.locals.success = req.flash('success');
-    await checkForNotifAndDelete(req.query.viewNotifId, res);
     res.render('lists/listContainer', {innerList: "countdowns"});
 });
 

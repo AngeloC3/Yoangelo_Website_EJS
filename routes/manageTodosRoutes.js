@@ -10,7 +10,6 @@ router.get('/', async(req, res) =>{
     res.locals.todoTypes = user.todoTypes.sort();
     res.locals.page_title = 'Todo Lists';
     res.locals.addRoute = '/manage-todos/create';
-    res.locals.success = req.flash('success');
     res.render('lists/listContainer', {innerList: 'goals'});
 });
 
