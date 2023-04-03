@@ -1,10 +1,9 @@
 exports.respondInternalError = (error, req, res, next) => {
-  res.render("error", {error: error, message: error.message});
+  res.render("errors/500", {error: error, message: error.message});
   //next(error);
 };
 
 exports.respondRouteNotFound = (req, res, next) => {
   res.status(404);
-  const msg = req.url + " is not an available route"
-  res.render('error', {message: msg});
+  res.render('errors/404');
 }

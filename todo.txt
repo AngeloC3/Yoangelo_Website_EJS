@@ -1,7 +1,7 @@
 Pre-publish:
-- TESTING
-- env vars
 - look into yoinkable error pages
+- passport?
+- password reset
 
 Rest:
 - upload images to todo list items
