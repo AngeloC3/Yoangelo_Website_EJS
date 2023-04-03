@@ -1,14 +1,26 @@
 <style>
     .goalContainer {
-    text-align: center;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      text-align: center;
     }
 
     .goalBox {
+    min-width: 30em;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    margin-left: 7em;
     /* flex-direction: row; */
+    }
+
+    @media (max-width: 480px) {
+    .goalBox {
+        padding-right: 1.5em;
+        font-size: 12px;
+    }
     }
   
   .goal {
@@ -22,20 +34,26 @@
     text-decoration: none;
     margin: 0 1.25rem 2rem 1.25rem;
   }
+
+  .trashcan {
+    padding-right: 6em;
+  }
+
 </style>
 
 <div class="goalContainer">
     <% for (todoType of todoTypes) { %>
       <% todoTitle = todoType.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ") %>
-      <a href="/manage-todos/delete/<%= todoType %>" class="btn btn-lg text-white" style="transform: scale(1.5);">
-        <i class="fas fa-trash"></i>
-      </a>   
+      
         <div class="goalBox">
           <a href="todos/<%=todoType%>" class="goal text-white glow-on-hover">
             <div style="display: block;">
                 <h2><%=todoTitle%></h2>
             </div>
           </a>
+          <a href="/manage-todos/delete/<%= todoType %>" class="btn btn-lg text-white trashcan" style="transform: scale(1.5);">
+            <i class="fas fa-trash"></i>
+          </a>   
         </div>   
     <% } %>
 </div>
