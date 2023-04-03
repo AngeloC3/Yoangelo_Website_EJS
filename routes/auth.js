@@ -21,8 +21,14 @@ router.post('/login', passport.authenticate("local", {
     successRedirect: "/",
 }));
 
-router.get("/logout", (req, res, next) => {
-  res.send("LOGGED OUT")
+router.get("/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    req.flash("success", "You have been logged out!");
+    res.redirect("/")
+  });
 });
 
 router.get('/signup', (req, res) => {

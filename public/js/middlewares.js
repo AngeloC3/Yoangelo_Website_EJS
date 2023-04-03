@@ -3,12 +3,12 @@ const User = require('../../models/User')
 const ObjectId = require('mongoose').Types.ObjectId;
 const isValidMongooseId = ObjectId.isValid;
 
-devMode = process.env.devMode || true;
+devMode = process.env.devMode || false;
 
 // sets local that are needed constantly
 const set_locals = async (req,res,next) => {
     if (devMode && !req.user) {
-        const user = await User.findOne({email: "user2@fake.com"});
+        const user = await User.findOne({email: "user1@fake.com"});
         req.user = user._id;
     }
     if (req.user) {
