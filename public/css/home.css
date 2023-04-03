@@ -85,13 +85,16 @@ animation: animate 6s linear infinite;
 
 }
 
+#circleContainer:hover {
+    color: black;
+}
+
 :root {
-    --circleHover: #292b2c;
+    --circleHoverBorder: pink;
   }
 
 .twitch:hover .one {
-border: none;
-background: var(--circleHover);
+    border-color: var(--circleHoverBorder);
 }
 
 .square .two {
@@ -107,9 +110,7 @@ animation: animate 6s linear infinite;
 }
 
 .twitch:hover .two {
-border: none;
-background: var(--circleHover);
-
+    border-color: var(--circleHoverBorder);
 }
 
 .square .three {
@@ -124,24 +125,19 @@ transition: 0.5s;
 animation: animate2 10s linear infinite;
 }
 .twitch:hover .three {
-border: none;
-background: var(--circleHover);
+    border-color: var(--circleHoverBorder);
 }
 
 .circle {
 position: relative;
 padding: 2.5rem 3.75rem;
 text-align: center;
-transition: 0.5s;
+transition: .8s;
 z-index: 1000;
-}
-
-.square:hover{
-color: white;
+color: #fff;
 }
 
 .content:hover {
-
 color: #ffffff;
 }
 
@@ -166,4 +162,8 @@ color: #ffffff;
 
 .homeTitle{
     font-size: 3.125rem;
+}
+
+.cursorHover {
+    cursor: default;
 }
