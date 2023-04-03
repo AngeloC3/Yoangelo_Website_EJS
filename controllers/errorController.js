@@ -1,6 +1,6 @@
 exports.respondInternalError = (error, req, res, next) => {
+  console.log(error);
   res.render("errors/500", {error: error, message: error.message});
-  //next(error);
 };
 
 exports.respondRouteNotFound = (req, res, next) => {

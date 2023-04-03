@@ -1,5 +1,4 @@
 Pre-publish:
-- look into yoinkable error pages
 - passport?
 - password reset
 
@@ -7,3 +6,7 @@ Rest:
 - upload images to todo list items
 - upload background images to countdowns
 - upload pfps
+
+installs:
+passport
+passport-local-mongoose

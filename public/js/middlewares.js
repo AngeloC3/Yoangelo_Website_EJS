@@ -7,16 +7,16 @@ devMode = process.env.devMode|| false;
 
 // sets local that are needed constantly
 const set_locals = async (req,res,next) => {
-    if (devMode && !req.session.userId) {
+    if (devMode && !req.user) {
         const user = await User.findOne({email: "user1@fake.com"});
-        req.session.userId = user._id;
+        req.user = user._id;
     }
-    if (req.session.userId) {
+    if (req.user) {
         res.locals.loggedIn = true;
-        req.session.userId = new ObjectId(req.session.userId); // session saves as a string this converts back
+        req.user = new ObjectId(req.user); // session saves as a string this converts back
         // get # of notifs and unread notifs --> error if there are none
         try{
-            const notifs = await Notification.aggregate(getReadVsUnreadPipeline(req.session.userId));
+            const notifs = await Notification.aggregate(getReadVsUnreadPipeline(req.user));
             const {notifTotal, notifUnreadTotal} = notifs[0];
             res.locals.notifNums = {
                 notifTotal: notifTotal,
@@ -59,7 +59,7 @@ const checkParamId = (paramName) => {
 
 // checks if the todoType is valid
 const checkTodoType = async (req, res, next) => {
-    const user = await User.findById(req.session.userId);
+    const user = await User.findById(req.user);
     const todoType = req.params.todoType;
     if (!user.todoTypes.includes(todoType)){
         const error = new Error(`This Todo List (${todoType}) Does not Exist`);

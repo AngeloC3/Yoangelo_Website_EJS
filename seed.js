@@ -1,9 +1,8 @@
-const User = require('./models/User')
-const Notification = require('./models/Notification')
-const TodoItem = require('./models/TodoItem')
-const Countdown = require('./models/Countdown')
-const Wishlist = require('./models/Wishlist')
-const bcrypt = require("bcrypt");
+const User = require('./models/User');
+const Notification = require('./models/Notification');
+const TodoItem = require('./models/TodoItem');
+const Countdown = require('./models/Countdown');
+const Wishlist = require('./models/Wishlist');
 
 const mongoose = require("mongoose");
 const mongodb_URI = 'mongodb://0.0.0.0:27017/'
@@ -21,21 +20,35 @@ todoTypes = todoTypes.concat(["todoooooooooooooooooooooooooooooooooooooooooooooo
 // above line is to test stupidly long title and desc
 
 const seedUsers = async () => {
-  for (let i = 1; i <= howManyUsers; i++){
-    userString = "user" + i;
-    const hashedPassword = await bcrypt.hash(userString, 10);
-    let tempUser = {
+  try {
+    await User.deleteMany({});
+    const promises = [];
+    for (let i = 1; i <= howManyUsers; i++){
+      const userString = "user" + i;
+      const tempUser = {
         username: userString,
         email: userString + "@" + "fake.com",
-        password: hashedPassword,
         todoTypes: todoTypes
-    };
-    userObjs.push(tempUser);
-  } 
-  await User.deleteMany({});
-  await User.insertMany(userObjs);
-  console.log("users added")
-}
+      };
+      userObjs.push(tempUser);
+      const promise = new Promise((resolve, reject) => {
+        User.register(tempUser, userString, (err, user) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(user);
+          }
+        });
+      });
+      promises.push(promise);
+    }
+    await Promise.all(promises);
+    console.log("users added");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
 const seedPairRequests = async (u1u2_pair = false) => {
 

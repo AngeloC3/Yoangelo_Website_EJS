@@ -8,7 +8,7 @@ const { findUserByIdAndUpdateReqSession, checkForNotifAndDelete, todoTypeToTitle
 // Every route has param todoType that specifies which type of todo list it is
 
 router.get('/', async (req, res) => {
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const userId = user._id;
     const partnerId = user.partnerId;
     if (req.query.sortByRating == "true") {
@@ -77,11 +77,11 @@ router.get('/add', (req, res) => {
 
 router.post('/add', async (req, res) => {
     const {title, rating} = req.body;
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const description = req.body.description || undefined;
     const new_todo_item = await TodoItem.create({
         creatorInfo: {
-            creatorId: req.session.userId,
+            creatorId: req.user,
             creatorName: user.username
         },
         todoType: req.params.todoType,
@@ -122,7 +122,7 @@ router.get('/modify/:todoId', checkParamId("todoId"), async (req, res, next) => 
     res.locals.buttonText = "Modify";
     res.locals.titleVal = todo_item.title;
     res.locals.descVal = todo_item.description;
-    const userId = req.session.userId;
+    const userId = req.user;
     if (todo_item.didRate(userId)){
         if (userId.equals(todo_item.creatorInfo.creatorId)){
             res.locals.ratingVal = todo_item.creatorRate;
@@ -152,7 +152,7 @@ router.post('/modify/:todoId', checkParamId("todoId"), async (req, res) => {
     }
     if (title) toModify.title = title;
     if (description || toModify.description) toModify.description = description;
-    if (req.session.userId.equals(toModify.creatorInfo.creatorId)){
+    if (req.user.equals(toModify.creatorInfo.creatorId)){
         toModify.creatorRate = rating;
     } else {
         toModify.partnerRate = rating;

@@ -13,7 +13,7 @@ router.get('/request_pair', (req, res) => {
 });
 
 router.post('/request_pair', async (req, res) => {
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req)
+    const user = await findUserByIdAndUpdateReqSession(req.user, req)
     const pair_email = req.body.email;
     let pair = false;
     if (pair_email !== user.email){
@@ -57,7 +57,7 @@ router.get('/respond_pair_request/:notifId', checkParamId('notifId'), async (req
 });
 
 router.post('/respond_pair_request/:notifId', checkParamId('notifId'), async (req, res) => {
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const choice = req.body.yesno;
     if (choice === "accept"){
         // find the one that you are recipient

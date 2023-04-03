@@ -2,6 +2,7 @@
 const mongoose = require( 'mongoose' );
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
+const passportLocalMongoose = require("passport-local-mongoose");
 
 const UserSchema = Schema( {
   username: {
@@ -15,21 +16,24 @@ const UserSchema = Schema( {
     unique: true,
     trim: true,
   },
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-  },
+  // password: {
+  //   type: String,
+  //   required: true,
+  //   trim: true,
+  // },
   partnerId: {
     type: ObjectId,
     ref: 'User',
-    default: null
+    default: null,
   },
   todoTypes: {
     type: [String],
     default: [],
-    trim: true
+    trim: true,
+    required: true
   }
 } );
+
+UserSchema.plugin(passportLocalMongoose, { usernameField: "email" });
 
 module.exports = mongoose.model( 'User', UserSchema );

@@ -6,7 +6,7 @@ const { checkParamId } = require("../public/js/middlewares");
 const { findUserByIdAndUpdateReqSession, checkForNotifAndDelete } = require("../public/js/utils");
 
 router.get('/', async (req, res) => {
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const userId = user._id;
     const partnerId = user.partnerId;
     await Countdown.find({'creatorInfo.creatorId': {$in: [userId, partnerId]}})
@@ -38,7 +38,7 @@ router.get('/add', (req, res) =>{
 
 router.post('/add', async (req, res) => {
     const {title, date} = req.body;
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const new_countdown_item = await Countdown.create({
         creatorInfo: {
             creatorId: user._id,

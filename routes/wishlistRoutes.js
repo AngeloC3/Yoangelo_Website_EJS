@@ -6,7 +6,7 @@ const { checkParamId } = require("../public/js/middlewares");
 const { findUserByIdAndUpdateReqSession, checkForNotifAndDelete } = require("../public/js/utils");
 
 router.get("/", async (req, res) => {
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    const user = await findUserByIdAndUpdateReqSession(req.user, req);
     let [userId, partnerId] = [undefined, undefined];
     if (req.query.oneHalf !== 'pair') userId = user._id;
     if (req.query.oneHalf !== 'user') partnerId = user.partnerId;
@@ -37,10 +37,10 @@ router.post('/add', async (req, res) => {
     const description = req.body.description || undefined;
     const price = req.body.price || undefined;
     const url = req.body.url || undefined;
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const new_wishlist_item = await Wishlist.create({
         creatorInfo: {
-            creatorId: req.session.userId,
+            creatorId: req.user,
             creatorName: user.username
         },
         todoType: req.params.todoType,

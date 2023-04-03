@@ -7,7 +7,7 @@ const system_name = "Yoangelo Website"
 
 router.get("/", async (req, res) => {
     const notifs = []
-    await Notification.find({recipientId: req.session.userId}).sort({createdAt: -1}).then(async (notifications) => {
+    await Notification.find({recipientId: req.user}).sort({createdAt: -1}).then(async (notifications) => {
         for (const notif of notifications) {
             let senderName = system_name;
             if (notif.senderId){

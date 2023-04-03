@@ -6,7 +6,7 @@ const { checkParamId } = require("../public/js/middlewares");
 const { findUserByIdAndUpdateReqSession, todoTypeToTitle } = require("../public/js/utils");
 
 router.get('/', async(req, res) =>{
-    user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    user = await findUserByIdAndUpdateReqSession(req.user, req);
     res.locals.todoTypes = user.todoTypes.sort();
     res.locals.page_title = 'Todo Lists';
     res.locals.addRoute = '/manage-todos/create';
@@ -16,7 +16,7 @@ router.get('/', async(req, res) =>{
 
 router.get('/delete/:todoType', async(req, res) => {
     res.locals.todoTitle = todoTypeToTitle(req.params.todoType);
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const userId = user._id;
     const partnerId = user.partnerId;
     const numDocuments = await TodoItem.countDocuments({'creatorInfo.creatorId': {$in: [userId, partnerId]}, todoType: req.params.todoType});
@@ -32,7 +32,7 @@ router.post('/delete/:todoType', async(req, res) => {
     if (!req.body.shouldDelete){
         res.redirect("/manage-todos")
     }
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const userId = user._id;
     const pair = await User.findById(user.partnerId);
     const partnerId = pair._id;
@@ -55,7 +55,7 @@ router.post('/create', async(req, res) => {
         return next(error);
     }
     const todoType = title.split(' ').join('_').toLowerCase() + "_list";
-    const user = await findUserByIdAndUpdateReqSession(req.session.userId, req);
+    const user = await findUserByIdAndUpdateReqSession(req.user, req);
     if (user.todoTypes.includes(todoType)) {
         const error = new Error('Todo list with that title already exists');
         error.status = 400;

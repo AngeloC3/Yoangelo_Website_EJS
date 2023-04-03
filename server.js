@@ -35,7 +35,6 @@ if (storedCookies){
     console.log(error);
   });
 }
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "thisismysecrctekeyfhrgfgrfrty84fwir767",
@@ -50,6 +49,20 @@ app.use(
 const cookieParser = require("cookie-parser"); // to handle cookies
 app.use(cookieParser());
 
+// setting up passport
+const passport = require("passport");
+app.use(passport.initialize());
+app.use(passport.session());
+const User = require('./models/User')
+passport.use(User.createStrategy());
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+passport.deserializeUser((id, done) => {
+  done(null, id);
+});
+passport.deserializeUser(User.deserializeUser());
+
 // fully accessible routes and middleware
 app.use(require('connect-flash')());
 app.use(require("./public/js/middlewares").set_locals);
@@ -59,11 +72,6 @@ app.get("/", (req, res,) => {
   res.render("home");
 });
 
-// errors
-const errorController = require('./controllers/errorController');
-app.use(errorController.respondInternalError);
-app.use(errorController.respondRouteNotFound);
-
 // log in only routes
 app.use(require("./public/js/middlewares").req_login);
 app.use("/pair", require("./routes/pairRoutes"));
@@ -72,6 +80,11 @@ app.use("/manage-todos", require('./routes/manageTodosRoutes'))
 app.use("/todos/:todoType", require("./public/js/middlewares").checkTodoType, require('./routes/todoRoutes'));
 app.use("/countdowns", require('./routes/countdownRoutes'));
 app.use("/wishlist", require('./routes/wishlistRoutes'))
+
+// errors
+const errorController = require('./controllers/errorController');
+app.use(errorController.respondInternalError);
+app.use(errorController.respondRouteNotFound);
 
 app.listen(port, () => {
     const url = `http://localhost:${port}`;
