@@ -19,15 +19,44 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
     }
 
     .sectioned-children > div {
-        flex-basis: calc(33.33% - 10px);
+        flex-basis: calc(33.33% - 0.625rem);
         margin-bottom: 1rem;
     }
 
     #listImage {
         width: 35%; height: 35%; 
+    }
+
+    @media only screen and (max-width: 480px) {
+        .phoneShrinker, .phoneShrinker h2 {
+            font-size: .65rem;
+        }
+
+        .phoneShrinker h1 {
+            font-size: 2rem;
+        }
+
+        .phoneShrinker #title {
+            font-size: 1.25rem;
+        }
+        
+        .phoneShrinker .disappearOnShrink {
+            display: none;
+        }
+
+        .sectioned-children > div {
+            flex-basis: calc(95% - 0.625rem);
+            margin-bottom: 1rem;
+        }
+
+        .sectioned-children > .extrasContainer {
+            flex-basis: calc(1% - 0.625rem);
+            margin-bottom: 1rem;
+        }
     }
 </style>
 
@@ -58,12 +87,12 @@
                         <a href="<%= todoType %>/modify/<%= todo._id %>?rateOnly=true" class="btn glow-on-hover" id='rateButton'><i class="fa fa-star"></i></a>
                     </div>
                 <% } %>
-                <div class="d-flex sectioned-children">
-                    <div>
+                <div class="d-flex sectioned-children phoneShrinker">
+                    <div class="disappearOnShrink">
                         <img id='listImage' src="/images/check.png">
                     </div>
-                    <div style="text-align: center;">
-                        <h1 style="margin-bottom: 2rem;"><%= todo.title %></h1>
+                    <div style="text-align: center; overflow: hidden;">
+                        <h1 style="margin-bottom: 2rem;" class="overflowElipsis" id="title"><%= todo.title %></h1>
                         <p><%= todo.description %></p>
                     </div>
                     <div class="extras-container">
@@ -88,7 +117,7 @@
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
-                <button class="top-right glow-on-hover btn btn-secondary details-button" onclick="toggleDisplay(this)">
+                <button class="top-right glow-on-hover btn details-button text-white" onclick="toggleDisplay(this)">
                     <i class="fas fa-info-circle"></i>
                 </button>
             </li>

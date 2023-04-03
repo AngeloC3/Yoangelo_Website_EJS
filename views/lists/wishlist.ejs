@@ -17,6 +17,35 @@
   #listImage {
       width: 35%; height: 35%; 
   }
+
+  @media only screen and (max-width: 480px) {
+    .phoneShrinker, .phoneShrinker h2 {
+        font-size: .65rem;
+    }
+
+    .phoneShrinker h1 {
+        font-size: 2rem;
+    }
+
+    .phoneShrinker #title {
+        font-size: 1.25rem;
+    }
+
+    .phoneShrinker .disappearOnShrink {
+        display: none;
+    }
+
+    .sectioned-children > div {
+        flex-basis: calc(95% - 0.625rem);
+        margin-bottom: 1rem;
+    }
+
+    .sectioned-children > .extrasContainer {
+        flex-basis: calc(10% - 0.625rem);
+        margin-bottom: 1rem;
+    }
+}
+
 </style>
 
 
@@ -38,12 +67,12 @@
 
         <!-- list group item-->
             <li class="list-group-item wishlistItem text-white mb-3 rounded bordered">
-                <div class="d-flex sectioned-children">
-                    <div id="smaller">
+                <div class="d-flex sectioned-children phoneShrinker">
+                    <div class="disappearOnShrink">
                         <img id='listImage' src="/images/kirby.png">
                     </div>
-                    <div style="text-align: center;">
-                        <h1 style="margin-bottom: 2rem;"><%= wishlistItem.title %></h1>
+                    <div style="text-align: center; overflow: hidden;">
+                        <h1 style="margin-bottom: 2rem;" id="title" class="overflowElipsis"><%= wishlistItem.title %></h1>
                         <p><%= wishlistItem.description %></p>
                     </div>
                     <div class="extras-container">
@@ -70,7 +99,7 @@
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
-                <button class="top-right glow-on-hover btn btn-secondary details-button" onclick="toggleDisplay(this)">
+                <button class="top-right glow-on-hover btn details-button text-white" onclick="toggleDisplay(this)">
                     <i class="fas fa-info-circle"></i>
                 </button>
             </li>

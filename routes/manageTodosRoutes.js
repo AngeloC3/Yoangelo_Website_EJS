@@ -39,6 +39,7 @@ router.post('/delete/:todoType', async(req, res) => {
     await TodoItem.deleteMany({'creatorInfo.creatorId': {$in: [userId, partnerId]}, todoType: req.params.todoType});
     deleteTodoTypeAndSave(user, req.params.todoType);
     deleteTodoTypeAndSave(pair, req.params.todoType);
+    await Notification.findOneAndDelete({'related.relatedParam': req.params.todoType, senderId: { $in: [userId, partnerId] }, recipientId: { $in: [userId, partnerId] }});
     res.redirect('/manage-todos')
 });
 

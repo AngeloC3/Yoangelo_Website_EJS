@@ -1,6 +1,7 @@
 Pre-publish:
-- max text on names / descriptions
-- fix too long name for error / success msgs
+- TESTING
+- env vars
+- look into yoinkable error pages
 
 Rest:
 - upload images to todo list items

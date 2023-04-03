@@ -45,6 +45,7 @@
   text-transform: uppercase;
   color: transparent;
   -webkit-text-stroke: 0.0625rem var(--text-stroke-color);
+  text-align: center;
 }
 /* this is the text, when you hover on button */
 .hover-text {
@@ -58,6 +59,7 @@
   overflow: hidden;
   transition: 0.5s;
   -webkit-text-stroke: 0.0625rem var(--animation-color);
+  margin-left: .175rem; /* actual-text is alligned center, but this doesn't align as well, so this is the fix */
 }
 /* hover */
 .homeLink:hover .hover-text {
