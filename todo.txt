@@ -1,6 +1,8 @@
 Pre-publish:
 - show error message by clicking button in error page
 - functionalize all the error creates
+- functionalize the confirmMatches
+- google login?
 
 
 Rest:
