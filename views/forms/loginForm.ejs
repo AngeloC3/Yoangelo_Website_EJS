@@ -1,5 +1,11 @@
 <form action="/login" method="POST">
 
+  <% if (success.length > 0) {%>
+    <div class="alert alert-success" role="alert">
+      <h2><%= success %></h2>
+    </div>
+   <% } %>
+
   <% if (error.length > 0) {%>
     <div class="alert alert-danger" role="alert">
       <h2><%= error %></h2>

@@ -50,7 +50,7 @@ router.post('/signup', (req, res) => {
         if (user) {
           req.flash(
             "success",
-            `${user.username}'s account created successfully!`
+            'Account created successfully!'
           );
           res.redirect("/");
         } else {

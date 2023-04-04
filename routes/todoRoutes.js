@@ -113,7 +113,7 @@ router.get('/modify/:todoId', checkParamId("todoId"), async (req, res, next) => 
     res.locals.page_title = todoTypeToTitle(req.params.todoType);
     const todo_item = await TodoItem.findById(req.params.todoId);
     if (!todo_item) {
-        const error = new Error(`Todo Item Not Found`);
+        const error = new Error('Todo Item Not Found');
         error.status = 400;
         return next(error);
     }

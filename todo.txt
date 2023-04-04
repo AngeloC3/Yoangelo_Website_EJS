@@ -1,12 +1,9 @@
 Pre-publish:
-- passport?
-- password reset
+- show error message by clicking button in error page
+- functionalize all the error creates
+
 
 Rest:
 - upload images to todo list items
 - upload background images to countdowns
 - upload pfps
-
-installs:
-passport
-passport-local-mongoose

@@ -3,7 +3,7 @@ const User = require('../../models/User')
 const ObjectId = require('mongoose').Types.ObjectId;
 const isValidMongooseId = ObjectId.isValid;
 
-devMode = process.env.devMode || false;
+devMode = false;
 
 // sets local that are needed constantly
 const set_locals = async (req,res,next) => {
