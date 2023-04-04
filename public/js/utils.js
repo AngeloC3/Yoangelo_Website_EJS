@@ -12,7 +12,14 @@ const todoTypeToTitle = (type) => {
     return capitalizedWords.join(" ");
   };
 
+const makeNextError = (msg, code, next) =>{
+    const error = new Error(msg);
+    error.status = code;
+    return next(error);
+}
+
 module.exports = {
     findUserByIdAndUpdateReqSession,
     todoTypeToTitle,
+    makeNextError,
 }

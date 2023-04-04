@@ -3,7 +3,7 @@ const TodoItem = require('../models/TodoItem');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const { checkParamId } = require("../public/js/middlewares");
-const { findUserByIdAndUpdateReqSession, todoTypeToTitle } = require("../public/js/utils");
+const { findUserByIdAndUpdateReqSession, todoTypeToTitle, makeNextError } = require("../public/js/utils");
 
 // Every route has param todoType that specifies which type of todo list it is
 
@@ -113,9 +113,7 @@ router.get('/modify/:todoId', checkParamId("todoId"), async (req, res, next) => 
     res.locals.page_title = todoTypeToTitle(req.params.todoType);
     const todo_item = await TodoItem.findById(req.params.todoId);
     if (!todo_item) {
-        const error = new Error('Todo Item Not Found');
-        error.status = 400;
-        return next(error);
+        return makeNextError('Todo Item Not Found', 400, next);
     }
     res.locals.buttonText = "Modify";
     res.locals.titleVal = todo_item.title;
@@ -143,9 +141,7 @@ router.post('/modify/:todoId', checkParamId("todoId"), async (req, res) => {
     const {title, rating, description} = req.body;
     const toModify = await TodoItem.findById(req.params.todoId);
     if (!toModify) {
-        const error = new Error(`Todo Item Not Found`);
-        error.status = 400;
-        return next(error);
+        return makeNextError('Todo Item Not Found', 400, next)
     }
     if (title) toModify.title = title;
     if (description || toModify.description) toModify.description = description;

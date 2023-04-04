@@ -2,6 +2,7 @@ const Notification = require('../../models/Notification')
 const User = require('../../models/User')
 const ObjectId = require('mongoose').Types.ObjectId;
 const isValidMongooseId = ObjectId.isValid;
+const { makeNextError } = require('./utils');
 
 devMode = false;
 
@@ -50,9 +51,7 @@ const checkParamId = (paramName) => {
     return (req, res, next) => {
         const paramVal = req.params[paramName];
         if (!isValidMongooseId(paramVal)){
-            const error = new Error('Invalid ID in Route');
-            error.status = 400;
-            return next(error);
+            return makeNextError('Invalid ID in Route', 400, next);
         }
         next();
     }
@@ -63,9 +62,7 @@ const checkTodoType = async (req, res, next) => {
     const user = await User.findById(req.user);
     const todoType = req.params.todoType;
     if (!user.todoTypes.includes(todoType)){
-        const error = new Error(`This Todo List (${todoType}) Does not Exist`);
-        error.status = 400;
-        return next(error);
+        return makeNextError(`This Todo List (${todoType}) Does not Exist`, 400, next);
     }
     next();
 }

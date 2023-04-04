@@ -3,7 +3,7 @@ const User = require('../models/User');
 const Notification = require('../models/Notification');
 const TodoItem = require('../models/TodoItem');
 const { checkParamId } = require("../public/js/middlewares");
-const { findUserByIdAndUpdateReqSession, todoTypeToTitle } = require("../public/js/utils");
+const { findUserByIdAndUpdateReqSession, todoTypeToTitle, makeNextError } = require("../public/js/utils");
 
 router.get('/', async(req, res) =>{
     user = await findUserByIdAndUpdateReqSession(req.user, req);
@@ -49,16 +49,12 @@ router.get('/create', async(req, res) => {
 router.post('/create', async(req, res) => {
     const title = req.body.title;
     if (!title) {
-        const error = new Error('Tried to make a todo list without a title');
-        error.status = 400;
-        return next(error);
+        return makeNextError('Tried to make a todo list without a title', 400, next);
     }
     const todoType = title.split(' ').join('_').toLowerCase() + "_list";
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
     if (user.todoTypes.includes(todoType)) {
-        const error = new Error('Todo list with that title already exists');
-        error.status = 400;
-        return next(error);
+        return makeNextError('Todo list with that title already exists', 400, next);
     }
     const pair = await User.findById(user.pairId);
     addTodoTypeAndSave(user, todoType);

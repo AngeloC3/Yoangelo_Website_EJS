@@ -4,6 +4,7 @@ const PasswordResetToken = require('../../models/PasswordResetToken');
 const jwt = require('jsonwebtoken');
 const dummy_jwt = "thisismysecrctekeyforjwticdf8wehjidjs9";
 const nodemailer = require("nodemailer");
+const { makeNextError } = require("../public/js/utils");
 
 router.get("/request_reset", (req, res) => {
     res.render("forms/formContainer", {form: 'requestPassResetForm.ejs'})
@@ -75,18 +76,14 @@ router.get("/reset/:token", async(req, res, next) => {
     const jwt_secret = process.env.JWT_SECRET || dummy_jwt;
     jwt.verify(token, jwt_secret, async (err, decoded) => {
       if (err) {
-        const error = new Error('Invalid or Expired Reset Token');
-        error.status = 400;
-        return next(error);
+        return makeNextError('Invalid or Expired Reset Token', 400, next);
       }
       const resetToken = await PasswordResetToken.findOne({
         userId: decoded.userId,
         token: token,
       });
       if (!resetToken) {
-        const error = new Error('Invalid or Expired Reset Token');
-        error.status = 400;
-        return next(error);
+        return makeNextError('Invalid or Expired Reset Token', 400, next);
       }
       res.locals.userId = decoded.userId;
       res.locals.token = token;
@@ -101,16 +98,12 @@ router.post("/reset", async(req, res, next) => {
         token: token,
     });
     if (!resetToken) {
-        const error = new Error('Invalid or Expired Reset Token');
-        error.status = 400;
-        return next(error);
+      return makeNextError('Invalid or Expired Reset Token', 400, next);
     }
     try {
         const user = await User.findById(userId);
         if (!user) {
-          const error = new Error('Error finding your data');
-          error.status = 400;
-          return next(error);
+          return makeNextError('Error finding your data', 400, next);
         }
         user.setPassword(password, async (err) => {
           if (err) {

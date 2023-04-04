@@ -3,12 +3,8 @@ Pre-publish:
 - functionalize all the error creates
 - functionalize the confirmMatches
 - change display name
-- timestamps to user
 
 Rest:
 - upload images to todo list items
 - upload background images to countdowns
 - upload pfps
-
-? installs:
-- passport-google-oauth20

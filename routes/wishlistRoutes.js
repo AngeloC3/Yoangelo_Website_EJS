@@ -3,7 +3,7 @@ const User = require('../models/User');
 const Wishlist = require('../models/Wishlist');
 const Notification = require('../models/Notification');
 const { checkParamId } = require("../public/js/middlewares");
-const { findUserByIdAndUpdateReqSession } = require("../public/js/utils");
+const { findUserByIdAndUpdateReqSession, makeNextError } = require("../public/js/utils");
 
 router.get("/", async (req, res) => {
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
@@ -83,9 +83,7 @@ router.post('/modify/:wishlistItemId', checkParamId("wishlistItemId"), async (re
     const {title, description, price, url, rating} = req.body;
     const toModify = await Wishlist.findById(req.params.wishlistItemId);
     if (!toModify) {
-        const error = new Error(`Wishlist Item Not Found`);
-        error.status = 400;
-        return next(error);
+        return makeNextError('Wishlist Item Not Found', 400, next)
     }
     if (title) toModify.title = title;
     if (rating) toModify.rating = rating;
