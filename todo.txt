@@ -1,12 +1,9 @@
 Pre-publish:
-- WHY LOGIN DONT SAVE
 - show error message by clicking button in error page
 - functionalize all the error creates
 - functionalize the confirmMatches
 - change display name
-- add auth to all login routes O:
-- ^ and also reset
-
+- timestamps to user
 
 Rest:
 - upload images to todo list items

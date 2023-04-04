@@ -1,8 +1,26 @@
-const passport = require('passport');
-const User = require('../models/User')
+const User = require('../models/User');
+const LocalStrategy = require('passport-local').Strategy;
+
+const updateLastLogin = async (user, done) => {
+    user.lastLogin = Date.now(); // updates the last time a user logged in
+    await user.save().then(() => {
+        return done(null, user);
+    }).catch((err) => {
+        return done(err);
+    });
+};
 
 const setUpLocalPassport = (passport) => {
-    passport.use(User.createStrategy());
+    passport.use(new LocalStrategy(
+        { usernameField: "email" },
+        (email, password, done) => {
+            User.authenticate()(email, password, function(err, user) {
+                if (err) { return done(err); }
+                if (!user) { return done(null, false); }
+                return updateLastLogin(user, done);
+            });
+        }
+    ));
 };
 
 // google strategy
@@ -22,7 +40,7 @@ const setUpGooglePassport = (passport) => {
                 let existingUser = await User.findOne({ 'google.id': profile.id });
                 // if user exists return the user
                 if (existingUser) {
-                    return done(null, existingUser);
+                    return updateLastLogin(existingUser, done);
                 }
                 // if user does not exist create a new user
                 const newUser = new User({
@@ -49,7 +67,7 @@ const setUpPassportSerializers = (passport) => {
     passport.deserializeUser((id, done) => {
         done(null, id);
     });
-    passport.deserializeUser(User.deserializeUser());
+    passport.deserializeUser(User.deserializeUser()); // DO  I NEED THIS
 }
 
 module.exports = {

@@ -5,7 +5,7 @@
     </div>
 
 <% } else { %>
-    <form action="/password/request_reset" method="POST">
+    <form action="/auth/password/request_reset" method="POST">
 
         <% if (error.length > 0) { %>
             <div class="alert alert-danger" role="alert"><%= error %></div>

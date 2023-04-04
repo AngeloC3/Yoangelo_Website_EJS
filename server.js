@@ -68,8 +68,7 @@ const { set_locals, req_login, checkTodoType, checkForNotifAndDelete} = require(
 app.use(require('connect-flash')());
 app.use(set_locals);
 app.use(checkForNotifAndDelete);
-app.use(require("./routes/auth"));
-app.use("/password", require('./routes/passwordResetRoutes'))
+app.use('/auth', require("./routes/auth"));
 app.get("/", (req, res,) => {
   res.render("home");
 });

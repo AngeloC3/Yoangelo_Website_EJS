@@ -37,7 +37,7 @@
         <ul class="navbar-nav ms-auto d-lg-inline-flex d-block">
             <% if (!loggedIn) {%>
                 <li class="nav-item">
-                    <a class="nav-link mx-2" href="/login">Login</a>
+                    <a class="nav-link mx-2" href="/auth/login">Login</a>
                 </li>
             <% } else { %>
                 <li class="nav-item">
@@ -57,7 +57,7 @@
                         <% if (!hasPair) {%>
                             <li><a class="dropdown-item text-light" href="/pair/request_pair">Request Pair</a></li>
                         <% } %> 
-                        <li><a class="dropdown-item text-light" href="/logout">Logout</a></li>
+                        <li><a class="dropdown-item text-light" href="/auth/logout">Logout</a></li>
                     </ul>
                 </li>
             <% } %>

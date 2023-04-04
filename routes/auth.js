@@ -9,14 +9,12 @@ const req_not_login = (req,res,next) => {
     else res.redirect('/')
 }
 
-router.use(['/login', '/signup', '/auth'], req_not_login);
-
-router.get('/login', (req, res) => {
+router.get('/login', req_not_login, (req, res) => {
     res.render("forms/formContainer", {form: "loginForm"});
 });
 
-router.post('/login', passport.authenticate("local", {
-    failureRedirect: "/login",
+router.post('/login', req_not_login, passport.authenticate("local", {
+    failureRedirect: "login",
     failureFlash: "Incorrect login.",
     successRedirect: "/",
 }));
@@ -31,15 +29,15 @@ router.get("/logout", (req, res) => {
   });
 });
 
-router.get('/signup', (req, res) => {
+router.get('/signup', req_not_login, (req, res) => {
     res.render("forms/formContainer", {form: "signupForm"});
 });
 
-router.post('/signup', (req, res) => {
+router.post('/signup', req_not_login, (req, res) => {
     const {username, email, password} = req.body;
     if (!username || !email || !password) {
         req.flash("error", "Please fill out all fields.");
-        res.redirect("/signup");
+        res.redirect("signup");
         return;
     }
     const newUser = {
@@ -61,21 +59,24 @@ router.post('/signup', (req, res) => {
             "error",
             `Failed to create user account because: ${error.message}.`
           );
-          res.redirect("/login");
+          res.redirect("login");
         }
       });
 });
 
 // google auth
-router.get("/auth/google", passport.authenticate("google", 
+router.get("/google", req_not_login, passport.authenticate("google", 
   { scope: ["email", "profile"] }
 ));
 // Retrieve user data using the access token received</em> 
-router.get("/auth/google/callback", passport.authenticate("google", {
-    failureRedirect: "/login",
+router.get("/google/callback", req_not_login, passport.authenticate("google", {
+    failureRedirect: "login",
     failureFlash: "Google login failed",
     successRedirect: "/",
   }
 ));
+
+// reset routes
+router.use("/password", require('./subRoutes/passwordResetRoutes'))
 
 module.exports = router;

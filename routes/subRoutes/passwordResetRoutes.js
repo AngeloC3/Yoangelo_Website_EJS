@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const User = require('../models/User');
-const PasswordResetToken = require('../models/PasswordResetToken');
+const User = require('../../models/User');
+const PasswordResetToken = require('../../models/PasswordResetToken');
 const jwt = require('jsonwebtoken');
 const dummy_jwt = "thisismysecrctekeyforjwticdf8wehjidjs9";
 const nodemailer = require("nodemailer");
@@ -53,7 +53,7 @@ router.post("/request_reset", async (req, res) => {
         from: website_email,
         to: user.email,
         subject: "Password Reset Request",
-        text: `Hi ${user.username},\n\nPlease click the following link to reset your password:\n\nhttp://${req.headers.host}/password/reset/${token}\n\nThis link will expire in 1 hour.\n\nIf you did not request a password reset, please ignore this email.\n`,
+        text: `Hi ${user.username},\n\nPlease click the following link to reset your password:\n\nhttp://${req.headers.host}/auth/password/reset/${token}\n\nThis link will expire in 1 hour.\n\nIf you did not request a password reset, please ignore this email.\n`,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -124,7 +124,7 @@ router.post("/reset", async(req, res, next) => {
     }
     await resetToken.deleteOne();
     req.flash('success', 'Password successfully reset');
-    res.redirect('/login');
+    res.redirect('/auth/login');
 });
 
 

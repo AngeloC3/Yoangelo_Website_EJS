@@ -1,4 +1,4 @@
-<form action="/login" method="POST">
+<form action="/auth/login" method="POST">
 
   <% if (success.length > 0) {%>
     <div class="alert alert-success" role="alert">
@@ -36,9 +36,9 @@
   <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
 </div> %>
 
-<p class="small mb-2 pb-lg-2 mt-5"><a class="text-white-50" href="/password/request_reset">Forgot password?</a></p>
+<p class="small mb-2 pb-lg-2 mt-5"><a class="text-white-50" href="/auth/password/request_reset">Forgot password?</a></p>
 
 <div>
-<p class="mb-0">Don't have an account? <a href="/signup" class="text-white-50 fw-bold">Sign Up</a>
+<p class="mb-0">Don't have an account? <a href="/auth/signup" class="text-white-50 fw-bold">Sign Up</a>
 </p>
 </div>

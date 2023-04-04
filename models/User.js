@@ -32,6 +32,10 @@ const UserSchema = Schema( {
     trim: true,
     required: true
   },
+  lastLogin: {
+    type: Date,
+    default: Date.now(),
+  },
   google: {
     id: String,
   }
