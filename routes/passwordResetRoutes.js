@@ -17,6 +17,11 @@ router.post("/request_reset", async (req, res) => {
         res.redirect("request_reset");
         return;
     }
+    if (user.google.id){
+      req.flash("error", "This website cannot reset the password associated with a Google account. Reset your password via Google!")
+      res.redirect("request_reset");
+      return;
+    }
     const jwt_secret = process.env.JWT_SECRET || dummy_jwt;
     const token = jwt.sign(
         {

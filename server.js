@@ -54,7 +54,8 @@ const passport = require("passport");
 app.use(passport.initialize());
 app.use(passport.session());
 const User = require('./models/User')
-passport.use(User.createStrategy());
+// local strategy
+passport.use(User.createStrategy()); // from plugin in User.js
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -62,6 +63,9 @@ passport.deserializeUser((id, done) => {
   done(null, id);
 });
 passport.deserializeUser(User.deserializeUser());
+
+// google
+require("./config/passport-config").setUpGooglePassport(passport);
 
 // get middleware
 const { set_locals, req_login, checkTodoType, checkForNotifAndDelete} = require("./public/js/middlewares");

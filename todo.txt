@@ -3,9 +3,15 @@ Pre-publish:
 - functionalize all the error creates
 - functionalize the confirmMatches
 - google login?
+- change display name
+- add auth to all login routes O:
+- ^ and also reset
 
 
 Rest:
 - upload images to todo list items
 - upload background images to countdowns
 - upload pfps
+
+? installs:
+- passport-google-oauth20

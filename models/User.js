@@ -31,6 +31,9 @@ const UserSchema = Schema( {
     default: [],
     trim: true,
     required: true
+  },
+  google: {
+    id: String,
   }
 } );
 

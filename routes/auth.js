@@ -9,7 +9,7 @@ const req_not_login = (req,res,next) => {
     else res.redirect('/')
 }
 
-router.use(['/login', '/signup'], req_not_login);
+router.use(['/login', '/signup', '/auth'], req_not_login);
 
 router.get('/login', (req, res) => {
     res.render("forms/formContainer", {form: "loginForm"});
@@ -62,5 +62,17 @@ router.post('/signup', (req, res) => {
         }
       });
 });
+
+// google auth
+router.get("/auth/google", passport.authenticate("google", 
+  { scope: ["email", "profile"] }
+));
+// Retrieve user data using the access token received</em> 
+router.get("/auth/google/callback", passport.authenticate("google", {
+    failureRedirect: "/login",
+    failureFlash: "Google login failed",
+    successRedirect: "/",
+  }
+));
 
 module.exports = router;
