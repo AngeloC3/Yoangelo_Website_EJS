@@ -91,6 +91,5 @@ app.use(errorController.respondInternalError);
 app.use(errorController.respondRouteNotFound);
 
 app.listen(port, () => {
-    const url = `http://localhost:${port}`;
-    console.log(`Listening on ${url}`);
+    console.log(`Listening on port: ${port}`);
   });

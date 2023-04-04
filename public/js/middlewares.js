@@ -11,8 +11,8 @@ const set_locals = async (req,res,next) => {
         const user = await User.findOne({email: "user1@fake.com"});
         req.user = user._id;
     }
+    res.locals.loggedIn = req.isAuthenticated();
     if (req.user) {
-        res.locals.loggedIn = true;
         req.user = new ObjectId(req.user); // session saves as a string this converts back
         // get # of notifs and unread notifs --> error if there are none
         try{
@@ -30,7 +30,6 @@ const set_locals = async (req,res,next) => {
         }
         res.locals.hasPair = req.session.hasPair;
     } else {
-        res.locals.loggedIn = false;
         res.locals.notifNums = {}
     }
     res.locals.error = req.flash('error');
