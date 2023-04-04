@@ -52,7 +52,10 @@ router.post('/signup', (req, res) => {
             "success",
             'Account created successfully!'
           );
-          res.redirect("/");
+          // authenticates if account is created
+          passport.authenticate('local')(req, res, () => {
+            res.redirect('/');
+          });
         } else {
           req.flash(
             "error",

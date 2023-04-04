@@ -1,4 +1,9 @@
+const passport = require('passport');
 const User = require('../models/User')
+
+const setUpLocalPassport = (passport) => {
+    passport.use(User.createStrategy());
+};
 
 // google strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
@@ -20,9 +25,8 @@ const setUpGooglePassport = (passport) => {
                     return done(null, existingUser);
                 }
                 // if user does not exist create a new user
-                console.log('Creating new user...');
                 const newUser = new User({
-                    method: 'google', // delete?
+                    method: 'google',
                     username: profile.displayName,
                     email: profile.emails[0].value,
                     google: {
@@ -36,8 +40,20 @@ const setUpGooglePassport = (passport) => {
             }
         }
     ));
+};
+
+const setUpPassportSerializers = (passport) => {
+    passport.serializeUser((user, done) => {
+        done(null, user.id);
+      });
+    passport.deserializeUser((id, done) => {
+        done(null, id);
+    });
+    passport.deserializeUser(User.deserializeUser());
 }
 
 module.exports = {
+    setUpLocalPassport,
     setUpGooglePassport,
+    setUpPassportSerializers,
 }

@@ -53,19 +53,13 @@ app.use(cookieParser());
 const passport = require("passport");
 app.use(passport.initialize());
 app.use(passport.session());
-const User = require('./models/User')
+const {setUpGooglePassport, setUpLocalPassport, setUpPassportSerializers} = require("./config/passport-config")
 // local strategy
-passport.use(User.createStrategy()); // from plugin in User.js
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-passport.deserializeUser((id, done) => {
-  done(null, id);
-});
-passport.deserializeUser(User.deserializeUser());
-
+setUpLocalPassport(passport);
 // google
-require("./config/passport-config").setUpGooglePassport(passport);
+setUpGooglePassport(passport);
+// serializers
+setUpPassportSerializers(passport);
 
 // get middleware
 const { set_locals, req_login, checkTodoType, checkForNotifAndDelete} = require("./public/js/middlewares");
