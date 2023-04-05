@@ -42,6 +42,7 @@ app.use(
     store: store,
     resave: false,
     saveUninitialized: false,
+    unset: 'destroy'
   })
 );
 const cookieParser = require("cookie-parser"); // to handle cookies
