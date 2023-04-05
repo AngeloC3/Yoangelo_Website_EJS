@@ -4,7 +4,7 @@ const PasswordResetToken = require('../../models/PasswordResetToken');
 const jwt = require('jsonwebtoken');
 const dummy_jwt = "thisismysecrctekeyforjwticdf8wehjidjs9";
 const nodemailer = require("nodemailer");
-const { makeNextError } = require("../public/js/utils");
+const { makeNextError } = require("../../public/js/utils");
 
 router.get("/request_reset", (req, res) => {
     res.render("forms/formContainer", {form: 'requestPassResetForm.ejs'})

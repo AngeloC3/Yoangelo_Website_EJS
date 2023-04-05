@@ -1,8 +1,7 @@
 Pre-publish:
-- show error message by clicking button in error page
-- functionalize all the error creates
-- functionalize the confirmMatches
 - change display name
+- initialize all env vars
+- switch how u do login only
 
 Rest:
 - upload images to todo list items

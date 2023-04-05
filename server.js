@@ -74,13 +74,13 @@ app.get("/", (req, res,) => {
 });
 
 // log in only routes
-app.use(req_login);
-app.use("/pair", require("./routes/pairRoutes"));
-app.use("/notifications", require("./routes/notificationRoutes"));
-app.use("/manage-todos", require('./routes/manageTodosRoutes'))
-app.use("/todos/:todoType", checkTodoType, require('./routes/todoRoutes'));
-app.use("/countdowns", require('./routes/countdownRoutes'));
-app.use("/wishlist", require('./routes/wishlistRoutes'))
+app.use("/pair", req_login, require("./routes/pairRoutes"));
+app.use("/notifications", req_login, require("./routes/notificationRoutes"));
+app.use("/manage-todos", req_login, require('./routes/manageTodosRoutes'))
+app.use("/todos/:todoType", req_login, checkTodoType, require('./routes/todoRoutes'));
+app.use("/countdowns", req_login, require('./routes/countdownRoutes'));
+app.use("/wishlist", req_login, require('./routes/wishlistRoutes'))
+app.use("/profile", req_login, require('./routes/profileRoutes'))
 
 // errors
 const errorController = require('./controllers/errorController');
