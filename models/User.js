@@ -24,7 +24,6 @@ const UserSchema = Schema( {
   pairId: {
     type: ObjectId,
     ref: 'User',
-    default: null,
   },
   todoTypes: {
     type: [String],

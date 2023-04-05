@@ -23,6 +23,22 @@ const setActiveTab = (selected, hideFlash = true) => {
     if (hideFlash) document.getElementById('flashView').style.display = 'none';
 };
 
+const params = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop),
+});
+// gets tabToActivate based on the query and actives it
+let tabToActivate;
+if (!params.startingTab) tabToActivate = 'profile';
+else tabToActivate = params.startingTab;
+document.getElementById('profile').classList.add("active");
+// configures buttons to work with setting active tab
+const buttons = document.querySelectorAll('.tabButtonContainer button');
+for (button of buttons){
+    const data_tab = button.getAttribute('data-tab');
+    button.onclick = () => setActiveTab(data_tab);
+    if (data_tab === tabToActivate) setActiveTab(data_tab, false);
+}
+
 const checkIfNewUsername = (username) => {
     const changed = document.getElementById('changedUsername').value;
     if (username === changed){
@@ -41,18 +57,9 @@ const confirmAndCheckIfNewEmail = (email) => {
     return confirm(`Are you sure you wish to change your email to ${changed}?`)
 }
 
-const params = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop),
-});
-// gets tabToActivate based on the query and actives it
-let tabToActivate;
-if (!params.startingTab) tabToActivate = 'profile';
-else tabToActivate = params.startingTab;
-document.getElementById('profile').classList.add("active");
-// configures buttons to work with setting active tab
-const buttons = document.querySelectorAll('.tabButtonContainer button');
-for (button of buttons){
-    const data_tab = button.getAttribute('data-tab');
-    button.onclick = () => setActiveTab(data_tab);
-    if (data_tab === tabToActivate) setActiveTab(data_tab, false);
+const confirmRemovePair = (pairName) => {
+    if (confirm(`Are you sure you wish to unpair with ${pairName}`)) {
+        const delete_pair_form = document.getElementById('deletePairForm');
+        delete_pair_form.submit();
+    }
 }

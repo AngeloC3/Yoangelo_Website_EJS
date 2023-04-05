@@ -2,7 +2,7 @@ const router = require('express').Router();
 const Notification = require('../models/Notification');
 const User = require('../models/User');
 const { checkParamId } = require("../public/js/middlewares");
-const { findUserByIdAndUpdateReqSession } = require("../public/js/utils");
+const { findUserByIdAndUpdateReqSession, sendSystemNotif } = require("../public/js/utils");
 
 // pair auth
 
@@ -96,13 +96,8 @@ router.post('/respond_pair_request/:notifId', checkParamId('notifId'), async (re
 // pair specific functions
 
 const sendSuccessfulPairAlert = async (recipientId, pair_name) => {
-    await Notification.create({
-        recipientId: recipientId,
-        notifDetails: {
-            notifType: "system",
-            notifMessage: "You have successfully paired with " + pair_name + "!"
-        }
-    });
+    const msg = "You have successfully paired with " + pair_name + "!";
+    await sendSystemNotif(recipientId, msg);
 }
 
 module.exports = router;

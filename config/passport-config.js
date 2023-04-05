@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const LocalStrategy = require('passport-local').Strategy;
 
-const updatelastLogin = async (user, done) => {
+const updateLastLogin = async (user, done) => {
     user.lastLogin = Date.now(); // updates the last time a user logged in
     await user.save().then(() => {
         return done(null, user);
@@ -17,7 +17,7 @@ const setUpLocalPassport = (passport) => {
             User.authenticate()(email, password, function(err, user) {
                 if (err) { return done(err); }
                 if (!user) { return done(null, false); }
-                return updatelastLogin(user, done);
+                return updateLastLogin(user, done);
             });
         }
     ));
@@ -40,7 +40,7 @@ const setUpGooglePassport = (passport) => {
                 let existingUser = await User.findOne({ 'google.id': profile.id });
                 // if user exists return the user
                 if (existingUser) {
-                    return updatelastLogin(existingUser, done);
+                    return updateLastLogin(existingUser, done);
                 }
                 // if user does not exist create a new user
                 const newUser = new User({
@@ -61,13 +61,13 @@ const setUpGooglePassport = (passport) => {
 };
 
 const setUpPassportSerializers = (passport) => {
-    passport.serializeUser((user, done) => {
+    passport.serializeUser((req, user, done) => {
+        req.session.hasPair = Boolean(user.pairId);
         done(null, user.id);
       });
     passport.deserializeUser((id, done) => {
         done(null, id);
     });
-    passport.deserializeUser(User.deserializeUser()); // DO  I NEED THIS
 }
 
 module.exports = {

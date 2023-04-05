@@ -7,7 +7,7 @@ const Wishlist = require('../../models/Wishlist');
 
 const findUserByIdAndUpdateReqSession = async (id, req) => {
     const user = await User.findByIdAndUpdate(id);
-    req.session.hasPair = user.pairId !== null;
+    req.session.hasPair = user.pairId !== undefined;
     return user;
 }
 
@@ -26,13 +26,45 @@ const makeNextError = (msg, code, next) => {
 // countdown notif todo wishlist
 const deleteAllUsersCreations = async(id) => {
     await Countdown.deleteMany({'creatorInfo.creatorId': id});
-    // delete where id is sender or recipient
+    await Notification.deleteMany({
+        $or: [
+          { recipientId: id },
+          { senderId: id }
+        ]
+      })
+      
     await TodoItem.deleteMany({'creatorInfo.creatorId': id});
     await Wishlist.deleteMany({'creatorInfo.creatorId': id});
+}
+
+const removeAllPairActions = async(userId, pairId) => {
+    await Notification.deleteMany({
+        $and: [
+          { sender_id: { $in: [userId, pairId] } },
+          { recipient_id: { $in: [userId, pairId] } }
+        ]
+    });
+    await TodoItem.updateMany(
+        { "creatorInfo.creatorId": { $in: [userId, pairId] } },
+        { $unset: { pairRate: "" } }
+    );
+}
+
+const sendSystemNotif = async(id, msg) => {
+    await Notification.create({
+        recipientId: id,
+        notifDetails: {
+            notifType: "system",
+            notifMessage: msg
+        }
+    });
 }
 
 module.exports = {
     findUserByIdAndUpdateReqSession,
     todoTypeToTitle,
     makeNextError,
+    deleteAllUsersCreations,
+    removeAllPairActions,
+    sendSystemNotif,
 }

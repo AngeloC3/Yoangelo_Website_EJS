@@ -2,8 +2,8 @@ Pre-publish:
 - initialize all env vars
 - finish settings
 - change google button
-- passport config has 2 deseralizers?
 - test prof routes on google acc
+- link to github issues on 500 error
 
 Rest:
 - upload images to todo list items

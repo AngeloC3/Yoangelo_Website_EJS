@@ -12,7 +12,6 @@ const NotificationSchema = Schema( {
   senderId: {
     type: ObjectId,
     ref: 'User',
-    default: null
   },
   notifDetails: {
     notifType: {
