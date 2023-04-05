@@ -3,6 +3,7 @@ Pre-publish:
 - finish settings
 - change google button
 - passport config has 2 deseralizers?
+- test prof routes on google acc
 
 Rest:
 - upload images to todo list items

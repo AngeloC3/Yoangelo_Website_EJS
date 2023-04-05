@@ -42,13 +42,18 @@ router.post('/change/email', async (req, res) => {
 
 
 router.get('/delete/account', (req, res) => {
-    res.locals.username = req.user.username;
-    res.render('forms/formContainer', {form: 'confirmProfileDeleteForm'})
+    res.locals.code = Math.floor(100000 + Math.random() * 900000);
+    res.render('forms/formContainer', {form: 'confirmAccounDeleteForm'})
 });
 
 router.post('/delete/account', async (req, res) => {
-    const enteredEmail = req.body.email;
+    const { enteredEmail, enteredCode, actualCode } = req.body;
     const redirectRoute = '/profile/settings?startingTab=account';
+    if (enteredCode !== actualCode){
+        req.flash('error', "Code did not match");
+        res.redirect(redirectRoute);
+        return;
+    }
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
     if (!user || enteredEmail !== user.email){
         req.flash('error', "Email did not match");

@@ -1,0 +1,20 @@
+<form action="/profile/delete/account" method="POST">
+  
+      <h2 class="fw-bold mb-2 text-uppercase">Confirm Account Deletion</h2>
+      <p class="text-white-50 mb-5">Enter your email to confirm.</p>
+  
+      <div class="form-outline form-white mb-4">
+        <input type="email" name="enteredEmail" class="form-control form-control-lg" required/>
+        <label class="form-label" for="enteredEmail">Email</label>
+      </div>
+
+      <div class="form-outline form-white mb-4">
+        <input type="hidden" name="actualCode" value="<%= code %>"/>
+        <label class="form-label" for="enteredCode">Additionally, enter the 6 digit code below to confirm.</label>
+        <h2 class="mb-2 text-white"><%= code %></h2>
+        <input type="number" name="enteredCode" class="form-control form-control-lg" required/>
+        <label class="form-label" for="enteredCode">Code</label>
+      </div>
+  
+      <button class="btn btn-outline-light btn-lg px-5 mb-5 btn-danger text-uppercase" type="submit">Delete Account</button>
+  </form>
