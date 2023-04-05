@@ -5,7 +5,7 @@ const app = express();
 app.use(layouts);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.static( __dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set("view engine", "ejs");
 if (process.env.NODE_ENV === 'development') require('dotenv').config(); // so the env variables work 
