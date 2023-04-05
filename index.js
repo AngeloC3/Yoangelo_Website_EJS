@@ -6,6 +6,7 @@ app.use(layouts);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.set('views', __dirname + '/views');
 app.set("view engine", "ejs");
 if (process.env.NODE_ENV === 'development') require('dotenv').config(); // so the env variables work 
 const port = process.env.PORT
