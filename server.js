@@ -7,13 +7,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-require('dotenv').config(); // so the env variables work 
-const port = process.env.PORT || 5000;
+if (process.env.NODE_ENV === 'development') require('dotenv').config(); // so the env variables work 
+const port = process.env.PORT
 
 // setting up mongoose
 const mongoose = require('mongoose');
 const dbName = 'yoangelo_website_db';
-const mongodb_URI = process.env.MONGODB_URI || 'mongodb://0.0.0.0:27017/'
+const mongodb_URI = process.env.MONGODB_URI
 mongoose.connect(mongodb_URI, {
     dbName: dbName,
     useNewUrlParser: true,
@@ -23,21 +23,18 @@ mongoose.connect(mongodb_URI, {
 // setting up session
 const session = require("express-session"); // to handle sessions
 const MongoDBStore = require('connect-mongodb-session')(session);
-let store;
-const storedCookies = false;
-if (storedCookies){
-  store = new MongoDBStore({
-    uri: mongodb_URI + dbName,
-    collection: 'sessions'
-  });
-  // Catch errors
-  store.on('error', function(error) {
-    console.log(error);
-  });
-}
+store = new MongoDBStore({
+  uri: mongodb_URI + dbName,
+  collection: 'user_sessions'
+});
+// Catch errors
+store.on('error', function(error) {
+  console.log(error);
+});
+// create session
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    secret: process.env.SESSION_SECRET,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 30 // 30 days
     },
@@ -69,7 +66,7 @@ app.use(require('connect-flash')());
 app.use(set_locals);
 app.use(checkForNotifAndDelete);
 app.use('/auth', require("./routes/auth"));
-app.get("/", (req, res,) => {
+app.get("/", (req, res) => {
   res.render("home");
 });
 

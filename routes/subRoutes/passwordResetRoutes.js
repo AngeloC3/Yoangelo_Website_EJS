@@ -2,7 +2,6 @@ const router = require('express').Router();
 const User = require('../../models/User');
 const PasswordResetToken = require('../../models/PasswordResetToken');
 const jwt = require('jsonwebtoken');
-const dummy_jwt = "thisismysecrctekeyforjwticdf8wehjidjs9";
 const nodemailer = require("nodemailer");
 const { makeNextError } = require("../../public/js/utils");
 
@@ -23,7 +22,7 @@ router.post("/request_reset", async (req, res) => {
       res.redirect("request_reset");
       return;
     }
-    const jwt_secret = process.env.JWT_SECRET || dummy_jwt;
+    const jwt_secret = process.env.JWT_SECRET;
     const token = jwt.sign(
         {
           userId: user._id,
@@ -73,7 +72,7 @@ router.post("/request_reset", async (req, res) => {
 
 router.get("/reset/:token", async(req, res, next) => {
     const token = req.params.token;
-    const jwt_secret = process.env.JWT_SECRET || dummy_jwt;
+    const jwt_secret = process.env.JWT_SECRET;
     jwt.verify(token, jwt_secret, async (err, decoded) => {
       if (err) {
         return makeNextError('Invalid or Expired Reset Token', 400, next);

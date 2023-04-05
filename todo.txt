@@ -1,10 +1,6 @@
-Pre-publish:
-- initialize all env vars
-- link to github issues on 500 error
-- change profile icon
-- when on profile settings, all nav links mark as active
-
 Rest:
 - upload images to todo list items
 - upload background images to countdowns
 - upload pfps
+
+NODE_ENV <- make sure thats defined

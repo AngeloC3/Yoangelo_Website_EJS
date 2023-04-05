@@ -4,14 +4,8 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const isValidMongooseId = ObjectId.isValid;
 const { makeNextError } = require('./utils');
 
-devMode = true;
-
 // sets local that are needed constantly
 const set_locals = async (req,res,next) => {
-    if (devMode && !req.user) {
-        const user = await User.findOne({email: "user1@fake.com"});
-        if (user) req.user = user._id;
-    }
     res.locals.loggedIn = req.isAuthenticated();
     if (req.user) {
         req.user = new ObjectId(req.user); // session saves as a string this converts back
