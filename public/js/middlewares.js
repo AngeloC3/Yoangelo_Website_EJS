@@ -30,6 +30,7 @@ const set_locals = async (req,res,next) => {
     }
     res.locals.error = req.flash('error');
     res.locals.success = req.flash('success');
+    req.session.flash = undefined;
     next();
 };
 
