@@ -1,6 +1,6 @@
 {
   "name": "yoangelo_website",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "website four pairs to interact",
   "main": "server.js",
   "scripts": {
