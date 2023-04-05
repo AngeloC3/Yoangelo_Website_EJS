@@ -23,15 +23,15 @@ mongoose.connect(mongodb_URI, {
 
 // setting up session
 const session = require("express-session"); // to handle sessions
-const MongoDBStore = require('connect-mongodb-session')(session);
-store = new MongoDBStore({
-  uri: mongodb_URI + dbName,
-  collection: 'user_sessions'
-});
-// Catch errors
-store.on('error', function(error) {
-  console.log(error);
-});
+// const MongoDBStore = require('connect-mongodb-session')(session);
+// store = new MongoDBStore({
+//   uri: mongodb_URI + dbName,
+//   collection: 'user_sessions'
+// });
+// // Catch errors
+// store.on('error', function(error) {
+//   console.log(error);
+// });
 // create session
 app.use(
   session({
@@ -39,7 +39,7 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 14 // 14 days
     },
-    store: store,
+    //store: store,
     resave: false,
     saveUninitialized: false,
   })
