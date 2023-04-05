@@ -58,8 +58,13 @@ const confirmAndCheckIfNewEmail = (email) => {
 }
 
 const confirmRemovePair = (pairName) => {
-    if (confirm(`Are you sure you wish to unpair with ${pairName}`)) {
-        const delete_pair_form = document.getElementById('deletePairForm');
-        delete_pair_form.submit();
+    if (!confirm(`Are you sure you wish to unpair with ${pairName}`)) {
+        return false;
     }
+    if (!confirm(`Confirm again that you wish to unpair with ${pairName}`)) {
+        return false;
+    }
+    const delete_pair_form = document.getElementById('deletePairForm');
+    delete_pair_form.submit();
+    return true;
 }

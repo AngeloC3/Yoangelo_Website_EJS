@@ -1,9 +1,9 @@
 Pre-publish:
 - initialize all env vars
-- finish settings
 - change google button
-- test prof routes on google acc
+- test profile routes on google acc
 - link to github issues on 500 error
+- change profile icon
 
 Rest:
 - upload images to todo list items

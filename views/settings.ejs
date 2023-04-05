@@ -75,7 +75,7 @@
 
             <%# PROFILE STARTS HERE %>
             <div class="tab-pane" id="profile">
-              <h6>YOUR PROFILE INFORMATION</h6>
+              <h3>YOUR PROFILE INFORMATION</h3>
               <hr>
               <form action="/profile/change/unessentials" method="POST">
                 <div class="form-outline form-group form-white mb-4">
@@ -89,7 +89,7 @@
 
             <%# ACCOUNT STARTS HERE %>
             <div class="tab-pane" id="account">
-              <h6>ACCOUNT SETTINGS</h6>
+              <h3>ACCOUNT SETTINGS</h3>
               <hr>
               <form action="/profile/change/email" method="POST">
                 <div class="form-outline form-group form-white mb-4">
@@ -104,7 +104,7 @@
                   <form action="/profile/delete/pair"  id='deletePairForm' method="POST">
                     <hr>
                     <label class="d-block text-danger mb-2 label-large">Unpair with <%= pairName %></label>
-                    <button class="btn btn-danger" onclick="confirmRemovePair('<%= pairName %>')">
+                    <button class="btn btn-danger" type="button" onclick="confirmRemovePair('<%= pairName %>')">
                       Remove Pair
                     </button>
                   </form>
@@ -117,7 +117,7 @@
                 </div>
               <% } %>
               <hr>
-              <div class="form-group">
+              <div>
                 <label class="d-block text-danger label-large">Delete Account</label>
                 <p class="font-size-sm dark-muted">Once you delete your account, there is no going back. Please be certain.</p>
                 <a href="/profile/delete/account" class="btn btn-danger" type="button">Delete Account</a>
@@ -126,15 +126,21 @@
 
             <%# SECURITY STARTS HERE %>
             <div class="tab-pane" id="security">
-              <h6>SECURITY SETTINGS</h6>
+              <h3>SECURITY SETTINGS</h3>
               <hr>
-              <form>
-                <div class="form-group">
-                  <label class="d-block">Change Password</label>
-                  <input type="text" class="form-control" placeholder="Enter your old password">
-                  <input type="text" class="form-control mt-1" placeholder="New password">
-                  <input type="text" class="form-control mt-1" placeholder="Confirm new password">
-                </div>
+              <form action="/profile/change/password" method="POST">
+                  <h4 class="d-block">Change Password</h4>
+                  <small class="dark-muted">Change your password by entering your old and new password</small>
+                  <div class="form-outline form-group form-white my-3">
+                    <input type="password" class="form-control form-control-lg" name="oldPassword" placeholder="Enter your old password" required>
+                  </div>
+                  <div class="form-outline form-group form-white mb-3">
+                    <input type="password" class="form-control form-control-lg" name="newPassword" placeholder="New password" required>
+                  </div>
+                  <div class="form-outline form-group form-white mb-3">
+                    <input type="password" class="form-control form-control-lg" name="confirmPassword" placeholder="Confirm new password" required>
+                  </div>
+                  <button class="btn btn-primary btn-lg px-5" type="submit">Change Password</button>
               </form>
             </div>
 

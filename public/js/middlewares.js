@@ -4,7 +4,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const isValidMongooseId = ObjectId.isValid;
 const { makeNextError } = require('./utils');
 
-devMode = true;
+devMode = false;
 
 // sets local that are needed constantly
 const set_locals = async (req,res,next) => {
@@ -43,7 +43,7 @@ const req_login = (req,res,next) => {
     if (res.locals.loggedIn) {
         next()
     }
-    else res.redirect('/login')
+    else res.redirect('/auth/login')
 }
 
 // checks that the paramId is a valid Mongoose Id, and if not --> error

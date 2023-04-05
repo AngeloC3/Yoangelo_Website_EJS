@@ -60,6 +60,12 @@ const sendSystemNotif = async(id, msg) => {
     });
 }
 
+const flashAndRedirect = (req, res, status, msg, redirectRoute) => {
+    req.flash(status, msg);
+    res.redirect(redirectRoute);
+    return;
+}
+
 module.exports = {
     findUserByIdAndUpdateReqSession,
     todoTypeToTitle,
@@ -67,4 +73,5 @@ module.exports = {
     deleteAllUsersCreations,
     removeAllPairActions,
     sendSystemNotif,
+    flashAndRedirect,
 }
