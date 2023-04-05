@@ -15,4 +15,4 @@ The Yoangelo website is a platform designed to help pairs connect with each othe
 </ul>
 
 ## Acknowledgments
-* Help from [Eddie Scott](https://github.com/PixllCreations)
+* Front-end help from [Eddie Scott](https://github.com/PixllCreations)
