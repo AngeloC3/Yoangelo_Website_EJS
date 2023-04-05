@@ -1,9 +1,8 @@
 Pre-publish:
 - initialize all env vars
-- change google button
-- test profile routes on google acc
 - link to github issues on 500 error
 - change profile icon
+- when on profile settings, all nav links mark as active
 
 Rest:
 - upload images to todo list items

@@ -42,4 +42,16 @@ const UserSchema = Schema( {
 
 UserSchema.plugin(passportLocalMongoose, { usernameField: "email" });
 
+UserSchema.methods.isExternalAccount = function() {
+  return Boolean(this.google);
+}
+
+UserSchema.methods.getExternalProviderName = function() {
+  if (this.google){
+    return "Google";
+  } else {
+    return "External"; // should never happen
+  }
+}
+
 module.exports = mongoose.model( 'User', UserSchema );

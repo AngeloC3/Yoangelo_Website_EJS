@@ -28,8 +28,8 @@ router.post('/change/email', async (req, res) => {
     if (!user){
         return next(err);
     }
-    if (user.google.id){
-        return flashAndRedirect(req, res, 'error', "Cannot change the email of a google account", redirectRoute);
+    if (user.isExternalAccount()){
+        return flashAndRedirect(req, res, 'error', "Cannot change the email of an external account", redirectRoute);
     }
     user.email = changedEmail;
     await user.save().then(() => {
@@ -108,8 +108,8 @@ router.post('/change/password', async (req, res, next) => {
     if (!user){
         return next(err);
     }
-    if (user.google.id){
-        return flashAndRedirect(req, res, 'error', "Cannot change the password of a google account", redirectRoute);
+    if (user.isExternalAccount()){
+        return flashAndRedirect(req, res, 'error', "Cannot change the password of an external account", redirectRoute);
     }
     const auth_result = await user.authenticate(oldPassword);
     if (!auth_result.user){

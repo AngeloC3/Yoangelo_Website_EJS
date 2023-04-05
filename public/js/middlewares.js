@@ -4,7 +4,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const isValidMongooseId = ObjectId.isValid;
 const { makeNextError } = require('./utils');
 
-devMode = false;
+devMode = true;
 
 // sets local that are needed constantly
 const set_locals = async (req,res,next) => {

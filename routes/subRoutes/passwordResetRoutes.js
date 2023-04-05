@@ -18,8 +18,8 @@ router.post("/request_reset", async (req, res) => {
         res.redirect("request_reset");
         return;
     }
-    if (user.google.id){
-      req.flash("error", "This website cannot reset the password associated with a Google account. Reset your password via Google!")
+    if (user.isExternalAccount()){
+      req.flash("error", `This website cannot reset the password associated with an external account. Reset your password via ${user.getExternalProviderName()}!`)
       res.redirect("request_reset");
       return;
     }

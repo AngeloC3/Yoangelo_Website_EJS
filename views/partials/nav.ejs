@@ -50,14 +50,20 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link mx-2 dropdown-toggle" id="profileDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Profile
+                        <i class="fas fa-user-circle"></i> Profile
                     </a>
                     <ul class="dropdown-menu bg-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item text-light" href='/profile/settings'>Settings</a></li>
+                        <li><a class="dropdown-item text-light" href='/profile/settings'>
+                            <i class="fas fa-cog"></i> Settings
+                        </a></li>
                         <% if (!hasPair) {%>
-                            <li><a class="dropdown-item text-light" href="/pair/request_pair">Request Pair</a></li>
+                            <li><a class="dropdown-item text-light" href="/pair/request_pair">
+                                <i class="fas fa-handshake"></i> Request Pair
+                            </a></li>
                         <% } %> 
-                        <li><a class="dropdown-item text-light" href="/auth/logout">Logout</a></li>
+                        <li><a class="dropdown-item text-light" href="/auth/logout">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a></li>
                     </ul>
                 </li>
             <% } %>
@@ -74,10 +80,12 @@
     const links = document.querySelectorAll('.navbar-nav a');
     for (let i = 0; i < links.length; i++) {
         if (links[i].href === currentUrl) {
+            console.log(links[i].textContent)
             links[i].classList.add('active');
             if (links[i].closest('.dropdown-menu')) {
-            const dropdownToggle = links[i].closest('.dropdown-menu').previousElementSibling;
-            dropdownToggle.classList.add('active');
+                const dropdownToggle = links[i].closest('.dropdown-menu').previousElementSibling;
+                console.log(dropdownToggle.textContent)
+                dropdownToggle.classList.add('active');
             }
         }   
     }

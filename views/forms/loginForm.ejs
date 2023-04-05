@@ -1,3 +1,25 @@
+<style>
+  .externalLoginButton {
+    background-color: #ffffff; 
+    border-radius: 0.3125rem; 
+    padding: 0.625rem; 
+    border: 0.125rem solid #4285F4;
+  }
+
+  .externalLoginButton a {
+    text-decoration: none; color: #000000; display: flex; align-items: center;
+  }
+
+  .externalLoginButton:hover {
+    background-color: #4285F4;
+    border: 0.125rem solid white;
+  }
+  .externalLoginButton:hover a {
+    color: #ffffff;
+  }
+
+</style>
+
 <form action="/auth/login" method="POST">
 
   <% if (success.length > 0) {%>
@@ -28,7 +50,12 @@
     <button class="btn btn-outline-light btn-lg px-5 mb-5" type="submit">Login</button>
 </form>
 
-<a href="/auth/google" class="text-white"><i class="fab fa-google fa-lg"></i></a>
+<button class="externalLoginButton">
+  <a href="/auth/google">
+    <i class="fab fa-google fa-lg" style="margin-right: 0.625rem;"></i>
+    Sign in with Google
+  </a>
+</button>
 
 <%# <div class="d-flex justify-content-center text-center mt-4 pt-1">
   <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
