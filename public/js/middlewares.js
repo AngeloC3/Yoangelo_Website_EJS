@@ -6,7 +6,6 @@ const { makeNextError } = require('./utils');
 
 // sets local that are needed constantly
 const set_locals = async (req,res,next) => {
-    res.locals.loggedIn = req.isAuthenticated();
     if (req.user) {
         req.user = new ObjectId(req.user); // session saves as a string this converts back
         // get # of notifs and unread notifs --> error if there are none
@@ -24,8 +23,10 @@ const set_locals = async (req,res,next) => {
             }
         }
         res.locals.hasPair = req.session.hasPair;
+        res.locals.loggedIn = true;
     } else {
         res.locals.notifNums = {}
+        res.locals.loggedIn = false;
     }
     res.locals.error = req.flash('error');
     res.locals.success = req.flash('success');
