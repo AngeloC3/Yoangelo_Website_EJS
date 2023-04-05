@@ -1,4 +1,4 @@
-Rest:
+gRest:
 - upload images to todo list items
 - upload background images to countdowns
 - upload pfps
