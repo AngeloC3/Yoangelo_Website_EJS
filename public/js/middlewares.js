@@ -10,7 +10,7 @@ devMode = true;
 const set_locals = async (req,res,next) => {
     if (devMode && !req.user) {
         const user = await User.findOne({email: "user1@fake.com"});
-        req.user = user._id;
+        if (user) req.user = user._id;
     }
     res.locals.loggedIn = req.isAuthenticated();
     if (req.user) {

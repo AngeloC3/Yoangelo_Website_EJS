@@ -1,7 +1,8 @@
 Pre-publish:
-- change display name
 - initialize all env vars
-- switch how u do login only
+- finish settings
+- change google button
+- passport config has 2 deseralizers?
 
 Rest:
 - upload images to todo list items

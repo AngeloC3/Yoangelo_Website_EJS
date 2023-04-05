@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const LocalStrategy = require('passport-local').Strategy;
 
-const updateLastLogin = async (user, done) => {
+const updatelastLogin = async (user, done) => {
     user.lastLogin = Date.now(); // updates the last time a user logged in
     await user.save().then(() => {
         return done(null, user);
@@ -17,7 +17,7 @@ const setUpLocalPassport = (passport) => {
             User.authenticate()(email, password, function(err, user) {
                 if (err) { return done(err); }
                 if (!user) { return done(null, false); }
-                return updateLastLogin(user, done);
+                return updatelastLogin(user, done);
             });
         }
     ));
@@ -40,7 +40,7 @@ const setUpGooglePassport = (passport) => {
                 let existingUser = await User.findOne({ 'google.id': profile.id });
                 // if user exists return the user
                 if (existingUser) {
-                    return updateLastLogin(existingUser, done);
+                    return updatelastLogin(existingUser, done);
                 }
                 // if user does not exist create a new user
                 const newUser = new User({
