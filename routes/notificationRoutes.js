@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
                 senderName: senderName,
                 message: message,
                 viewRoute: viewRoute,
-                createdAt: notif.createdAt.toLocaleString("en-US", {  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-'),
+                createdAt: notif.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-'),
                 deleteId: deleteId,
                 viewed: notif.viewed
             }
