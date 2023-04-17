@@ -84,7 +84,7 @@
                                 <h2>$<%= wishlistItem.price %></h2>
                             <% } %>
                             <figcaption>Created by <%= wishlistItem.creatorInfo.creatorName %></figcaption>
-                            <figcaption><%= wishlistItem.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-') %></figcaption>
+                            <figcaption><%= wishlistItem.createdAt.toLocaleString("en-US", { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-') %></figcaption>
                             <% if (wishlistItem.url) { %>
                                 <figcaption class="glow-on-hover"><a  href="<%= wishlistItem.url %>" target="_blank"><i class="fa fa-link text-white" style="transform: scale(1.5);"></i></a></figcaption>
                             <% } %>

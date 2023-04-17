@@ -1,6 +1,4 @@
 gRest:
-- upload images to todo list items
+- upload images to list items (then show img on mobile?)
 - upload background images to countdowns
-- upload pfps
-
-NODE_ENV <- make sure thats defined
+- upload pfps 
