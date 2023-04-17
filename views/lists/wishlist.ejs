@@ -86,7 +86,7 @@
                             <figcaption>Created by <%= wishlistItem.creatorInfo.creatorName %></figcaption>
                             <figcaption><%= wishlistItem.createdAt.toLocaleString("en-US", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).replace('at', '-') %></figcaption>
                             <% if (wishlistItem.url) { %>
-                                <figcaption class="glow-on-hover"><a  href="<%= wishlistItem.url %>"><i class="fa fa-link text-white" style="transform: scale(1.5);"></i></a></figcaption>
+                                <figcaption class="glow-on-hover"><a  href="<%= wishlistItem.url %>" target="_blank"><i class="fa fa-link text-white" style="transform: scale(1.5);"></i></a></figcaption>
                             <% } %>
                         </div>
                     </div>                                                                               

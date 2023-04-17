@@ -53,6 +53,10 @@ const TodoItemSchema = Schema( {
     required: true,
     default: Date.now,
   },
+  url: {
+    type: String,
+    trim: true
+  },
 });
 
 TodoItemSchema.methods.getAvgRating = function() {

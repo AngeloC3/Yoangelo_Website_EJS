@@ -70,13 +70,15 @@ router.get('/add', (req, res) => {
     res.locals.descVal = undefined;
     res.locals.ratingVal = 0;
     res.locals.rateOnly = false;
-    res.render("forms/formContainer", {form: "add-modifyTodoForm"});
+    res.locals.url = undefined;
+    res.render("forms/formContainer", {form: "add-modifyTodoItemForm"});
 });
 
 router.post('/add', async (req, res) => {
     const {title, rating} = req.body;
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const description = req.body.description || undefined;
+    const url = req.body.url || undefined;
     const new_todo_item = await TodoItem.create({
         creatorInfo: {
             creatorId: req.user,
@@ -86,6 +88,7 @@ router.post('/add', async (req, res) => {
         title: title,
         description: description,
         creatorRate: rating,
+        url: url,
     });
     if (user.pairId){
         await User.findById(user.pairId).then(async (pair) => {
@@ -118,6 +121,7 @@ router.get('/modify/:todoId', checkParamId("todoId"), async (req, res, next) => 
     res.locals.buttonText = "Modify";
     res.locals.titleVal = todo_item.title;
     res.locals.descVal = todo_item.description;
+    res.locals.url = todo_item.url;
     const userId = req.user;
     if (todo_item.didRate(userId)){
         if (userId.equals(todo_item.creatorInfo.creatorId)){
@@ -134,17 +138,18 @@ router.get('/modify/:todoId', checkParamId("todoId"), async (req, res, next) => 
     } else {
         res.locals.rateOnly = false;
     }
-    res.render("forms/formContainer", {form: "add-modifyTodoForm"});
+    res.render("forms/formContainer", {form: "add-modifyTodoItemForm"});
 });
 
 router.post('/modify/:todoId', checkParamId("todoId"), async (req, res) => {
-    const {title, rating, description} = req.body;
+    const {title, rating, description, url} = req.body;
     const toModify = await TodoItem.findById(req.params.todoId);
     if (!toModify) {
         return makeNextError('Todo Item Not Found', 400, next)
     }
     if (title) toModify.title = title;
     if (description || toModify.description) toModify.description = description;
+    if (url || toModify.url) toModify.url = url;
     if (req.user.equals(toModify.creatorInfo.creatorId)){
         toModify.creatorRate = rating;
     } else {
