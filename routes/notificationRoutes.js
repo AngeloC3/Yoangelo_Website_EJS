@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
                 senderName: senderName,
                 message: message,
                 viewRoute: viewRoute,
-                createdAt: notif.getCreatedAtString(),
+                createdAt: notif.createdAt,
                 deleteId: deleteId,
                 viewed: notif.viewed
             }

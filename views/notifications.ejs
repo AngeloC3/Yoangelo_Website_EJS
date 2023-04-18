@@ -19,7 +19,7 @@
                         <div class="notification-list_detail text-light">
                             <b style="color: pink"><%= notif.senderName %></b>
                             <p><%= notif.message %></p>
-                            <p><small><%= notif.createdAt %></small></p>
+                            <p><small class="notif-date" data-date="<%= notif.createdAt %>"></small></p>
                         </div>
                     </div>
                     <div class="notification-list_right">
@@ -46,6 +46,12 @@
 </div>
 
 <script src="/js/listButtons.js"></script>
+<script src="/js/schemaUtils.js"></script>
 <script>
-          addDeleteFunctionalityToButtons('notification', '/notifications');
+    addDeleteFunctionalityToButtons('notification', '/notifications');
+    const notifDateElems = document.querySelectorAll('.notif-date');
+    notifDateElems.forEach(elem => {
+        const date = elem.getAttribute('data-date');
+        elem.textContent = getDateString(date);
+    });
 </script>
