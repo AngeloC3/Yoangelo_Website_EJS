@@ -94,9 +94,4 @@ NotificationSchema.methods.getTypeInfo = function() {
   return infoObj;
 };
 
-const { getDateString } = require("../public/js/schemaUtils");
-NotificationSchema.methods.getCreatedAtString = function() {
-  return getDateString(this.createdAt);
-}
-
 module.exports = mongoose.model( 'Notification', NotificationSchema );

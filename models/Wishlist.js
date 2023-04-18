@@ -44,9 +44,4 @@ const WishlistSchema = Schema( {
   },
 });
 
-const { getDateString } = require("../public/js/schemaUtils");
-WishlistSchema.methods.getCreatedAtString = function() {
-  return getDateString(this.createdAt);
-}
-
 module.exports = mongoose.model( 'Wishlist', WishlistSchema );

@@ -9,6 +9,10 @@ const getDateString = (date) => {
     }).format(new Date(date)).replace("at", "-");
 }
 
-module.exports = {
-    getDateString,
+const setDateElems = () => {
+    const dateElems = document.querySelectorAll('.date-elem');
+    dateElems.forEach(elem => {
+        const date = elem.getAttribute('data-date');
+        elem.textContent = getDateString(date);
+    });
 }

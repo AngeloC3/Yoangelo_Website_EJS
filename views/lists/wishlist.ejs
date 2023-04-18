@@ -84,7 +84,7 @@
                                 <h2>$<%= wishlistItem.price %></h2>
                             <% } %>
                             <figcaption>Created by <%= wishlistItem.creatorInfo.creatorName %></figcaption>
-                            <figcaption><%= wishlistItem.getCreatedAtString() %></figcaption>
+                            <figcaption class="date-elem" data-date="<%= wishlistItem.createdAt %>"></figcaption>
                             <% if (wishlistItem.url) { %>
                                 <figcaption class="glow-on-hover"><a  href="<%= wishlistItem.url %>" target="_blank"><i class="fa fa-link text-white" style="transform: scale(1.5);"></i></a></figcaption>
                             <% } %>
@@ -114,8 +114,10 @@
     <% } %> 
 
 <script src="/js/listButtons.js"></script>
+<script src="/js/ejsUtils.js"></script>
 <script>
   addDeleteFunctionalityToButtons('<%= page_title %>', '/wishlist');
+  setDateElems();
 
   function createDropdown(text, halfParam = "") {
     // Create the main dropdown container

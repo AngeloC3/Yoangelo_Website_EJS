@@ -100,9 +100,4 @@ TodoItemSchema.methods.getBothRateString = function(id) {
   return getRateString(num1) + " - " + getRateString(num2);
 }
 
-const { getDateString } = require("../public/js/schemaUtils");
-TodoItemSchema.methods.getCreatedAtString = function() {
-  return getDateString(this.createdAt);
-}
-
 module.exports = mongoose.model( 'TodoItem', TodoItemSchema );
