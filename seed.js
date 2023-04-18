@@ -198,11 +198,20 @@ const seedWishlists = async () => {
   }
 };
 
+const clearSessions = async() => {
+  await db.collection('user_sessions').drop().then(() => {
+    console.log("sessions removed")
+  }).catch(() => {
+    console.log("error removing sessions")
+  });
+}
+
 seedUsers()
 .then(() => { return seedPairRequests(true) })
 .then(() => { return seedTodos() })
 .then(() => { return seedCountdowns() })
 .then(() => { return seedWishlists() })
+.then(() => { return clearSessions() })
 .then(() => {
   console.log("closing")
   db.close()

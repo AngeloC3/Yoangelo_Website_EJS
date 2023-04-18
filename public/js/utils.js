@@ -4,7 +4,6 @@ const TodoItem = require('../../models/TodoItem');
 const User = require('../../models/User');
 const Wishlist = require('../../models/Wishlist');
 
-
 const findUserByIdAndUpdateReqSession = async (id, req) => {
     const user = await User.findByIdAndUpdate(id);
     req.session.hasPair = user.pairId !== undefined;
