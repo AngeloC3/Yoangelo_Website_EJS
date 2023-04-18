@@ -75,7 +75,7 @@ app.get("/", (req, res) => {
 // log in only routes
 app.use("/pair", req_login, require("./routes/pairRoutes"));
 app.use("/notifications", req_login, require("./routes/notificationRoutes"));
-app.use("/manage-todos", req_login, require('./routes/manageTodosRoutes'))
+app.use("/manage_todos", req_login, require('./routes/manageTodosRoutes'))
 app.use("/todos/:todoType", req_login, checkTodoType, require('./routes/todoRoutes'));
 app.use("/countdowns", req_login, require('./routes/countdownRoutes'));
 app.use("/wishlist", req_login, require('./routes/wishlistRoutes'))

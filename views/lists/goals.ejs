@@ -38,6 +38,12 @@
 </style>
 
 <div class="goalContainer">
+  <% if (error.length > 0) {%>
+    <div class="alert alert-danger" role="alert">
+      <h2><%= error %></h2>
+    </div>
+   <% } %> 
+
   <% for (todoType of todoTypes) { %>
     <% todoTitle = todoType.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ") %>
     
@@ -47,7 +53,7 @@
               <h2><%=todoTitle%></h2>
           </div>
         </a>
-        <a href="/manage-todos/delete/<%= todoType %>" class="btn btn-lg text-white trashcan" style="transform: scale(1.5);">
+        <a href="/manage_todos/delete/<%= todoType %>" class="btn btn-lg text-white trashcan" style="transform: scale(1.5);">
           <i class="fas fa-trash"></i>
         </a>   
       </div>   

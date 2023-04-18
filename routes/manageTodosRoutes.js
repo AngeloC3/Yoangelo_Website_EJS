@@ -9,7 +9,7 @@ router.get('/', async(req, res) =>{
     user = await findUserByIdAndUpdateReqSession(req.user, req);
     res.locals.todoTypes = user.todoTypes.sort();
     res.locals.page_title = 'Todo Lists';
-    res.locals.addRoute = '/manage-todos/create';
+    res.locals.addRoute = '/manage_todos/create';
     res.render('lists/listContainer', {innerList: 'goals'});
 });
 
@@ -29,7 +29,7 @@ router.get('/delete/:todoType', async(req, res) => {
 
 router.post('/delete/:todoType', async(req, res) => {
     if (!req.body.shouldDelete){
-        res.redirect("/manage-todos")
+        res.redirect("/manage_todos")
     }
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
     const userId = user._id;
@@ -39,7 +39,7 @@ router.post('/delete/:todoType', async(req, res) => {
     deleteTodoTypeAndSave(user, req.params.todoType);
     deleteTodoTypeAndSave(pair, req.params.todoType);
     await Notification.findOneAndDelete({'related.relatedParam': req.params.todoType, senderId: { $in: [userId, pairId] }, recipientId: { $in: [userId, pairId] }});
-    res.redirect('/manage-todos')
+    res.redirect('/manage_todos')
 });
 
 router.get('/create', async(req, res) => {
@@ -54,12 +54,14 @@ router.post('/create', async(req, res) => {
     const todoType = title.split(' ').join('_').toLowerCase() + "_list";
     const user = await findUserByIdAndUpdateReqSession(req.user, req);
     if (user.todoTypes.includes(todoType)) {
-        return makeNextError('Todo list with that title already exists', 400, next);
+        req.flash("error", `Todo list with title - ${title} - already exists`);
+        res.redirect("/manage_todos");
+        return;
     }
-    const pair = await User.findById(user.pairId);
     addTodoTypeAndSave(user, todoType);
-    addTodoTypeAndSave(pair, todoType);
     if (user.pairId){
+        const pair = await User.findById(user.pairId);
+        addTodoTypeAndSave(pair, todoType);
         await Notification.create({
             recipientId: pair._id,
             senderId: user._id,
