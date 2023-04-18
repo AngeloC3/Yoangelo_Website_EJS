@@ -63,14 +63,23 @@ router.post('/delete/account', async (req, res) => {
     // delete all items pertaining to the user
     await deleteAllUsersCreations(deleteId).then(async() => {
         // inside so that the created notif doesnt get deleted
-        const msg = `${username} has unpaired with you via account deletion.`;
-        await sendSystemNotif(pairId, msg);
+        if (pairId){
+            const msg = `${username} has unpaired with you via account deletion.`;
+            await sendSystemNotif(pairId, msg);
+        }
     });
     // unlink their pair from them
-    const pair = await User.findByIdAndUpdate(pairId);
-    pair.pairId = undefined;
-    await pair.save();
-    return flashAndRedirect(req, res, 'success', "Account deleted. Thank you for using this website!", "/");
+    if (pairId){
+        const pair = await User.findByIdAndUpdate(pairId);
+        pair.pairId = undefined;
+        await pair.save();
+    }
+    req.logout(function (err) {
+        if (err) {
+          return next(err);
+        }
+        return flashAndRedirect(req, res, 'success', "Account deleted. Thank you for using this website!", "/");
+      });
 });
 
 router.post('/delete/pair', async (req, res) => {
