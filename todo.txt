@@ -2,6 +2,4 @@ gRest:
 - upload images to list items (then show img on mobile?)
 - upload background images to countdowns
 - upload pfps 
-
-FIXES:
-- times dispalying 4 hour ahead FIX !!!!!
+- sign up nav button

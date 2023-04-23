@@ -70,9 +70,11 @@ router.post('/delete/account', async (req, res) => {
     });
     // unlink their pair from them
     if (pairId){
-        const pair = await User.findByIdAndUpdate(pairId);
-        pair.pairId = undefined;
-        await pair.save();
+        const pair = await User.findByIdAndUpdate(pairId)
+        if (pair){
+            pair.pairId = undefined;
+            await pair.save();
+        }        
     }
     req.logout(function (err) {
         if (err) {
