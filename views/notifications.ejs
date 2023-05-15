@@ -1,13 +1,36 @@
 <link href="/css/notifications.css" rel="stylesheet" type="text/css">
+<style>
+    .flashMessage{
+        padding: .2rem; 
+        padding-top: .5rem;
+    }
+</style>
 
 <% avatar_route = 'images/avatar.png'; %>
 
 <div class="container bg-dark">
+    <% if (success.length > 0) {%>
+        <div class="alert alert-success alert-sm" role="alert" class="flashMessage">
+            <h2><%= success %></h2>
+        </div>
+    <% } %> 
+    <% if (error.length > 0) {%>
+        <div class="alert alert-error alert-sm" role="alert" class="flashMessage">
+            <h2><%= error %></h2>
+        </div>
+    <% } %> 
     <h3 class="m-b-50 heading-line text-light">Notifications <i class="fa fa-bell"></i></h3>
 
     <div class="notification-ui_dd-content">
 
         <% if (notifs.length !== 0) { %>
+            <div class="dropdown mb-2">
+                <button class="btn btn-secondary glow-on-hover" type="button" data-bs-toggle="dropdown">Delete...</button>
+                <ul class="dropdown-menu bg-secondary">
+                    <a class="dropdown-item text-light" href="/notifications/delete/all?readOnly=true&_method=DELETE">Delete Read Only</a>
+                    <a class="dropdown-item text-light" href="/notifications/delete/all?_method=DELETE">Delete All</a>
+                </ul>
+            </div>
 
             <% for (let notif of notifs) { %>
             

@@ -11,6 +11,13 @@ app.set("view engine", "ejs");
 if (process.env.NODE_ENV === 'development') require('dotenv').config(); // so the env variables work 
 const port = process.env.PORT
 
+const methodOverride = require("method-override");
+app.use(
+  methodOverride("_method", {
+    methods: ["POST", "GET"],
+  })
+);
+
 // setting up mongoose
 const mongoose = require('mongoose');
 const dbName = 'yoangelo_website_db';

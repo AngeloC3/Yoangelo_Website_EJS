@@ -2,4 +2,3 @@ gRest:
 - upload images to list items (then show img on mobile?)
 - upload background images to countdowns
 - upload pfps 
-- sign up nav button
