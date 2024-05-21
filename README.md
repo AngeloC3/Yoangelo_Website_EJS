@@ -1,4 +1,4 @@
-# Yoangelo Website
+# Yoangelo Website (EJS Version)
 
 The [Yoangelo website](https://yoangelo-website.vercel.app/) is a platform designed to help pairs connect with each other. It is built using Express and Node.
 
